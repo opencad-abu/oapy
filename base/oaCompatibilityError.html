@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>oaCompatibilityError</title>
+  <style>
+body {
+  margin: 0;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  color: #f2d6c2;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #fff4ea;
+}
+
+.topbar {
+  border-bottom: 1px solid #6f3d2d;
+  background: #120f0f;
+}
+
+.topbar-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 14px 20px 10px;
+}
+
+.brand {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff8f2;
+  margin: 0 0 10px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tab {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  color: #f2d6c2;
+  font-size: 13px;
+}
+
+.tab.active {
+  background: #4b2317;
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.layout {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 28px;
+  padding: 24px 24px 40px;
+}
+
+.sidebar {
+  font-size: 13px;
+}
+
+.sidebar-panel {
+  border: 1px solid #6f3d2d;
+  margin-bottom: 16px;
+  background: #151111;
+}
+
+.sidebar-title {
+  background: #2a1713;
+  border-bottom: 1px solid #6f3d2d;
+  padding: 8px 10px;
+  font-weight: 700;
+  color: #fff1e8;
+}
+
+.sidebar-body {
+  padding: 8px 10px;
+}
+
+.sidebar-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.sidebar-search::placeholder {
+  color: #c8a995;
+}
+
+.sidebar-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-body li.hidden {
+  display: none;
+}
+
+.active-link {
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.sidebar-body li + li {
+  margin-top: 6px;
+}
+
+.content {
+  min-width: 0;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  align-items: start;
+}
+
+.doc {
+  border: 1px solid #6f3d2d;
+  background: #120f0f;
+  padding: 24px 28px 32px;
+  min-width: 0;
+}
+
+.toc-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 0;
+  position: sticky;
+  top: 16px;
+  margin-bottom: 16px;
+}
+
+.toc-toggle {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 0;
+  background: #2a1713;
+  color: #fff1e8;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.toc-toggle:hover {
+  background: #3a1d16;
+}
+
+.toc-toggle-indicator {
+  font-size: 12px;
+  color: #d6ac96;
+}
+
+.toc-body {
+  display: none;
+  padding: 14px 16px;
+}
+
+.toc-panel.open .toc-body {
+  display: block;
+}
+
+.toc-panel h2 {
+  margin: 0 0 10px;
+  padding: 0;
+  border: 0;
+  font-size: 18px;
+  color: #fff1e8;
+}
+
+.toc-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-panel li + li {
+  margin-top: 8px;
+}
+
+.toc-panel a {
+  font-size: 13px;
+  line-height: 1.35;
+  color: #f2d6c2;
+}
+
+.crumbs {
+  color: #c8a995;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.meta {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 10px 12px;
+  margin: 16px 0 20px;
+  font-size: 13px;
+}
+
+.meta div + div {
+  margin-top: 4px;
+}
+
+.doc h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  color: #fff8f2;
+}
+
+.doc h2 {
+  margin: 28px 0 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #6f3d2d;
+  font-size: 22px;
+  color: #fff1e8;
+}
+
+.doc h3 {
+  margin: 22px 0 10px;
+  font-size: 18px;
+  color: #f7e1d5;
+}
+
+.doc p, .doc li {
+  font-size: 14px;
+}
+
+.doc pre {
+  overflow-x: auto;
+  background: #0d0b0b;
+  border: 1px solid #6f3d2d;
+  padding: 12px 14px;
+}
+
+.doc code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  color: #f7e1d5;
+}
+
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 18px;
+  font-size: 13px;
+  table-layout: fixed;
+}
+
+.doc th, .doc td {
+  border: 1px solid #6f3d2d;
+  padding: 7px 9px;
+  vertical-align: top;
+  text-align: left;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.doc th {
+  background: #2a1713;
+  color: #fff1e8;
+}
+
+.doc blockquote {
+  margin: 14px 0;
+  padding: 8px 12px;
+  border-left: 4px solid #8a4a36;
+  background: #151111;
+  color: #f2d6c2;
+}
+
+.search-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+
+.search-panel input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 14px;
+}
+
+.search-panel input::placeholder {
+  color: #c8a995;
+}
+
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+}
+
+.search-results li {
+  border-top: 1px solid #4b2317;
+  padding: 10px 0;
+}
+
+.search-results li.hidden {
+  display: none;
+}
+
+.search-results a {
+  font-weight: 700;
+}
+
+.search-results .module-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border: 1px solid #8a4a36;
+  background: #2a1713;
+  color: #f2d6c2;
+  font-size: 12px;
+}
+
+.search-results .result-path {
+  margin-top: 4px;
+  color: #c8a995;
+  font-size: 12px;
+}
+
+.footer {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px 28px;
+  color: #b89481;
+  font-size: 12px;
+}
+
+.doc > * {
+  min-width: 0;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toc-panel {
+    position: static;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><a href="../index.html">AIVI / oapy API 中文文档</a></div>
+      <div class="tabs"><a class="tab active" href="../base/index.html">base</a><a class="tab" href="../common/index.html">common</a><a class="tab" href="../cms/index.html">cms</a><a class="tab" href="../dm/index.html">dm</a><a class="tab" href="../design/index.html">design</a><a class="tab" href="../tech/index.html">tech</a><a class="tab" href="../wafer/index.html">wafer</a></div>
+    </div>
+  </div>
+  <div class="layout">
+    <aside class="sidebar"><div class="sidebar-panel"><div class="sidebar-title">模块</div><div class="sidebar-body"><ul><li><a href="../classes.html">全部类</a></li><li><a class="active-link" href="../base/index.html">base</a></li><li><a href="../common/index.html">common</a></li><li><a href="../cms/index.html">cms</a></li><li><a href="../dm/index.html">dm</a></li><li><a href="../design/index.html">design</a></li><li><a href="../tech/index.html">tech</a></li><li><a href="../wafer/index.html">wafer</a></li></ul></div></div><div class="sidebar-panel"><div class="sidebar-title">base 类</div><div class="sidebar-body"><input class="sidebar-search" type="search" placeholder="筛选类" data-class-filter><ul><li data-class-item data-class-name="oaabstracttype"><a href="oaAbstractType.html">oaAbstractType</a></li><li data-class-item data-class-name="oaalignmenttype"><a href="oaAlignmentType.html">oaAlignmentType</a></li><li data-class-item data-class-name="oaappdef"><a href="oaAppDef.html">oaAppDef</a></li><li data-class-item data-class-name="oaappobject"><a href="oaAppObject.html">oaAppObject</a></li><li data-class-item data-class-name="oaappobjectdef"><a href="oaAppObjectDef.html">oaAppObjectDef</a></li><li data-class-item data-class-name="oaappobjectdefcollection"><a href="oaAppObjectDefCollection.html">oaAppObjectDefCollection</a></li><li data-class-item data-class-name="oaappprop"><a href="oaAppProp.html">oaAppProp</a></li><li data-class-item data-class-name="oabasecollection"><a href="oaBaseCollection.html">oaBaseCollection</a></li><li data-class-item data-class-name="oabaseiter"><a href="oaBaseIter.html">oaBaseIter</a></li><li data-class-item data-class-name="oabaseobserver"><a href="oaBaseObserver.html">oaBaseObserver</a></li><li data-class-item data-class-name="oabasepackeddata"><a href="oaBasePackedData.html">oaBasePackedData</a></li><li data-class-item data-class-name="oabooleanappdef"><a href="oaBooleanAppDef.html">oaBooleanAppDef</a></li><li data-class-item data-class-name="oabooleanprop"><a href="oaBooleanProp.html">oaBooleanProp</a></li><li data-class-item data-class-name="oabooleanvalue"><a href="oaBooleanValue.html">oaBooleanValue</a></li><li data-class-item data-class-name="oabox"><a href="oaBox.html">oaBox</a></li><li data-class-item data-class-name="oaboxarray"><a href="oaBoxArray.html">oaBoxArray</a></li><li data-class-item data-class-name="oaboxarrayvalue"><a href="oaBoxArrayValue.html">oaBoxArrayValue</a></li><li data-class-item data-class-name="oabuildinfo"><a href="oaBuildInfo.html">oaBuildInfo</a></li><li data-class-item data-class-name="oabuildinfoarray"><a href="oaBuildInfoArray.html">oaBuildInfoArray</a></li><li data-class-item data-class-name="oabundlename"><a href="oaBundleName.html">oaBundleName</a></li><li data-class-item data-class-name="oabytearray"><a href="oaByteArray.html">oaByteArray</a></li><li data-class-item data-class-name="oacategory"><a href="oaCategory.html">oaCategory</a></li><li data-class-item data-class-name="oacdbans"><a href="oaCdbaNS.html">oaCdbaNS</a></li><li data-class-item data-class-name="oaclientsocket"><a href="oaClientSocket.html">oaClientSocket</a></li><li data-class-item data-class-name="oacompatibilityerror"><a class="active-link" href="oaCompatibilityError.html">oaCompatibilityError</a></li><li data-class-item data-class-name="oacomplexarray"><a href="oaComplexArray.html">oaComplexArray</a></li><li data-class-item data-class-name="oaconnectlayertype"><a href="oaConnectLayerType.html">oaConnectLayerType</a></li><li data-class-item data-class-name="oaconnectivitytype"><a href="oaConnectivityType.html">oaConnectivityType</a></li><li data-class-item data-class-name="oaconstraint"><a href="oaConstraint.html">oaConstraint</a></li><li data-class-item data-class-name="oaconstraintdef"><a href="oaConstraintDef.html">oaConstraintDef</a></li><li data-class-item data-class-name="oaconstraintgroup"><a href="oaConstraintGroup.html">oaConstraintGroup</a></li><li data-class-item data-class-name="oaconstraintgroupdef"><a href="oaConstraintGroupDef.html">oaConstraintGroupDef</a></li><li data-class-item data-class-name="oaconstraintgroupheader"><a href="oaConstraintGroupHeader.html">oaConstraintGroupHeader</a></li><li data-class-item data-class-name="oaconstraintgroupmem"><a href="oaConstraintGroupMem.html">oaConstraintGroupMem</a></li><li data-class-item data-class-name="oaconstraintgroupoperator"><a href="oaConstraintGroupOperator.html">oaConstraintGroupOperator</a></li><li data-class-item data-class-name="oaconstraintgrouptype"><a href="oaConstraintGroupType.html">oaConstraintGroupType</a></li><li data-class-item data-class-name="oaconstraintparam"><a href="oaConstraintParam.html">oaConstraintParam</a></li><li data-class-item data-class-name="oaconstraintparamarray"><a href="oaConstraintParamArray.html">oaConstraintParamArray</a></li><li data-class-item data-class-name="oaconstraintparamdef"><a href="oaConstraintParamDef.html">oaConstraintParamDef</a></li><li data-class-item data-class-name="oaconstraintparamtype"><a href="oaConstraintParamType.html">oaConstraintParamType</a></li><li data-class-item data-class-name="oadbtype"><a href="oaDBType.html">oaDBType</a></li><li data-class-item data-class-name="oadataappdef"><a href="oaDataAppDef.html">oaDataAppDef</a></li><li data-class-item data-class-name="oadatamodelmodtype"><a href="oaDataModelModType.html">oaDataModelModType</a></li><li data-class-item data-class-name="oadefns"><a href="oaDefNS.html">oaDefNS</a></li><li data-class-item data-class-name="oadir"><a href="oaDir.html">oaDir</a></li><li data-class-item data-class-name="oadiriter"><a href="oaDirIter.html">oaDirIter</a></li><li data-class-item data-class-name="oadistancemeasuretype"><a href="oaDistanceMeasureType.html">oaDistanceMeasureType</a></li><li data-class-item data-class-name="oadomain"><a href="oaDomain.html">oaDomain</a></li><li data-class-item data-class-name="oadoubleappdef"><a href="oaDoubleAppDef.html">oaDoubleAppDef</a></li><li data-class-item data-class-name="oadoubleprop"><a href="oaDoubleProp.html">oaDoubleProp</a></li><li data-class-item data-class-name="oadoublerangeprop"><a href="oaDoubleRangeProp.html">oaDoubleRangeProp</a></li><li data-class-item data-class-name="oadualint"><a href="oaDualInt.html">oaDualInt</a></li><li data-class-item data-class-name="oadualint1dtblvalue"><a href="oaDualInt1DTblValue.html">oaDualInt1DTblValue</a></li><li data-class-item data-class-name="oadualintarray"><a href="oaDualIntArray.html">oaDualIntArray</a></li><li data-class-item data-class-name="oadualintvalue"><a href="oaDualIntValue.html">oaDualIntValue</a></li><li data-class-item data-class-name="oaenclosedcuttype"><a href="oaEnclosedCutType.html">oaEnclosedCutType</a></li><li data-class-item data-class-name="oaenumcollection"><a href="oaEnumCollection.html">oaEnumCollection</a></li><li data-class-item data-class-name="oaenumprop"><a href="oaEnumProp.html">oaEnumProp</a></li><li data-class-item data-class-name="oaenumpropiter"><a href="oaEnumPropIter.html">oaEnumPropIter</a></li><li data-class-item data-class-name="oaerror"><a href="oaError.html">oaError</a></li><li data-class-item data-class-name="oaexception"><a href="oaException.html">oaException</a></li><li data-class-item data-class-name="oaextrapolatetype"><a href="oaExtrapolateType.html">oaExtrapolateType</a></li><li data-class-item data-class-name="oafdset"><a href="oaFDSet.html">oaFDSet</a></li><li data-class-item data-class-name="oafscomponent"><a href="oaFSComponent.html">oaFSComponent</a></li><li data-class-item data-class-name="oafeature"><a href="oaFeature.html">oaFeature</a></li><li data-class-item data-class-name="oafeaturearray"><a href="oaFeatureArray.html">oaFeatureArray</a></li><li data-class-item data-class-name="oafile"><a href="oaFile.html">oaFile</a></li><li data-class-item data-class-name="oaflatgroupdef"><a href="oaFlatGroupDef.html">oaFlatGroupDef</a></li><li data-class-item data-class-name="oafloatappdef"><a href="oaFloatAppDef.html">oaFloatAppDef</a></li><li data-class-item data-class-name="oafloatprop"><a href="oaFloatProp.html">oaFloatProp</a></li><li data-class-item data-class-name="oafloatrangeprop"><a href="oaFloatRangeProp.html">oaFloatRangeProp</a></li><li data-class-item data-class-name="oaflt1dtblvalue"><a href="oaFlt1DTblValue.html">oaFlt1DTblValue</a></li><li data-class-item data-class-name="oaflt2dtblvalue"><a href="oaFlt2DTblValue.html">oaFlt2DTblValue</a></li><li data-class-item data-class-name="oafltintflttblvalue"><a href="oaFltIntFltTblValue.html">oaFltIntFltTblValue</a></li><li data-class-item data-class-name="oafltvalue"><a href="oaFltValue.html">oaFltValue</a></li><li data-class-item data-class-name="oagateorientationtype"><a href="oaGateOrientationType.html">oaGateOrientationType</a></li><li data-class-item data-class-name="oagroup"><a href="oaGroup.html">oaGroup</a></li><li data-class-item data-class-name="oagroupdef"><a href="oaGroupDef.html">oaGroupDef</a></li><li data-class-item data-class-name="oagroupdefarray"><a href="oaGroupDefArray.html">oaGroupDefArray</a></li><li data-class-item data-class-name="oagroupdeletewhen"><a href="oaGroupDeleteWhen.html">oaGroupDeleteWhen</a></li><li data-class-item data-class-name="oagroupmember"><a href="oaGroupMember.html">oaGroupMember</a></li><li data-class-item data-class-name="oagrouppurposetype"><a href="oaGroupPurposeType.html">oaGroupPurposeType</a></li><li data-class-item data-class-name="oagrouptype"><a href="oaGroupType.html">oaGroupType</a></li><li data-class-item data-class-name="oahiergroupdef"><a href="oaHierGroupDef.html">oaHierGroupDef</a></li><li data-class-item data-class-name="oahierprop"><a href="oaHierProp.html">oaHierProp</a></li><li data-class-item data-class-name="oaint1dtblvalue"><a href="oaInt1DTblValue.html">oaInt1DTblValue</a></li><li data-class-item data-class-name="oaint2dtblvalue"><a href="oaInt2DTblValue.html">oaInt2DTblValue</a></li><li data-class-item data-class-name="oaintappdef"><a href="oaIntAppDef.html">oaIntAppDef</a></li><li data-class-item data-class-name="oaintdualintarraytblvalue"><a href="oaIntDualIntArrayTblValue.html">oaIntDualIntArrayTblValue</a></li><li data-class-item data-class-name="oaintflttblvalue"><a href="oaIntFltTblValue.html">oaIntFltTblValue</a></li><li data-class-item data-class-name="oaintprop"><a href="oaIntProp.html">oaIntProp</a></li><li data-class-item data-class-name="oaintrange"><a href="oaIntRange.html">oaIntRange</a></li><li data-class-item data-class-name="oaintrangearray"><a href="oaIntRangeArray.html">oaIntRangeArray</a></li><li data-class-item data-class-name="oaintrangearray1dtblvalue"><a href="oaIntRangeArray1DTblValue.html">oaIntRangeArray1DTblValue</a></li><li data-class-item data-class-name="oaintrangearray2dtblvalue"><a href="oaIntRangeArray2DTblValue.html">oaIntRangeArray2DTblValue</a></li><li data-class-item data-class-name="oaintrangearrayvalue"><a href="oaIntRangeArrayValue.html">oaIntRangeArrayValue</a></li><li data-class-item data-class-name="oaintrangeprop"><a href="oaIntRangeProp.html">oaIntRangeProp</a></li><li data-class-item data-class-name="oaintrangevalue"><a href="oaIntRangeValue.html">oaIntRangeValue</a></li><li data-class-item data-class-name="oaintvalue"><a href="oaIntValue.html">oaIntValue</a></li><li data-class-item data-class-name="oainterpointerappdef"><a href="oaInterPointerAppDef.html">oaInterPointerAppDef</a></li><li data-class-item data-class-name="oainterpolatetype"><a href="oaInterpolateType.html">oaInterpolateType</a></li><li data-class-item data-class-name="oaintrapointerappdef"><a href="oaIntraPointerAppDef.html">oaIntraPointerAppDef</a></li><li data-class-item data-class-name="oalayerarrayconstraintdef"><a href="oaLayerArrayConstraintDef.html">oaLayerArrayConstraintDef</a></li><li data-class-item data-class-name="oalayerarrayconstrainttype"><a href="oaLayerArrayConstraintType.html">oaLayerArrayConstraintType</a></li><li data-class-item data-class-name="oalayerconstraintdef"><a href="oaLayerConstraintDef.html">oaLayerConstraintDef</a></li><li data-class-item data-class-name="oalayerconstrainttype"><a href="oaLayerConstraintType.html">oaLayerConstraintType</a></li><li data-class-item data-class-name="oalayerpairconstraintdef"><a href="oaLayerPairConstraintDef.html">oaLayerPairConstraintDef</a></li><li data-class-item data-class-name="oalayerpairconstrainttype"><a href="oaLayerPairConstraintType.html">oaLayerPairConstraintType</a></li><li data-class-item data-class-name="oalefns"><a href="oaLefNS.html">oaLefNS</a></li><li data-class-item data-class-name="oamanagedtype"><a href="oaManagedType.html">oaManagedType</a></li><li data-class-item data-class-name="oamanagedtypearray"><a href="oaManagedTypeArray.html">oaManagedTypeArray</a></li><li data-class-item data-class-name="oamapfile"><a href="oaMapFile.html">oaMapFile</a></li><li data-class-item data-class-name="oamapfilewindow"><a href="oaMapFileWindow.html">oaMapFileWindow</a></li><li data-class-item data-class-name="oamapwindow"><a href="oaMapWindow.html">oaMapWindow</a></li><li data-class-item data-class-name="oamemory"><a href="oaMemory.html">oaMemory</a></li><li data-class-item data-class-name="oamemoryerror"><a href="oaMemoryError.html">oaMemoryError</a></li><li data-class-item data-class-name="oaname"><a href="oaName.html">oaName</a></li><li data-class-item data-class-name="oanamebase"><a href="oaNameBase.html">oaNameBase</a></li><li data-class-item data-class-name="oanamemem"><a href="oaNameMem.html">oaNameMem</a></li><li data-class-item data-class-name="oanamespace"><a href="oaNameSpace.html">oaNameSpace</a></li><li data-class-item data-class-name="oanametype"><a href="oaNameType.html">oaNameType</a></li><li data-class-item data-class-name="oanativens"><a href="oaNativeNS.html">oaNativeNS</a></li><li data-class-item data-class-name="oaneighborlayermetaltype"><a href="oaNeighborLayerMetalType.html">oaNeighborLayerMetalType</a></li><li data-class-item data-class-name="oaoserror"><a href="oaOSError.html">oaOSError</a></li><li data-class-item data-class-name="oaobject"><a href="oaObject.html">oaObject</a></li><li data-class-item data-class-name="oaobjectarray"><a href="oaObjectArray.html">oaObjectArray</a></li><li data-class-item data-class-name="oaorient"><a href="oaOrient.html">oaOrient</a></li><li data-class-item data-class-name="oapackeddata"><a href="oaPackedData.html">oaPackedData</a></li><li data-class-item data-class-name="oaparam"><a href="oaParam.html">oaParam</a></li><li data-class-item data-class-name="oaparamarray"><a href="oaParamArray.html">oaParamArray</a></li><li data-class-item data-class-name="oaparamtype"><a href="oaParamType.html">oaParamType</a></li><li data-class-item data-class-name="oapoint"><a href="oaPoint.html">oaPoint</a></li><li data-class-item data-class-name="oapointarray"><a href="oaPointArray.html">oaPointArray</a></li><li data-class-item data-class-name="oaprop"><a href="oaProp.html">oaProp</a></li><li data-class-item data-class-name="oarange"><a href="oaRange.html">oaRange</a></li><li data-class-item data-class-name="oarangebase"><a href="oaRangeBase.html">oaRangeBase</a></li><li data-class-item data-class-name="oarangetype"><a href="oaRangeType.html">oaRangeType</a></li><li data-class-item data-class-name="oascalarname"><a href="oaScalarName.html">oaScalarName</a></li><li data-class-item data-class-name="oasegment"><a href="oaSegment.html">oaSegment</a></li><li data-class-item data-class-name="oasemaphore"><a href="oaSemaphore.html">oaSemaphore</a></li><li data-class-item data-class-name="oaserversocket"><a href="oaServerSocket.html">oaServerSocket</a></li><li data-class-item data-class-name="oasession"><a href="oaSession.html">oaSession</a></li><li data-class-item data-class-name="oasessionobject"><a href="oaSessionObject.html">oaSessionObject</a></li><li data-class-item data-class-name="oashapeangletype"><a href="oaShapeAngleType.html">oaShapeAngleType</a></li><li data-class-item data-class-name="oasimpleconstraint"><a href="oaSimpleConstraint.html">oaSimpleConstraint</a></li><li data-class-item data-class-name="oasimpleconstraintdef"><a href="oaSimpleConstraintDef.html">oaSimpleConstraintDef</a></li><li data-class-item data-class-name="oasimpleconstrainttype"><a href="oaSimpleConstraintType.html">oaSimpleConstraintType</a></li><li data-class-item data-class-name="oasimplename"><a href="oaSimpleName.html">oaSimpleName</a></li><li data-class-item data-class-name="oasocket"><a href="oaSocket.html">oaSocket</a></li><li data-class-item data-class-name="oasocketerror"><a href="oaSocketError.html">oaSocketError</a></li><li data-class-item data-class-name="oaspacingdirectiontype"><a href="oaSpacingDirectionType.html">oaSpacingDirectionType</a></li><li data-class-item data-class-name="oaspacingmeasuretype"><a href="oaSpacingMeasureType.html">oaSpacingMeasureType</a></li><li data-class-item data-class-name="oaspacingtype"><a href="oaSpacingType.html">oaSpacingType</a></li><li data-class-item data-class-name="oaspefns"><a href="oaSpefNS.html">oaSpefNS</a></li><li data-class-item data-class-name="oaspfns"><a href="oaSpfNS.html">oaSpfNS</a></li><li data-class-item data-class-name="oaspicens"><a href="oaSpiceNS.html">oaSpiceNS</a></li><li data-class-item data-class-name="oastring"><a href="oaString.html">oaString</a></li><li data-class-item data-class-name="oastringappdef"><a href="oaStringAppDef.html">oaStringAppDef</a></li><li data-class-item data-class-name="oastringarray"><a href="oaStringArray.html">oaStringArray</a></li><li data-class-item data-class-name="oastringprop"><a href="oaStringProp.html">oaStringProp</a></li><li data-class-item data-class-name="oastringvalue"><a href="oaStringValue.html">oaStringValue</a></li><li data-class-item data-class-name="oasubset"><a href="oaSubset.html">oaSubset</a></li><li data-class-item data-class-name="oasystemtime"><a href="oaSystemTime.html">oaSystemTime</a></li><li data-class-item data-class-name="oathreadusemodel"><a href="oaThreadUseModel.html">oaThreadUseModel</a></li><li data-class-item data-class-name="oatimeappdef"><a href="oaTimeAppDef.html">oaTimeAppDef</a></li><li data-class-item data-class-name="oatimeprop"><a href="oaTimeProp.html">oaTimeProp</a></li><li data-class-item data-class-name="oatimerangeprop"><a href="oaTimeRangeProp.html">oaTimeRangeProp</a></li><li data-class-item data-class-name="oatimestamp"><a href="oaTimeStamp.html">oaTimeStamp</a></li><li data-class-item data-class-name="oatimer"><a href="oaTimer.html">oaTimer</a></li><li data-class-item data-class-name="oatransform"><a href="oaTransform.html">oaTransform</a></li><li data-class-item data-class-name="oatype"><a href="oaType.html">oaType</a></li><li data-class-item data-class-name="oauint8range"><a href="oaUInt8Range.html">oaUInt8Range</a></li><li data-class-item data-class-name="oauint8rangevalue"><a href="oaUInt8RangeValue.html">oaUInt8RangeValue</a></li><li data-class-item data-class-name="oauint8value"><a href="oaUInt8Value.html">oaUInt8Value</a></li><li data-class-item data-class-name="oaunixns"><a href="oaUnixNS.html">oaUnixNS</a></li><li data-class-item data-class-name="oavalue"><a href="oaValue.html">oaValue</a></li><li data-class-item data-class-name="oavaluearray"><a href="oaValueArray.html">oaValueArray</a></li><li data-class-item data-class-name="oavaluearrayvalue"><a href="oaValueArrayValue.html">oaValueArrayValue</a></li><li data-class-item data-class-name="oavardataappdef"><a href="oaVarDataAppDef.html">oaVarDataAppDef</a></li><li data-class-item data-class-name="oavector"><a href="oaVector.html">oaVector</a></li><li data-class-item data-class-name="oavectorbitname"><a href="oaVectorBitName.html">oaVectorBitName</a></li><li data-class-item data-class-name="oavectorname"><a href="oaVectorName.html">oaVectorName</a></li><li data-class-item data-class-name="oaverilogns"><a href="oaVerilogNS.html">oaVerilogNS</a></li><li data-class-item data-class-name="oavhdlns"><a href="oaVhdlNS.html">oaVhdlNS</a></li><li data-class-item data-class-name="oaviaextensiontype"><a href="oaViaExtensionType.html">oaViaExtensionType</a></li><li data-class-item data-class-name="oavoidpointerappdef"><a href="oaVoidPointerAppDef.html">oaVoidPointerAppDef</a></li><li data-class-item data-class-name="oawidthlengthtabletype"><a href="oaWidthLengthTableType.html">oaWidthLengthTableType</a></li><li data-class-item data-class-name="oawinns"><a href="oaWinNS.html">oaWinNS</a></li><li data-class-item data-class-name="sr1to1relationship"><a href="sr1to1Relationship.html">sr1to1Relationship</a></li></ul></div></div></aside>
+    <main class="content">
+      <div class="content-grid">
+        <div class="doc">
+          <div class="crumbs"><a href="../index.html">首页</a> / <a href="index.html">base</a> / oaCompatibilityError</div>
+          <h1 id="oacompatibilityerror">oaCompatibilityError</h1>
+<p><strong>模块</strong>: <code>oapy._oa._base</code>
+<strong>导入</strong>: <code>from oapy._oa import _base</code></p>
+<h2 id="_1">概览</h2>
+<p><code>oaCompatibilityError</code> 在 <code>oapy</code> 中可用，可通过 <code>_base</code> 模块访问。</p>
+<p>本页汇总 <code>oaCompatibilityError</code> 当前在 <code>oapy</code> 中可用的 Python 接口。</p>
+<h2 id="_2">详细说明</h2>
+<p>The oaCompatiblityError class represents the exceptions that OpenAccess throws when it detects features in a database that are not supported by the version of OpenAccess the application is running against。 The message string associated with an oaCompatibilityError is generated in one of two formats: message ID (oacDataNotCompatibleOnOpen|oacDataNotCompatibleOnOpenInAppendMode), dbtype ("Design|Tech|Wafer"), dataModelBuildName "built against" appBuildName message ID (oacDataNotCompatibleOnOpen|oacDataNotCompatibleOnOpenInAppendMode), dbtype ("Design|Tech|Wafer"), dataModelBuildName "running with" kitBuildName) See Compatibility for OpenAccess Applications and Data in the Programmers Guide for more information。</p>
+<h2 id="_3">方法总览</h2>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>Python 调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅</td>
+<td><code>obj.getAppBuildName()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getKitBuildName()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getDataModelBuildName()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getDatabaseName()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getAppDataModelRev()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getKitDataModelRev()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getDBDataModelRev()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getFeatures()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">方法说明</h2>
+<h3 id="objgetappbuildname"><code>obj.getAppBuildName()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getAppBuildName()</code></p>
+<p>This function returns the name of the OpenAccess build that the application is built against。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _base
+
+# assume obj is a oaCompatibilityError
+obj.getAppBuildName()
+</code></pre>
+<h3 id="objgetkitbuildname"><code>obj.getKitBuildName()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getKitBuildName()</code></p>
+<p>This function returns the name of the OpenAccess kit that this application is running with。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _base
+
+# assume obj is a oaCompatibilityError
+obj.getKitBuildName()
+</code></pre>
+<h3 id="objgetdatamodelbuildname"><code>obj.getDataModelBuildName()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getDataModelBuildName()</code></p>
+<p>This function returns the name of the earliest OpenAccess build that supports the data model for the new data。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _base
+
+# assume obj is a oaCompatibilityError
+obj.getDataModelBuildName()
+</code></pre>
+<h3 id="objgetdatabasename"><code>obj.getDatabaseName()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getDatabaseName()</code></p>
+<p>This function returns the user-friendly name of the database that generated this error。 Some examples are as follows: design lib/cell/view technology database in library lib wafer lib/cell/view。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _base
+
+# assume obj is a oaCompatibilityError
+obj.getDatabaseName()
+</code></pre>
+<h3 id="objgetappdatamodelrev"><code>obj.getAppDataModelRev()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getAppDataModelRev()</code></p>
+<p>This function returns the data model revision of the database。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _base
+
+# assume obj is a oaCompatibilityError
+obj.getAppDataModelRev()
+</code></pre>
+<h3 id="objgetkitdatamodelrev"><code>obj.getKitDataModelRev()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getKitDataModelRev()</code></p>
+<p>This function returns the data model revision that the OpenAccess shared library supports。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _base
+
+# assume obj is a oaCompatibilityError
+obj.getKitDataModelRev()
+</code></pre>
+<h3 id="objgetdbdatamodelrev"><code>obj.getDBDataModelRev()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getDBDataModelRev()</code></p>
+<p>This function returns the database data model revision that triggered this error。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _base
+
+# assume obj is a oaCompatibilityError
+obj.getDBDataModelRev()
+</code></pre>
+<h3 id="objgetfeatures"><code>obj.getFeatures()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getFeatures()</code></p>
+<p>This function returns the array of features that caused this compatibility exception to be thrown by OpenAccess。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _base
+
+# assume obj is a oaCompatibilityError
+obj.getFeatures()
+</code></pre>
+        </div>
+        <aside class="toc-panel"><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false"><span>方法</span><span class="toc-toggle-indicator">展开</span></button><div class="toc-body"><h2>方法</h2><ul><li><a href="#obj-getappbuildname"><code>obj.getAppBuildName()</code></a></li><li><a href="#obj-getkitbuildname"><code>obj.getKitBuildName()</code></a></li><li><a href="#obj-getdatamodelbuildname"><code>obj.getDataModelBuildName()</code></a></li><li><a href="#obj-getdatabasename"><code>obj.getDatabaseName()</code></a></li><li><a href="#obj-getappdatamodelrev"><code>obj.getAppDataModelRev()</code></a></li><li><a href="#obj-getkitdatamodelrev"><code>obj.getKitDataModelRev()</code></a></li><li><a href="#obj-getdbdatamodelrev"><code>obj.getDBDataModelRev()</code></a></li><li><a href="#obj-getfeatures"><code>obj.getFeatures()</code></a></li></ul></div></aside>
+      </div>
+    </main>
+  </div>
+  <div class="footer">oapy 是 AIVI 项目的一部分。此站点提供当前 oapy Python API 的中文文档。</div>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.querySelector("[data-class-filter]");
+  if (input) {
+    input.addEventListener("input", () => {
+      const term = input.value.trim().toLowerCase();
+      document.querySelectorAll("[data-class-item]").forEach((item) => {
+        const name = item.getAttribute("data-class-name") || "";
+        item.classList.toggle("hidden", term && !name.includes(term));
+      });
+    });
+  }
+
+  const globalInput = document.querySelector("[data-global-search]");
+  if (globalInput) {
+    globalInput.addEventListener("input", () => {
+      const term = globalInput.value.trim().toLowerCase();
+      document.querySelectorAll("[data-search-item]").forEach((item) => {
+        const name = item.getAttribute("data-search-name") || "";
+        const module = item.getAttribute("data-search-module") || "";
+        const visible = !term || name.includes(term) || module.includes(term);
+        item.classList.toggle("hidden", !visible);
+      });
+    });
+  }
+
+  document.querySelectorAll("[data-toc-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const panel = button.closest(".toc-panel");
+      if (!panel) return;
+      const isOpen = panel.classList.toggle("open");
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      const indicator = button.querySelector(".toc-toggle-indicator");
+      if (indicator) {
+        indicator.textContent = isOpen ? "Hide" : "Show";
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

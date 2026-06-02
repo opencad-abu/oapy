@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>oaUnsetAttributeChangeRec</title>
+  <style>
+body {
+  margin: 0;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  color: #f2d6c2;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #fff4ea;
+}
+
+.topbar {
+  border-bottom: 1px solid #6f3d2d;
+  background: #120f0f;
+}
+
+.topbar-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 14px 20px 10px;
+}
+
+.brand {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff8f2;
+  margin: 0 0 10px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tab {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  color: #f2d6c2;
+  font-size: 13px;
+}
+
+.tab.active {
+  background: #4b2317;
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.layout {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 28px;
+  padding: 24px 24px 40px;
+}
+
+.sidebar {
+  font-size: 13px;
+}
+
+.sidebar-panel {
+  border: 1px solid #6f3d2d;
+  margin-bottom: 16px;
+  background: #151111;
+}
+
+.sidebar-title {
+  background: #2a1713;
+  border-bottom: 1px solid #6f3d2d;
+  padding: 8px 10px;
+  font-weight: 700;
+  color: #fff1e8;
+}
+
+.sidebar-body {
+  padding: 8px 10px;
+}
+
+.sidebar-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.sidebar-search::placeholder {
+  color: #c8a995;
+}
+
+.sidebar-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-body li.hidden {
+  display: none;
+}
+
+.active-link {
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.sidebar-body li + li {
+  margin-top: 6px;
+}
+
+.content {
+  min-width: 0;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  align-items: start;
+}
+
+.doc {
+  border: 1px solid #6f3d2d;
+  background: #120f0f;
+  padding: 24px 28px 32px;
+  min-width: 0;
+}
+
+.toc-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 0;
+  position: sticky;
+  top: 16px;
+  margin-bottom: 16px;
+}
+
+.toc-toggle {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 0;
+  background: #2a1713;
+  color: #fff1e8;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.toc-toggle:hover {
+  background: #3a1d16;
+}
+
+.toc-toggle-indicator {
+  font-size: 12px;
+  color: #d6ac96;
+}
+
+.toc-body {
+  display: none;
+  padding: 14px 16px;
+}
+
+.toc-panel.open .toc-body {
+  display: block;
+}
+
+.toc-panel h2 {
+  margin: 0 0 10px;
+  padding: 0;
+  border: 0;
+  font-size: 18px;
+  color: #fff1e8;
+}
+
+.toc-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-panel li + li {
+  margin-top: 8px;
+}
+
+.toc-panel a {
+  font-size: 13px;
+  line-height: 1.35;
+  color: #f2d6c2;
+}
+
+.crumbs {
+  color: #c8a995;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.meta {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 10px 12px;
+  margin: 16px 0 20px;
+  font-size: 13px;
+}
+
+.meta div + div {
+  margin-top: 4px;
+}
+
+.doc h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  color: #fff8f2;
+}
+
+.doc h2 {
+  margin: 28px 0 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #6f3d2d;
+  font-size: 22px;
+  color: #fff1e8;
+}
+
+.doc h3 {
+  margin: 22px 0 10px;
+  font-size: 18px;
+  color: #f7e1d5;
+}
+
+.doc p, .doc li {
+  font-size: 14px;
+}
+
+.doc pre {
+  overflow-x: auto;
+  background: #0d0b0b;
+  border: 1px solid #6f3d2d;
+  padding: 12px 14px;
+}
+
+.doc code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  color: #f7e1d5;
+}
+
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 18px;
+  font-size: 13px;
+  table-layout: fixed;
+}
+
+.doc th, .doc td {
+  border: 1px solid #6f3d2d;
+  padding: 7px 9px;
+  vertical-align: top;
+  text-align: left;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.doc th {
+  background: #2a1713;
+  color: #fff1e8;
+}
+
+.doc blockquote {
+  margin: 14px 0;
+  padding: 8px 12px;
+  border-left: 4px solid #8a4a36;
+  background: #151111;
+  color: #f2d6c2;
+}
+
+.search-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+
+.search-panel input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 14px;
+}
+
+.search-panel input::placeholder {
+  color: #c8a995;
+}
+
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+}
+
+.search-results li {
+  border-top: 1px solid #4b2317;
+  padding: 10px 0;
+}
+
+.search-results li.hidden {
+  display: none;
+}
+
+.search-results a {
+  font-weight: 700;
+}
+
+.search-results .module-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border: 1px solid #8a4a36;
+  background: #2a1713;
+  color: #f2d6c2;
+  font-size: 12px;
+}
+
+.search-results .result-path {
+  margin-top: 4px;
+  color: #c8a995;
+  font-size: 12px;
+}
+
+.footer {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px 28px;
+  color: #b89481;
+  font-size: 12px;
+}
+
+.doc > * {
+  min-width: 0;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toc-panel {
+    position: static;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><a href="../index.html">AIVI / oapy API 中文文档</a></div>
+      <div class="tabs"><a class="tab" href="../base/index.html">base</a><a class="tab" href="../common/index.html">common</a><a class="tab active" href="../cms/index.html">cms</a><a class="tab" href="../dm/index.html">dm</a><a class="tab" href="../design/index.html">design</a><a class="tab" href="../tech/index.html">tech</a><a class="tab" href="../wafer/index.html">wafer</a></div>
+    </div>
+  </div>
+  <div class="layout">
+    <aside class="sidebar"><div class="sidebar-panel"><div class="sidebar-title">模块</div><div class="sidebar-body"><ul><li><a href="../classes.html">全部类</a></li><li><a href="../base/index.html">base</a></li><li><a href="../common/index.html">common</a></li><li><a class="active-link" href="../cms/index.html">cms</a></li><li><a href="../dm/index.html">dm</a></li><li><a href="../design/index.html">design</a></li><li><a href="../tech/index.html">tech</a></li><li><a href="../wafer/index.html">wafer</a></li></ul></div></div><div class="sidebar-panel"><div class="sidebar-title">cms 类</div><div class="sidebar-body"><input class="sidebar-search" type="search" placeholder="筛选类" data-class-filter><ul><li data-class-item data-class-name="oaattributechangerec"><a href="oaAttributeChangeRec.html">oaAttributeChangeRec</a></li><li data-class-item data-class-name="oacmattr"><a href="oaCMAttr.html">oaCMAttr</a></li><li data-class-item data-class-name="oacmattrarray"><a href="oaCMAttrArray.html">oaCMAttrArray</a></li><li data-class-item data-class-name="oacmdatabaseref"><a href="oaCMDatabaseRef.html">oaCMDatabaseRef</a></li><li data-class-item data-class-name="oacmdatabasetbl"><a href="oaCMDatabaseTbl.html">oaCMDatabaseTbl</a></li><li data-class-item data-class-name="oacmerror"><a href="oaCMError.html">oaCMError</a></li><li data-class-item data-class-name="oacmexception"><a href="oaCMException.html">oaCMException</a></li><li data-class-item data-class-name="oacmobjectidref"><a href="oaCMObjectIDRef.html">oaCMObjectIDRef</a></li><li data-class-item data-class-name="oacmobjectref"><a href="oaCMObjectRef.html">oaCMObjectRef</a></li><li data-class-item data-class-name="oacmobjectreftbl"><a href="oaCMObjectRefTbl.html">oaCMObjectRefTbl</a></li><li data-class-item data-class-name="oacmobjectstateentry"><a href="oaCMObjectStateEntry.html">oaCMObjectStateEntry</a></li><li data-class-item data-class-name="oacmobjectstateref"><a href="oaCMObjectStateRef.html">oaCMObjectStateRef</a></li><li data-class-item data-class-name="oacmobjectstatetbl"><a href="oaCMObjectStateTbl.html">oaCMObjectStateTbl</a></li><li data-class-item data-class-name="oacmobjectvisitor"><a href="oaCMObjectVisitor.html">oaCMObjectVisitor</a></li><li data-class-item data-class-name="oacmprotocol"><a href="oaCMProtocol.html">oaCMProtocol</a></li><li data-class-item data-class-name="oacmprotocolarray"><a href="oaCMProtocolArray.html">oaCMProtocolArray</a></li><li data-class-item data-class-name="oacmstringentry"><a href="oaCMStringEntry.html">oaCMStringEntry</a></li><li data-class-item data-class-name="oacmstringtbl"><a href="oaCMStringTbl.html">oaCMStringTbl</a></li><li data-class-item data-class-name="oachangemgr"><a href="oaChangeMgr.html">oaChangeMgr</a></li><li data-class-item data-class-name="oachangerec"><a href="oaChangeRec.html">oaChangeRec</a></li><li data-class-item data-class-name="oachangerecvisitor"><a href="oaChangeRecVisitor.html">oaChangeRecVisitor</a></li><li data-class-item data-class-name="oachangeset"><a href="oaChangeSet.html">oaChangeSet</a></li><li data-class-item data-class-name="oachangesetbase"><a href="oaChangeSetBase.html">oaChangeSetBase</a></li><li data-class-item data-class-name="oachangesetobserver"><a href="oaChangeSetObserver.html">oaChangeSetObserver</a></li><li data-class-item data-class-name="oachangesetvisitor"><a href="oaChangeSetVisitor.html">oaChangeSetVisitor</a></li><li data-class-item data-class-name="oaconvertobjectchangerec"><a href="oaConvertObjectChangeRec.html">oaConvertObjectChangeRec</a></li><li data-class-item data-class-name="oacreate1to1relationshipchangerec"><a href="oaCreate1to1RelationshipChangeRec.html">oaCreate1to1RelationshipChangeRec</a></li><li data-class-item data-class-name="oacreate1tonrelationshipchangerec"><a href="oaCreate1toNRelationshipChangeRec.html">oaCreate1toNRelationshipChangeRec</a></li><li data-class-item data-class-name="oacreate2dtablerelationshipchangerec"><a href="oaCreate2DTableRelationshipChangeRec.html">oaCreate2DTableRelationshipChangeRec</a></li><li data-class-item data-class-name="oacreateobjectchangerec"><a href="oaCreateObjectChangeRec.html">oaCreateObjectChangeRec</a></li><li data-class-item data-class-name="oacreaterelationshipchangerec"><a href="oaCreateRelationshipChangeRec.html">oaCreateRelationshipChangeRec</a></li><li data-class-item data-class-name="oadestroy1to1relationshipchangerec"><a href="oaDestroy1to1RelationshipChangeRec.html">oaDestroy1to1RelationshipChangeRec</a></li><li data-class-item data-class-name="oadestroy1tonrelationshipchangerec"><a href="oaDestroy1toNRelationshipChangeRec.html">oaDestroy1toNRelationshipChangeRec</a></li><li data-class-item data-class-name="oadestroy2dtablerelationshipchangerec"><a href="oaDestroy2DTableRelationshipChangeRec.html">oaDestroy2DTableRelationshipChangeRec</a></li><li data-class-item data-class-name="oadestroyobjectchangerec"><a href="oaDestroyObjectChangeRec.html">oaDestroyObjectChangeRec</a></li><li data-class-item data-class-name="oadestroyrelationshipchangerec"><a href="oaDestroyRelationshipChangeRec.html">oaDestroyRelationshipChangeRec</a></li><li data-class-item data-class-name="oaexportmarkerchangerec"><a href="oaExportMarkerChangeRec.html">oaExportMarkerChangeRec</a></li><li data-class-item data-class-name="oahierchangerec"><a href="oaHierChangeRec.html">oaHierChangeRec</a></li><li data-class-item data-class-name="oamarkerchangerec"><a href="oaMarkerChangeRec.html">oaMarkerChangeRec</a></li><li data-class-item data-class-name="oamarkerchangerectype"><a href="oaMarkerChangeRecType.html">oaMarkerChangeRecType</a></li><li data-class-item data-class-name="oaobjectchangerec"><a href="oaObjectChangeRec.html">oaObjectChangeRec</a></li><li data-class-item data-class-name="oarelationshipchangerec"><a href="oaRelationshipChangeRec.html">oaRelationshipChangeRec</a></li><li data-class-item data-class-name="oasetattributechangerec"><a href="oaSetAttributeChangeRec.html">oaSetAttributeChangeRec</a></li><li data-class-item data-class-name="oatransientmarkerchangerec"><a href="oaTransientMarkerChangeRec.html">oaTransientMarkerChangeRec</a></li><li data-class-item data-class-name="oaunsetattributechangerec"><a class="active-link" href="oaUnsetAttributeChangeRec.html">oaUnsetAttributeChangeRec</a></li></ul></div></div></aside>
+    <main class="content">
+      <div class="content-grid">
+        <div class="doc">
+          <div class="crumbs"><a href="../index.html">首页</a> / <a href="index.html">cms</a> / oaUnsetAttributeChangeRec</div>
+          <h1 id="oaunsetattributechangerec">oaUnsetAttributeChangeRec</h1>
+<p><strong>模块</strong>: <code>oapy._oa._cms</code>
+<strong>导入</strong>: <code>from oapy._oa import _cms</code></p>
+<h2 id="_1">概览</h2>
+<p><code>oaUnsetAttributeChangeRec</code> 在 <code>oapy</code> 中可用，可通过 <code>_cms</code> 模块访问。</p>
+<p>本页汇总 <code>oaUnsetAttributeChangeRec</code> 当前在 <code>oapy</code> 中可用的 Python 接口。</p>
+<h2 id="_2">详细说明</h2>
+<p>The oaUnsetAttributeChangeRec class represents a change record that captures information related to unsetting the value of an attribute。 变更记录由 OpenAccess 变更管理系统（CMS）使用。</p>
+<h2 id="_3">构造函数</h2>
+<h3 id="_cmsoaunsetattributechangerecchangesetin-ownerin-attrin"><code>_cms.oaUnsetAttributeChangeRec(changeSetIn, ownerIn, attrIn)</code></h3>
+<pre><code class="language-python">obj = _cms.oaUnsetAttributeChangeRec(changeSetIn, ownerIn, attrIn)
+</code></pre>
+<h2 id="_4">方法总览</h2>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>Python 调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅</td>
+<td><code>obj.getSchemaDefinition()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getOwner()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.accept(visitor, forward=true)</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_5">方法说明</h2>
+<h3 id="objgetschemadefinition"><code>obj.getSchemaDefinition()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getSchemaDefinition()</code></p>
+<p>此函数返回指向此 oaUnsetAttributeChangeRec 所针对属性的 schema 定义的指针。 实现 oaAttributeChangeRec。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _cms
+
+# assume obj is a oaUnsetAttributeChangeRec
+obj.getSchemaDefinition()
+</code></pre>
+<h3 id="objgetowner"><code>obj.getOwner()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getOwner()</code></p>
+<p>此函数返回指向 oaCMObjectRef 的智能指针，该对象是此 oaAttributeChangeRec 所针对属性的所属对象。 实现 oaAttributeChangeRec。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _cms
+
+# assume obj is a oaUnsetAttributeChangeRec
+obj.getOwner()
+</code></pre>
+<h3 id="objacceptvisitor-forwardtrue"><code>obj.accept(visitor, forward=true)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.accept(visitor, forward=true)</code></p>
+<p>This function accepts a change record visitor。 It calls the visit function of the specified visitor on this object。 The forward parameter indicates the direction in which the change records are being visited。 The forward parameter might be set to false if the goal of the visit is to roll back changes due to an undo command。 实现 oaChangeRec。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>visitor</code>: A pointer to the change record visitor to call on this object。</li>
+<li><code>forward</code>: Specifies the direction in which change records are being visited。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _cms
+
+# assume obj is a oaUnsetAttributeChangeRec
+obj.accept(visitor, forward=true)
+</code></pre>
+        </div>
+        <aside class="toc-panel"><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false"><span>方法</span><span class="toc-toggle-indicator">展开</span></button><div class="toc-body"><h2>方法</h2><ul><li><a href="#cms-oaunsetattributechangerec-changesetin-ownerin-attrin"><code>_cms.oaUnsetAttributeChangeRec(changeSetIn, ownerIn, attrIn)</code></a></li><li><a href="#obj-getschemadefinition"><code>obj.getSchemaDefinition()</code></a></li><li><a href="#obj-getowner"><code>obj.getOwner()</code></a></li><li><a href="#obj-accept-visitor-forward-true"><code>obj.accept(visitor, forward=true)</code></a></li></ul></div></aside>
+      </div>
+    </main>
+  </div>
+  <div class="footer">oapy 是 AIVI 项目的一部分。此站点提供当前 oapy Python API 的中文文档。</div>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.querySelector("[data-class-filter]");
+  if (input) {
+    input.addEventListener("input", () => {
+      const term = input.value.trim().toLowerCase();
+      document.querySelectorAll("[data-class-item]").forEach((item) => {
+        const name = item.getAttribute("data-class-name") || "";
+        item.classList.toggle("hidden", term && !name.includes(term));
+      });
+    });
+  }
+
+  const globalInput = document.querySelector("[data-global-search]");
+  if (globalInput) {
+    globalInput.addEventListener("input", () => {
+      const term = globalInput.value.trim().toLowerCase();
+      document.querySelectorAll("[data-search-item]").forEach((item) => {
+        const name = item.getAttribute("data-search-name") || "";
+        const module = item.getAttribute("data-search-module") || "";
+        const visible = !term || name.includes(term) || module.includes(term);
+        item.classList.toggle("hidden", !visible);
+      });
+    });
+  }
+
+  document.querySelectorAll("[data-toc-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const panel = button.closest(".toc-panel");
+      if (!panel) return;
+      const isOpen = panel.classList.toggle("open");
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      const indicator = button.querySelector(".toc-toggle-indicator");
+      if (indicator) {
+        indicator.textContent = isOpen ? "Hide" : "Show";
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

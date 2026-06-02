@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>oaClearanceMeasure</title>
+  <style>
+body {
+  margin: 0;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  color: #f2d6c2;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #fff4ea;
+}
+
+.topbar {
+  border-bottom: 1px solid #6f3d2d;
+  background: #120f0f;
+}
+
+.topbar-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 14px 20px 10px;
+}
+
+.brand {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff8f2;
+  margin: 0 0 10px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tab {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  color: #f2d6c2;
+  font-size: 13px;
+}
+
+.tab.active {
+  background: #4b2317;
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.layout {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 28px;
+  padding: 24px 24px 40px;
+}
+
+.sidebar {
+  font-size: 13px;
+}
+
+.sidebar-panel {
+  border: 1px solid #6f3d2d;
+  margin-bottom: 16px;
+  background: #151111;
+}
+
+.sidebar-title {
+  background: #2a1713;
+  border-bottom: 1px solid #6f3d2d;
+  padding: 8px 10px;
+  font-weight: 700;
+  color: #fff1e8;
+}
+
+.sidebar-body {
+  padding: 8px 10px;
+}
+
+.sidebar-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.sidebar-search::placeholder {
+  color: #c8a995;
+}
+
+.sidebar-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-body li.hidden {
+  display: none;
+}
+
+.active-link {
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.sidebar-body li + li {
+  margin-top: 6px;
+}
+
+.content {
+  min-width: 0;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  align-items: start;
+}
+
+.doc {
+  border: 1px solid #6f3d2d;
+  background: #120f0f;
+  padding: 24px 28px 32px;
+  min-width: 0;
+}
+
+.toc-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 0;
+  position: sticky;
+  top: 16px;
+  margin-bottom: 16px;
+}
+
+.toc-toggle {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 0;
+  background: #2a1713;
+  color: #fff1e8;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.toc-toggle:hover {
+  background: #3a1d16;
+}
+
+.toc-toggle-indicator {
+  font-size: 12px;
+  color: #d6ac96;
+}
+
+.toc-body {
+  display: none;
+  padding: 14px 16px;
+}
+
+.toc-panel.open .toc-body {
+  display: block;
+}
+
+.toc-panel h2 {
+  margin: 0 0 10px;
+  padding: 0;
+  border: 0;
+  font-size: 18px;
+  color: #fff1e8;
+}
+
+.toc-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-panel li + li {
+  margin-top: 8px;
+}
+
+.toc-panel a {
+  font-size: 13px;
+  line-height: 1.35;
+  color: #f2d6c2;
+}
+
+.crumbs {
+  color: #c8a995;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.meta {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 10px 12px;
+  margin: 16px 0 20px;
+  font-size: 13px;
+}
+
+.meta div + div {
+  margin-top: 4px;
+}
+
+.doc h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  color: #fff8f2;
+}
+
+.doc h2 {
+  margin: 28px 0 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #6f3d2d;
+  font-size: 22px;
+  color: #fff1e8;
+}
+
+.doc h3 {
+  margin: 22px 0 10px;
+  font-size: 18px;
+  color: #f7e1d5;
+}
+
+.doc p, .doc li {
+  font-size: 14px;
+}
+
+.doc pre {
+  overflow-x: auto;
+  background: #0d0b0b;
+  border: 1px solid #6f3d2d;
+  padding: 12px 14px;
+}
+
+.doc code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  color: #f7e1d5;
+}
+
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 18px;
+  font-size: 13px;
+  table-layout: fixed;
+}
+
+.doc th, .doc td {
+  border: 1px solid #6f3d2d;
+  padding: 7px 9px;
+  vertical-align: top;
+  text-align: left;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.doc th {
+  background: #2a1713;
+  color: #fff1e8;
+}
+
+.doc blockquote {
+  margin: 14px 0;
+  padding: 8px 12px;
+  border-left: 4px solid #8a4a36;
+  background: #151111;
+  color: #f2d6c2;
+}
+
+.search-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+
+.search-panel input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 14px;
+}
+
+.search-panel input::placeholder {
+  color: #c8a995;
+}
+
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+}
+
+.search-results li {
+  border-top: 1px solid #4b2317;
+  padding: 10px 0;
+}
+
+.search-results li.hidden {
+  display: none;
+}
+
+.search-results a {
+  font-weight: 700;
+}
+
+.search-results .module-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border: 1px solid #8a4a36;
+  background: #2a1713;
+  color: #f2d6c2;
+  font-size: 12px;
+}
+
+.search-results .result-path {
+  margin-top: 4px;
+  color: #c8a995;
+  font-size: 12px;
+}
+
+.footer {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px 28px;
+  color: #b89481;
+  font-size: 12px;
+}
+
+.doc > * {
+  min-width: 0;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toc-panel {
+    position: static;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><a href="../index.html">AIVI / oapy API 中文文档</a></div>
+      <div class="tabs"><a class="tab" href="../base/index.html">base</a><a class="tab" href="../common/index.html">common</a><a class="tab" href="../cms/index.html">cms</a><a class="tab" href="../dm/index.html">dm</a><a class="tab" href="../design/index.html">design</a><a class="tab active" href="../tech/index.html">tech</a><a class="tab" href="../wafer/index.html">wafer</a></div>
+    </div>
+  </div>
+  <div class="layout">
+    <aside class="sidebar"><div class="sidebar-panel"><div class="sidebar-title">模块</div><div class="sidebar-body"><ul><li><a href="../classes.html">全部类</a></li><li><a href="../base/index.html">base</a></li><li><a href="../common/index.html">common</a></li><li><a href="../cms/index.html">cms</a></li><li><a href="../dm/index.html">dm</a></li><li><a href="../design/index.html">design</a></li><li><a class="active-link" href="../tech/index.html">tech</a></li><li><a href="../wafer/index.html">wafer</a></li></ul></div></div><div class="sidebar-panel"><div class="sidebar-title">tech 类</div><div class="sidebar-body"><input class="sidebar-search" type="search" placeholder="筛选类" data-class-filter><ul><li data-class-item data-class-name="oaanalysislib"><a href="oaAnalysisLib.html">oaAnalysisLib</a></li><li data-class-item data-class-name="oaantennaarea"><a href="oaAntennaArea.html">oaAntennaArea</a></li><li data-class-item data-class-name="oaantennaareaarray"><a href="oaAntennaAreaArray.html">oaAntennaAreaArray</a></li><li data-class-item data-class-name="oaantennadata"><a href="oaAntennaData.html">oaAntennaData</a></li><li data-class-item data-class-name="oaantennamodel"><a href="oaAntennaModel.html">oaAntennaModel</a></li><li data-class-item data-class-name="oaantennaratioarrayvalue"><a href="oaAntennaRatioArrayValue.html">oaAntennaRatioArrayValue</a></li><li data-class-item data-class-name="oaantennaratiovalue"><a href="oaAntennaRatioValue.html">oaAntennaRatioValue</a></li><li data-class-item data-class-name="oaarraysitedef"><a href="oaArraySiteDef.html">oaArraySiteDef</a></li><li data-class-item data-class-name="oaclearancemeasure"><a class="active-link" href="oaClearanceMeasure.html">oaClearanceMeasure</a></li><li data-class-item data-class-name="oacustomviadef"><a href="oaCustomViaDef.html">oaCustomViaDef</a></li><li data-class-item data-class-name="oacustomviavariant"><a href="oaCustomViaVariant.html">oaCustomViaVariant</a></li><li data-class-item data-class-name="oaderivedlayer"><a href="oaDerivedLayer.html">oaDerivedLayer</a></li><li data-class-item data-class-name="oaderivedlayerconnectivitytype"><a href="oaDerivedLayerConnectivityType.html">oaDerivedLayerConnectivityType</a></li><li data-class-item data-class-name="oaderivedlayerdef"><a href="oaDerivedLayerDef.html">oaDerivedLayerDef</a></li><li data-class-item data-class-name="oaderivedlayerparam"><a href="oaDerivedLayerParam.html">oaDerivedLayerParam</a></li><li data-class-item data-class-name="oaderivedlayerparamarray"><a href="oaDerivedLayerParamArray.html">oaDerivedLayerParamArray</a></li><li data-class-item data-class-name="oaderivedlayerparamdef"><a href="oaDerivedLayerParamDef.html">oaDerivedLayerParamDef</a></li><li data-class-item data-class-name="oaderivedlayerparamtype"><a href="oaDerivedLayerParamType.html">oaDerivedLayerParamType</a></li><li data-class-item data-class-name="oalayer"><a href="oaLayer.html">oaLayer</a></li><li data-class-item data-class-name="oalayerarray"><a href="oaLayerArray.html">oaLayerArray</a></li><li data-class-item data-class-name="oalayerarrayconstraint"><a href="oaLayerArrayConstraint.html">oaLayerArrayConstraint</a></li><li data-class-item data-class-name="oalayerarrayvalue"><a href="oaLayerArrayValue.html">oaLayerArrayValue</a></li><li data-class-item data-class-name="oalayerconstraint"><a href="oaLayerConstraint.html">oaLayerConstraint</a></li><li data-class-item data-class-name="oalayernamearray"><a href="oaLayerNameArray.html">oaLayerNameArray</a></li><li data-class-item data-class-name="oalayerop"><a href="oaLayerOp.html">oaLayerOp</a></li><li data-class-item data-class-name="oalayerpairconstraint"><a href="oaLayerPairConstraint.html">oaLayerPairConstraint</a></li><li data-class-item data-class-name="oalayervalue"><a href="oaLayerValue.html">oaLayerValue</a></li><li data-class-item data-class-name="oamaterial"><a href="oaMaterial.html">oaMaterial</a></li><li data-class-item data-class-name="oaoppoint"><a href="oaOpPoint.html">oaOpPoint</a></li><li data-class-item data-class-name="oaphysicallayer"><a href="oaPhysicalLayer.html">oaPhysicalLayer</a></li><li data-class-item data-class-name="oaprefroutingdir"><a href="oaPrefRoutingDir.html">oaPrefRoutingDir</a></li><li data-class-item data-class-name="oapurpose"><a href="oaPurpose.html">oaPurpose</a></li><li data-class-item data-class-name="oapurposearray"><a href="oaPurposeArray.html">oaPurposeArray</a></li><li data-class-item data-class-name="oapurposetype"><a href="oaPurposeType.html">oaPurposeType</a></li><li data-class-item data-class-name="oapurposevalue"><a href="oaPurposeValue.html">oaPurposeValue</a></li><li data-class-item data-class-name="oascalarsitedef"><a href="oaScalarSiteDef.html">oaScalarSiteDef</a></li><li data-class-item data-class-name="oasitedef"><a href="oaSiteDef.html">oaSiteDef</a></li><li data-class-item data-class-name="oasitedeftype"><a href="oaSiteDefType.html">oaSiteDefType</a></li><li data-class-item data-class-name="oasitepattern"><a href="oaSitePattern.html">oaSitePattern</a></li><li data-class-item data-class-name="oasiteref"><a href="oaSiteRef.html">oaSiteRef</a></li><li data-class-item data-class-name="oasizeop"><a href="oaSizeOp.html">oaSizeOp</a></li><li data-class-item data-class-name="oasizedlayer"><a href="oaSizedLayer.html">oaSizedLayer</a></li><li data-class-item data-class-name="oastdviadef"><a href="oaStdViaDef.html">oaStdViaDef</a></li><li data-class-item data-class-name="oastdviavariant"><a href="oaStdViaVariant.html">oaStdViaVariant</a></li><li data-class-item data-class-name="oatech"><a href="oaTech.html">oaTech</a></li><li data-class-item data-class-name="oatecharray"><a href="oaTechArray.html">oaTechArray</a></li><li data-class-item data-class-name="oatechconflicttype"><a href="oaTechConflictType.html">oaTechConflictType</a></li><li data-class-item data-class-name="oatechdatatype"><a href="oaTechDataType.html">oaTechDataType</a></li><li data-class-item data-class-name="oatecherror"><a href="oaTechError.html">oaTechError</a></li><li data-class-item data-class-name="oatechexception"><a href="oaTechException.html">oaTechException</a></li><li data-class-item data-class-name="oatechheader"><a href="oaTechHeader.html">oaTechHeader</a></li><li data-class-item data-class-name="oatechheaderarray"><a href="oaTechHeaderArray.html">oaTechHeaderArray</a></li><li data-class-item data-class-name="oatechlayerheader"><a href="oaTechLayerHeader.html">oaTechLayerHeader</a></li><li data-class-item data-class-name="oatechobject"><a href="oaTechObject.html">oaTechObject</a></li><li data-class-item data-class-name="oatechundoobserver"><a href="oaTechUndoObserver.html">oaTechUndoObserver</a></li><li data-class-item data-class-name="oatechundoobserverbase"><a href="oaTechUndoObserverBase.html">oaTechUndoObserverBase</a></li><li data-class-item data-class-name="oatechviadefheader"><a href="oaTechViaDefHeader.html">oaTechViaDefHeader</a></li><li data-class-item data-class-name="oatechviavariantheader"><a href="oaTechViaVariantHeader.html">oaTechViaVariantHeader</a></li><li data-class-item data-class-name="oauserunitstype"><a href="oaUserUnitsType.html">oaUserUnitsType</a></li><li data-class-item data-class-name="oaviadef"><a href="oaViaDef.html">oaViaDef</a></li><li data-class-item data-class-name="oaviadef2dtblvalue"><a href="oaViaDef2DTblValue.html">oaViaDef2DTblValue</a></li><li data-class-item data-class-name="oaviadefarray"><a href="oaViaDefArray.html">oaViaDefArray</a></li><li data-class-item data-class-name="oaviadefarrayvalue"><a href="oaViaDefArrayValue.html">oaViaDefArrayValue</a></li><li data-class-item data-class-name="oaviadefnamearray"><a href="oaViaDefNameArray.html">oaViaDefNameArray</a></li><li data-class-item data-class-name="oaviaparam"><a href="oaViaParam.html">oaViaParam</a></li><li data-class-item data-class-name="oaviaparamtype"><a href="oaViaParamType.html">oaViaParamType</a></li><li data-class-item data-class-name="oaviaspec"><a href="oaViaSpec.html">oaViaSpec</a></li><li data-class-item data-class-name="oaviatopology"><a href="oaViaTopology.html">oaViaTopology</a></li><li data-class-item data-class-name="oaviatopology2dtblvalue"><a href="oaViaTopology2DTblValue.html">oaViaTopology2DTblValue</a></li><li data-class-item data-class-name="oaviatopologyarray"><a href="oaViaTopologyArray.html">oaViaTopologyArray</a></li><li data-class-item data-class-name="oaviatopologyarrayvalue"><a href="oaViaTopologyArrayValue.html">oaViaTopologyArrayValue</a></li><li data-class-item data-class-name="oaviatopologytype"><a href="oaViaTopologyType.html">oaViaTopologyType</a></li><li data-class-item data-class-name="oaviavariant"><a href="oaViaVariant.html">oaViaVariant</a></li><li data-class-item data-class-name="oaviavariantheader"><a href="oaViaVariantHeader.html">oaViaVariantHeader</a></li></ul></div></div></aside>
+    <main class="content">
+      <div class="content-grid">
+        <div class="doc">
+          <div class="crumbs"><a href="../index.html">首页</a> / <a href="index.html">tech</a> / oaClearanceMeasure</div>
+          <h1 id="oaclearancemeasure">oaClearanceMeasure</h1>
+<p><strong>模块</strong>: <code>oapy._oa._tech</code>
+<strong>导入</strong>: <code>from oapy._oa import _tech</code></p>
+<h2 id="_1">概览</h2>
+<p><code>oaClearanceMeasure</code> 在 <code>oapy</code> 中可用，可通过 <code>_tech</code> 模块访问。</p>
+<p>本页汇总 <code>oaClearanceMeasure</code> 当前在 <code>oapy</code> 中可用的 Python 接口。</p>
+<h2 id="_2">详细说明</h2>
+<p><code>oaClearanceMeasure</code> 类封装用于描述the different types of clearance measurements的枚举值。 enum oaClearanceMeasureEnum Enumeration values: oacEuclidianClearanceMeasure "euclidian" oacMaxXYClearanceMeasure "maxXY"。</p>
+<h2 id="_3">构造函数</h2>
+<h3 id="_techoaclearancemeasurevaluein"><code>_tech.oaClearanceMeasure(valueIn)</code></h3>
+<pre><code class="language-python">obj = _tech.oaClearanceMeasure(valueIn)
+</code></pre>
+<h3 id="_techoaclearancemeasurename"><code>_tech.oaClearanceMeasure(name)</code></h3>
+<pre><code class="language-python">obj = _tech.oaClearanceMeasure(name)
+</code></pre>
+<h2 id="_4">方法总览</h2>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>Python 调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅</td>
+<td><code>obj.getName()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_5">方法说明</h2>
+<h3 id="objgetname"><code>obj.getName()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getName()</code></p>
+<p>This function returns the name string associated with the encapsulated oaClearanceMeasureEnum object。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaClearanceMeasure
+obj.getName()
+</code></pre>
+        </div>
+        <aside class="toc-panel"><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false"><span>方法</span><span class="toc-toggle-indicator">展开</span></button><div class="toc-body"><h2>方法</h2><ul><li><a href="#tech-oaclearancemeasure-valuein"><code>_tech.oaClearanceMeasure(valueIn)</code></a></li><li><a href="#tech-oaclearancemeasure-name"><code>_tech.oaClearanceMeasure(name)</code></a></li><li><a href="#obj-getname"><code>obj.getName()</code></a></li></ul></div></aside>
+      </div>
+    </main>
+  </div>
+  <div class="footer">oapy 是 AIVI 项目的一部分。此站点提供当前 oapy Python API 的中文文档。</div>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.querySelector("[data-class-filter]");
+  if (input) {
+    input.addEventListener("input", () => {
+      const term = input.value.trim().toLowerCase();
+      document.querySelectorAll("[data-class-item]").forEach((item) => {
+        const name = item.getAttribute("data-class-name") || "";
+        item.classList.toggle("hidden", term && !name.includes(term));
+      });
+    });
+  }
+
+  const globalInput = document.querySelector("[data-global-search]");
+  if (globalInput) {
+    globalInput.addEventListener("input", () => {
+      const term = globalInput.value.trim().toLowerCase();
+      document.querySelectorAll("[data-search-item]").forEach((item) => {
+        const name = item.getAttribute("data-search-name") || "";
+        const module = item.getAttribute("data-search-module") || "";
+        const visible = !term || name.includes(term) || module.includes(term);
+        item.classList.toggle("hidden", !visible);
+      });
+    });
+  }
+
+  document.querySelectorAll("[data-toc-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const panel = button.closest(".toc-panel");
+      if (!panel) return;
+      const isOpen = panel.classList.toggle("open");
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      const indicator = button.querySelector(".toc-toggle-indicator");
+      if (indicator) {
+        indicator.textContent = isOpen ? "Hide" : "Show";
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

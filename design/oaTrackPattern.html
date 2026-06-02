@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>oaTrackPattern</title>
+  <style>
+body {
+  margin: 0;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  color: #f2d6c2;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #fff4ea;
+}
+
+.topbar {
+  border-bottom: 1px solid #6f3d2d;
+  background: #120f0f;
+}
+
+.topbar-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 14px 20px 10px;
+}
+
+.brand {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff8f2;
+  margin: 0 0 10px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tab {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  color: #f2d6c2;
+  font-size: 13px;
+}
+
+.tab.active {
+  background: #4b2317;
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.layout {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 28px;
+  padding: 24px 24px 40px;
+}
+
+.sidebar {
+  font-size: 13px;
+}
+
+.sidebar-panel {
+  border: 1px solid #6f3d2d;
+  margin-bottom: 16px;
+  background: #151111;
+}
+
+.sidebar-title {
+  background: #2a1713;
+  border-bottom: 1px solid #6f3d2d;
+  padding: 8px 10px;
+  font-weight: 700;
+  color: #fff1e8;
+}
+
+.sidebar-body {
+  padding: 8px 10px;
+}
+
+.sidebar-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.sidebar-search::placeholder {
+  color: #c8a995;
+}
+
+.sidebar-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-body li.hidden {
+  display: none;
+}
+
+.active-link {
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.sidebar-body li + li {
+  margin-top: 6px;
+}
+
+.content {
+  min-width: 0;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  align-items: start;
+}
+
+.doc {
+  border: 1px solid #6f3d2d;
+  background: #120f0f;
+  padding: 24px 28px 32px;
+  min-width: 0;
+}
+
+.toc-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 0;
+  position: sticky;
+  top: 16px;
+  margin-bottom: 16px;
+}
+
+.toc-toggle {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 0;
+  background: #2a1713;
+  color: #fff1e8;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.toc-toggle:hover {
+  background: #3a1d16;
+}
+
+.toc-toggle-indicator {
+  font-size: 12px;
+  color: #d6ac96;
+}
+
+.toc-body {
+  display: none;
+  padding: 14px 16px;
+}
+
+.toc-panel.open .toc-body {
+  display: block;
+}
+
+.toc-panel h2 {
+  margin: 0 0 10px;
+  padding: 0;
+  border: 0;
+  font-size: 18px;
+  color: #fff1e8;
+}
+
+.toc-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-panel li + li {
+  margin-top: 8px;
+}
+
+.toc-panel a {
+  font-size: 13px;
+  line-height: 1.35;
+  color: #f2d6c2;
+}
+
+.crumbs {
+  color: #c8a995;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.meta {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 10px 12px;
+  margin: 16px 0 20px;
+  font-size: 13px;
+}
+
+.meta div + div {
+  margin-top: 4px;
+}
+
+.doc h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  color: #fff8f2;
+}
+
+.doc h2 {
+  margin: 28px 0 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #6f3d2d;
+  font-size: 22px;
+  color: #fff1e8;
+}
+
+.doc h3 {
+  margin: 22px 0 10px;
+  font-size: 18px;
+  color: #f7e1d5;
+}
+
+.doc p, .doc li {
+  font-size: 14px;
+}
+
+.doc pre {
+  overflow-x: auto;
+  background: #0d0b0b;
+  border: 1px solid #6f3d2d;
+  padding: 12px 14px;
+}
+
+.doc code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  color: #f7e1d5;
+}
+
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 18px;
+  font-size: 13px;
+  table-layout: fixed;
+}
+
+.doc th, .doc td {
+  border: 1px solid #6f3d2d;
+  padding: 7px 9px;
+  vertical-align: top;
+  text-align: left;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.doc th {
+  background: #2a1713;
+  color: #fff1e8;
+}
+
+.doc blockquote {
+  margin: 14px 0;
+  padding: 8px 12px;
+  border-left: 4px solid #8a4a36;
+  background: #151111;
+  color: #f2d6c2;
+}
+
+.search-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+
+.search-panel input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 14px;
+}
+
+.search-panel input::placeholder {
+  color: #c8a995;
+}
+
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+}
+
+.search-results li {
+  border-top: 1px solid #4b2317;
+  padding: 10px 0;
+}
+
+.search-results li.hidden {
+  display: none;
+}
+
+.search-results a {
+  font-weight: 700;
+}
+
+.search-results .module-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border: 1px solid #8a4a36;
+  background: #2a1713;
+  color: #f2d6c2;
+  font-size: 12px;
+}
+
+.search-results .result-path {
+  margin-top: 4px;
+  color: #c8a995;
+  font-size: 12px;
+}
+
+.footer {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px 28px;
+  color: #b89481;
+  font-size: 12px;
+}
+
+.doc > * {
+  min-width: 0;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toc-panel {
+    position: static;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><a href="../index.html">AIVI / oapy API 中文文档</a></div>
+      <div class="tabs"><a class="tab" href="../base/index.html">base</a><a class="tab" href="../common/index.html">common</a><a class="tab" href="../cms/index.html">cms</a><a class="tab" href="../dm/index.html">dm</a><a class="tab active" href="../design/index.html">design</a><a class="tab" href="../tech/index.html">tech</a><a class="tab" href="../wafer/index.html">wafer</a></div>
+    </div>
+  </div>
+  <div class="layout">
+    <aside class="sidebar"><div class="sidebar-panel"><div class="sidebar-title">模块</div><div class="sidebar-body"><ul><li><a href="../classes.html">全部类</a></li><li><a href="../base/index.html">base</a></li><li><a href="../common/index.html">common</a></li><li><a href="../cms/index.html">cms</a></li><li><a href="../dm/index.html">dm</a></li><li><a class="active-link" href="../design/index.html">design</a></li><li><a href="../tech/index.html">tech</a></li><li><a href="../wafer/index.html">wafer</a></li></ul></div></div><div class="sidebar-panel"><div class="sidebar-title">design 类</div><div class="sidebar-body"><input class="sidebar-search" type="search" placeholder="筛选类" data-class-filter><ul><li data-class-item data-class-name="iregionqueryplugmgr"><a href="IRegionQueryPlugMgr.html">IRegionQueryPlugMgr</a></li><li data-class-item data-class-name="oaanalysisoppoint"><a href="oaAnalysisOpPoint.html">oaAnalysisOpPoint</a></li><li data-class-item data-class-name="oaanalysispoint"><a href="oaAnalysisPoint.html">oaAnalysisPoint</a></li><li data-class-item data-class-name="oaanalysispointarray"><a href="oaAnalysisPointArray.html">oaAnalysisPointArray</a></li><li data-class-item data-class-name="oaarc"><a href="oaArc.html">oaArc</a></li><li data-class-item data-class-name="oaareablockage"><a href="oaAreaBlockage.html">oaAreaBlockage</a></li><li data-class-item data-class-name="oaareaboundary"><a href="oaAreaBoundary.html">oaAreaBoundary</a></li><li data-class-item data-class-name="oaareahalo"><a href="oaAreaHalo.html">oaAreaHalo</a></li><li data-class-item data-class-name="oaarrayinst"><a href="oaArrayInst.html">oaArrayInst</a></li><li data-class-item data-class-name="oaassignassignment"><a href="oaAssignAssignment.html">oaAssignAssignment</a></li><li data-class-item data-class-name="oaassignvalue"><a href="oaAssignValue.html">oaAssignValue</a></li><li data-class-item data-class-name="oaassignednetspec"><a href="oaAssignedNetSpec.html">oaAssignedNetSpec</a></li><li data-class-item data-class-name="oaassignment"><a href="oaAssignment.html">oaAssignment</a></li><li data-class-item data-class-name="oaassignmentattrtype"><a href="oaAssignmentAttrType.html">oaAssignmentAttrType</a></li><li data-class-item data-class-name="oaassignmentdef"><a href="oaAssignmentDef.html">oaAssignmentDef</a></li><li data-class-item data-class-name="oaattrdisplay"><a href="oaAttrDisplay.html">oaAttrDisplay</a></li><li data-class-item data-class-name="oaattrtype"><a href="oaAttrType.html">oaAttrType</a></li><li data-class-item data-class-name="oabasememnetcollection"><a href="oaBaseMemNetCollection.html">oaBaseMemNetCollection</a></li><li data-class-item data-class-name="oabasememnetiter"><a href="oaBaseMemNetIter.html">oaBaseMemNetIter</a></li><li data-class-item data-class-name="oabitinst"><a href="oaBitInst.html">oaBitInst</a></li><li data-class-item data-class-name="oabitnet"><a href="oaBitNet.html">oaBitNet</a></li><li data-class-item data-class-name="oabitorder"><a href="oaBitOrder.html">oaBitOrder</a></li><li data-class-item data-class-name="oabitterm"><a href="oaBitTerm.html">oaBitTerm</a></li><li data-class-item data-class-name="oablock"><a href="oaBlock.html">oaBlock</a></li><li data-class-item data-class-name="oablockdomainvisibility"><a href="oaBlockDomainVisibility.html">oaBlockDomainVisibility</a></li><li data-class-item data-class-name="oablockobject"><a href="oaBlockObject.html">oaBlockObject</a></li><li data-class-item data-class-name="oablockage"><a href="oaBlockage.html">oaBlockage</a></li><li data-class-item data-class-name="oablockagequery"><a href="oaBlockageQuery.html">oaBlockageQuery</a></li><li data-class-item data-class-name="oablockagetype"><a href="oaBlockageType.html">oaBlockageType</a></li><li data-class-item data-class-name="oaboundary"><a href="oaBoundary.html">oaBoundary</a></li><li data-class-item data-class-name="oaboundaryquery"><a href="oaBoundaryQuery.html">oaBoundaryQuery</a></li><li data-class-item data-class-name="oabundlenet"><a href="oaBundleNet.html">oaBundleNet</a></li><li data-class-item data-class-name="oabundleterm"><a href="oaBundleTerm.html">oaBundleTerm</a></li><li data-class-item data-class-name="oabusnet"><a href="oaBusNet.html">oaBusNet</a></li><li data-class-item data-class-name="oabusnetbit"><a href="oaBusNetBit.html">oaBusNetBit</a></li><li data-class-item data-class-name="oabusnetdef"><a href="oaBusNetDef.html">oaBusNetDef</a></li><li data-class-item data-class-name="oabusterm"><a href="oaBusTerm.html">oaBusTerm</a></li><li data-class-item data-class-name="oabustermbit"><a href="oaBusTermBit.html">oaBusTermBit</a></li><li data-class-item data-class-name="oabustermdef"><a href="oaBusTermDef.html">oaBusTermDef</a></li><li data-class-item data-class-name="oacmap"><a href="oaCMap.html">oaCMap</a></li><li data-class-item data-class-name="oacelltype"><a href="oaCellType.html">oaCellType</a></li><li data-class-item data-class-name="oacluster"><a href="oaCluster.html">oaCluster</a></li><li data-class-item data-class-name="oaclusterboundary"><a href="oaClusterBoundary.html">oaClusterBoundary</a></li><li data-class-item data-class-name="oaclustertype"><a href="oaClusterType.html">oaClusterType</a></li><li data-class-item data-class-name="oaconnfig"><a href="oaConnFig.html">oaConnFig</a></li><li data-class-item data-class-name="oaconnstatus"><a href="oaConnStatus.html">oaConnStatus</a></li><li data-class-item data-class-name="oaconnectdef"><a href="oaConnectDef.html">oaConnectDef</a></li><li data-class-item data-class-name="oacoreboxspec"><a href="oaCoreBoxSpec.html">oaCoreBoxSpec</a></li><li data-class-item data-class-name="oacouplingcap"><a href="oaCouplingCap.html">oaCouplingCap</a></li><li data-class-item data-class-name="oacustomvia"><a href="oaCustomVia.html">oaCustomVia</a></li><li data-class-item data-class-name="oacustomviaheader"><a href="oaCustomViaHeader.html">oaCustomViaHeader</a></li><li data-class-item data-class-name="oadesign"><a href="oaDesign.html">oaDesign</a></li><li data-class-item data-class-name="oadesignarray"><a href="oaDesignArray.html">oaDesignArray</a></li><li data-class-item data-class-name="oadesignattrtype"><a href="oaDesignAttrType.html">oaDesignAttrType</a></li><li data-class-item data-class-name="oadesigndatatype"><a href="oaDesignDataType.html">oaDesignDataType</a></li><li data-class-item data-class-name="oadesignerror"><a href="oaDesignError.html">oaDesignError</a></li><li data-class-item data-class-name="oadesignexception"><a href="oaDesignException.html">oaDesignException</a></li><li data-class-item data-class-name="oadesignobject"><a href="oaDesignObject.html">oaDesignObject</a></li><li data-class-item data-class-name="oadesignundoobserver"><a href="oaDesignUndoObserver.html">oaDesignUndoObserver</a></li><li data-class-item data-class-name="oadesignundoobserverbase"><a href="oaDesignUndoObserverBase.html">oaDesignUndoObserverBase</a></li><li data-class-item data-class-name="oadesignviavariantheader"><a href="oaDesignViaVariantHeader.html">oaDesignViaVariantHeader</a></li><li data-class-item data-class-name="oadevice"><a href="oaDevice.html">oaDevice</a></li><li data-class-item data-class-name="oadiode"><a href="oaDiode.html">oaDiode</a></li><li data-class-item data-class-name="oadonut"><a href="oaDonut.html">oaDonut</a></li><li data-class-item data-class-name="oadot"><a href="oaDot.html">oaDot</a></li><li data-class-item data-class-name="oaellipse"><a href="oaEllipse.html">oaEllipse</a></li><li data-class-item data-class-name="oaelmore"><a href="oaElmore.html">oaElmore</a></li><li data-class-item data-class-name="oaendstyle"><a href="oaEndStyle.html">oaEndStyle</a></li><li data-class-item data-class-name="oaendpointtype"><a href="oaEndpointType.html">oaEndpointType</a></li><li data-class-item data-class-name="oaevaltext"><a href="oaEvalText.html">oaEvalText</a></li><li data-class-item data-class-name="oaevaltextlink"><a href="oaEvalTextLink.html">oaEvalTextLink</a></li><li data-class-item data-class-name="oafig"><a href="oaFig.html">oaFig</a></li><li data-class-item data-class-name="oafiggroup"><a href="oaFigGroup.html">oaFigGroup</a></li><li data-class-item data-class-name="oafiggroupmem"><a href="oaFigGroupMem.html">oaFigGroupMem</a></li><li data-class-item data-class-name="oafiggroupquery"><a href="oaFigGroupQuery.html">oaFigGroupQuery</a></li><li data-class-item data-class-name="oafiggroupstatus"><a href="oaFigGroupStatus.html">oaFigGroupStatus</a></li><li data-class-item data-class-name="oafont"><a href="oaFont.html">oaFont</a></li><li data-class-item data-class-name="oagcellpattern"><a href="oaGCellPattern.html">oaGCellPattern</a></li><li data-class-item data-class-name="oagroundednode"><a href="oaGroundedNode.html">oaGroundedNode</a></li><li data-class-item data-class-name="oaguide"><a href="oaGuide.html">oaGuide</a></li><li data-class-item data-class-name="oaguidequery"><a href="oaGuideQuery.html">oaGuideQuery</a></li><li data-class-item data-class-name="oahierpath"><a href="oaHierPath.html">oaHierPath</a></li><li data-class-item data-class-name="oainductor"><a href="oaInductor.html">oaInductor</a></li><li data-class-item data-class-name="oainst"><a href="oaInst.html">oaInst</a></li><li data-class-item data-class-name="oainstattrdisplay"><a href="oaInstAttrDisplay.html">oaInstAttrDisplay</a></li><li data-class-item data-class-name="oainstattrtype"><a href="oaInstAttrType.html">oaInstAttrType</a></li><li data-class-item data-class-name="oainstheader"><a href="oaInstHeader.html">oaInstHeader</a></li><li data-class-item data-class-name="oainstpropdisplay"><a href="oaInstPropDisplay.html">oaInstPropDisplay</a></li><li data-class-item data-class-name="oainstquery"><a href="oaInstQuery.html">oaInstQuery</a></li><li data-class-item data-class-name="oainstterm"><a href="oaInstTerm.html">oaInstTerm</a></li><li data-class-item data-class-name="oainsttermattrtype"><a href="oaInstTermAttrType.html">oaInstTermAttrType</a></li><li data-class-item data-class-name="oalppheader"><a href="oaLPPHeader.html">oaLPPHeader</a></li><li data-class-item data-class-name="oalayerblockage"><a href="oaLayerBlockage.html">oaLayerBlockage</a></li><li data-class-item data-class-name="oalayerhalo"><a href="oaLayerHalo.html">oaLayerHalo</a></li><li data-class-item data-class-name="oalayerheader"><a href="oaLayerHeader.html">oaLayerHeader</a></li><li data-class-item data-class-name="oalayerheaderarray"><a href="oaLayerHeaderArray.html">oaLayerHeaderArray</a></li><li data-class-item data-class-name="oalayerrangeblockage"><a href="oaLayerRangeBlockage.html">oaLayerRangeBlockage</a></li><li data-class-item data-class-name="oalayerrangeblockagequery"><a href="oaLayerRangeBlockageQuery.html">oaLayerRangeBlockageQuery</a></li><li data-class-item data-class-name="oalayerrangehalo"><a href="oaLayerRangeHalo.html">oaLayerRangeHalo</a></li><li data-class-item data-class-name="oaline"><a href="oaLine.html">oaLine</a></li><li data-class-item data-class-name="oalumpedelmore"><a href="oaLumpedElmore.html">oaLumpedElmore</a></li><li data-class-item data-class-name="oamarker"><a href="oaMarker.html">oaMarker</a></li><li data-class-item data-class-name="oamarkerdeletewhen"><a href="oaMarkerDeleteWhen.html">oaMarkerDeleteWhen</a></li><li data-class-item data-class-name="oamarkerquery"><a href="oaMarkerQuery.html">oaMarkerQuery</a></li><li data-class-item data-class-name="oamarkerseverity"><a href="oaMarkerSeverity.html">oaMarkerSeverity</a></li><li data-class-item data-class-name="oamemnetcollection"><a href="oaMemNetCollection.html">oaMemNetCollection</a></li><li data-class-item data-class-name="oamemnetiter"><a href="oaMemNetIter.html">oaMemNetIter</a></li><li data-class-item data-class-name="oamodassignassignment"><a href="oaModAssignAssignment.html">oaModAssignAssignment</a></li><li data-class-item data-class-name="oamodassignvalue"><a href="oaModAssignValue.html">oaModAssignValue</a></li><li data-class-item data-class-name="oamodassignment"><a href="oaModAssignment.html">oaModAssignment</a></li><li data-class-item data-class-name="oamodbitinst"><a href="oaModBitInst.html">oaModBitInst</a></li><li data-class-item data-class-name="oamodbitnet"><a href="oaModBitNet.html">oaModBitNet</a></li><li data-class-item data-class-name="oamodbitterm"><a href="oaModBitTerm.html">oaModBitTerm</a></li><li data-class-item data-class-name="oamodbundlenet"><a href="oaModBundleNet.html">oaModBundleNet</a></li><li data-class-item data-class-name="oamodbundleterm"><a href="oaModBundleTerm.html">oaModBundleTerm</a></li><li data-class-item data-class-name="oamodbusnet"><a href="oaModBusNet.html">oaModBusNet</a></li><li data-class-item data-class-name="oamodbusnetbit"><a href="oaModBusNetBit.html">oaModBusNetBit</a></li><li data-class-item data-class-name="oamodbusnetdef"><a href="oaModBusNetDef.html">oaModBusNetDef</a></li><li data-class-item data-class-name="oamodbusterm"><a href="oaModBusTerm.html">oaModBusTerm</a></li><li data-class-item data-class-name="oamodbustermbit"><a href="oaModBusTermBit.html">oaModBusTermBit</a></li><li data-class-item data-class-name="oamodbustermdef"><a href="oaModBusTermDef.html">oaModBusTermDef</a></li><li data-class-item data-class-name="oamodconnectdef"><a href="oaModConnectDef.html">oaModConnectDef</a></li><li data-class-item data-class-name="oamoddesigninst"><a href="oaModDesignInst.html">oaModDesignInst</a></li><li data-class-item data-class-name="oamodinst"><a href="oaModInst.html">oaModInst</a></li><li data-class-item data-class-name="oamodinstheader"><a href="oaModInstHeader.html">oaModInstHeader</a></li><li data-class-item data-class-name="oamodinstterm"><a href="oaModInstTerm.html">oaModInstTerm</a></li><li data-class-item data-class-name="oamodmemnetcollection"><a href="oaModMemNetCollection.html">oaModMemNetCollection</a></li><li data-class-item data-class-name="oamodmemnetiter"><a href="oaModMemNetIter.html">oaModMemNetIter</a></li><li data-class-item data-class-name="oamodmodulebitinst"><a href="oaModModuleBitInst.html">oaModModuleBitInst</a></li><li data-class-item data-class-name="oamodmoduleinst"><a href="oaModModuleInst.html">oaModModuleInst</a></li><li data-class-item data-class-name="oamodmoduleinstheader"><a href="oaModModuleInstHeader.html">oaModModuleInstHeader</a></li><li data-class-item data-class-name="oamodmodulescalarinst"><a href="oaModModuleScalarInst.html">oaModModuleScalarInst</a></li><li data-class-item data-class-name="oamodmodulevectorinst"><a href="oaModModuleVectorInst.html">oaModModuleVectorInst</a></li><li data-class-item data-class-name="oamodmodulevectorinstbit"><a href="oaModModuleVectorInstBit.html">oaModModuleVectorInstBit</a></li><li data-class-item data-class-name="oamodnet"><a href="oaModNet.html">oaModNet</a></li><li data-class-item data-class-name="oamodnetconnectdef"><a href="oaModNetConnectDef.html">oaModNetConnectDef</a></li><li data-class-item data-class-name="oamodnettermarray"><a href="oaModNetTermArray.html">oaModNetTermArray</a></li><li data-class-item data-class-name="oamodnettermnamearray"><a href="oaModNetTermNameArray.html">oaModNetTermNameArray</a></li><li data-class-item data-class-name="oamodnettermposarray"><a href="oaModNetTermPosArray.html">oaModNetTermPosArray</a></li><li data-class-item data-class-name="oamodobject"><a href="oaModObject.html">oaModObject</a></li><li data-class-item data-class-name="oamodscalarinst"><a href="oaModScalarInst.html">oaModScalarInst</a></li><li data-class-item data-class-name="oamodscalarnet"><a href="oaModScalarNet.html">oaModScalarNet</a></li><li data-class-item data-class-name="oamodscalarterm"><a href="oaModScalarTerm.html">oaModScalarTerm</a></li><li data-class-item data-class-name="oamodterm"><a href="oaModTerm.html">oaModTerm</a></li><li data-class-item data-class-name="oamodtermarray"><a href="oaModTermArray.html">oaModTermArray</a></li><li data-class-item data-class-name="oamodtermconnectdef"><a href="oaModTermConnectDef.html">oaModTermConnectDef</a></li><li data-class-item data-class-name="oamodvectorinst"><a href="oaModVectorInst.html">oaModVectorInst</a></li><li data-class-item data-class-name="oamodvectorinstbit"><a href="oaModVectorInstBit.html">oaModVectorInstBit</a></li><li data-class-item data-class-name="oamodvectorinstdef"><a href="oaModVectorInstDef.html">oaModVectorInstDef</a></li><li data-class-item data-class-name="oamodule"><a href="oaModule.html">oaModule</a></li><li data-class-item data-class-name="oamutualinductor"><a href="oaMutualInductor.html">oaMutualInductor</a></li><li data-class-item data-class-name="oanet"><a href="oaNet.html">oaNet</a></li><li data-class-item data-class-name="oanetattrtype"><a href="oaNetAttrType.html">oaNetAttrType</a></li><li data-class-item data-class-name="oanetconnectdef"><a href="oaNetConnectDef.html">oaNetConnectDef</a></li><li data-class-item data-class-name="oanettermarray"><a href="oaNetTermArray.html">oaNetTermArray</a></li><li data-class-item data-class-name="oanettermnamearray"><a href="oaNetTermNameArray.html">oaNetTermNameArray</a></li><li data-class-item data-class-name="oanettermpair"><a href="oaNetTermPair.html">oaNetTermPair</a></li><li data-class-item data-class-name="oanettermposarray"><a href="oaNetTermPosArray.html">oaNetTermPosArray</a></li><li data-class-item data-class-name="oanode"><a href="oaNode.html">oaNode</a></li><li data-class-item data-class-name="oaoccarc"><a href="oaOccArc.html">oaOccArc</a></li><li data-class-item data-class-name="oaoccarrayinst"><a href="oaOccArrayInst.html">oaOccArrayInst</a></li><li data-class-item data-class-name="oaoccassignassignment"><a href="oaOccAssignAssignment.html">oaOccAssignAssignment</a></li><li data-class-item data-class-name="oaoccassignvalue"><a href="oaOccAssignValue.html">oaOccAssignValue</a></li><li data-class-item data-class-name="oaoccassignment"><a href="oaOccAssignment.html">oaOccAssignment</a></li><li data-class-item data-class-name="oaoccattrdisplay"><a href="oaOccAttrDisplay.html">oaOccAttrDisplay</a></li><li data-class-item data-class-name="oaoccbitinst"><a href="oaOccBitInst.html">oaOccBitInst</a></li><li data-class-item data-class-name="oaoccbitnet"><a href="oaOccBitNet.html">oaOccBitNet</a></li><li data-class-item data-class-name="oaoccbitterm"><a href="oaOccBitTerm.html">oaOccBitTerm</a></li><li data-class-item data-class-name="oaoccbundlenet"><a href="oaOccBundleNet.html">oaOccBundleNet</a></li><li data-class-item data-class-name="oaoccbundleterm"><a href="oaOccBundleTerm.html">oaOccBundleTerm</a></li><li data-class-item data-class-name="oaoccbusnet"><a href="oaOccBusNet.html">oaOccBusNet</a></li><li data-class-item data-class-name="oaoccbusnetbit"><a href="oaOccBusNetBit.html">oaOccBusNetBit</a></li><li data-class-item data-class-name="oaoccbusnetdef"><a href="oaOccBusNetDef.html">oaOccBusNetDef</a></li><li data-class-item data-class-name="oaoccbusterm"><a href="oaOccBusTerm.html">oaOccBusTerm</a></li><li data-class-item data-class-name="oaoccbustermbit"><a href="oaOccBusTermBit.html">oaOccBusTermBit</a></li><li data-class-item data-class-name="oaoccbustermdef"><a href="oaOccBusTermDef.html">oaOccBusTermDef</a></li><li data-class-item data-class-name="oaoccconnectdef"><a href="oaOccConnectDef.html">oaOccConnectDef</a></li><li data-class-item data-class-name="oaoccdesigninst"><a href="oaOccDesignInst.html">oaOccDesignInst</a></li><li data-class-item data-class-name="oaoccdonut"><a href="oaOccDonut.html">oaOccDonut</a></li><li data-class-item data-class-name="oaoccdot"><a href="oaOccDot.html">oaOccDot</a></li><li data-class-item data-class-name="oaoccellipse"><a href="oaOccEllipse.html">oaOccEllipse</a></li><li data-class-item data-class-name="oaoccevaltext"><a href="oaOccEvalText.html">oaOccEvalText</a></li><li data-class-item data-class-name="oaoccinst"><a href="oaOccInst.html">oaOccInst</a></li><li data-class-item data-class-name="oaoccinstattrdisplay"><a href="oaOccInstAttrDisplay.html">oaOccInstAttrDisplay</a></li><li data-class-item data-class-name="oaoccinstheader"><a href="oaOccInstHeader.html">oaOccInstHeader</a></li><li data-class-item data-class-name="oaoccinstpropdisplay"><a href="oaOccInstPropDisplay.html">oaOccInstPropDisplay</a></li><li data-class-item data-class-name="oaoccinstterm"><a href="oaOccInstTerm.html">oaOccInstTerm</a></li><li data-class-item data-class-name="oaoccline"><a href="oaOccLine.html">oaOccLine</a></li><li data-class-item data-class-name="oaoccmemnetcollection"><a href="oaOccMemNetCollection.html">oaOccMemNetCollection</a></li><li data-class-item data-class-name="oaoccmemnetiter"><a href="oaOccMemNetIter.html">oaOccMemNetIter</a></li><li data-class-item data-class-name="oaoccmodulebitinst"><a href="oaOccModuleBitInst.html">oaOccModuleBitInst</a></li><li data-class-item data-class-name="oaoccmoduleinst"><a href="oaOccModuleInst.html">oaOccModuleInst</a></li><li data-class-item data-class-name="oaoccmoduleinstheader"><a href="oaOccModuleInstHeader.html">oaOccModuleInstHeader</a></li><li data-class-item data-class-name="oaoccmodulescalarinst"><a href="oaOccModuleScalarInst.html">oaOccModuleScalarInst</a></li><li data-class-item data-class-name="oaoccmodulevectorinst"><a href="oaOccModuleVectorInst.html">oaOccModuleVectorInst</a></li><li data-class-item data-class-name="oaoccmodulevectorinstbit"><a href="oaOccModuleVectorInstBit.html">oaOccModuleVectorInstBit</a></li><li data-class-item data-class-name="oaoccnet"><a href="oaOccNet.html">oaOccNet</a></li><li data-class-item data-class-name="oaoccnetconnectdef"><a href="oaOccNetConnectDef.html">oaOccNetConnectDef</a></li><li data-class-item data-class-name="oaoccobject"><a href="oaOccObject.html">oaOccObject</a></li><li data-class-item data-class-name="oaoccpath"><a href="oaOccPath.html">oaOccPath</a></li><li data-class-item data-class-name="oaoccpathseg"><a href="oaOccPathSeg.html">oaOccPathSeg</a></li><li data-class-item data-class-name="oaoccpolygon"><a href="oaOccPolygon.html">oaOccPolygon</a></li><li data-class-item data-class-name="oaoccproducer"><a href="oaOccProducer.html">oaOccProducer</a></li><li data-class-item data-class-name="oaoccpropdisplay"><a href="oaOccPropDisplay.html">oaOccPropDisplay</a></li><li data-class-item data-class-name="oaoccrect"><a href="oaOccRect.html">oaOccRect</a></li><li data-class-item data-class-name="oaoccscalarinst"><a href="oaOccScalarInst.html">oaOccScalarInst</a></li><li data-class-item data-class-name="oaoccscalarnet"><a href="oaOccScalarNet.html">oaOccScalarNet</a></li><li data-class-item data-class-name="oaoccscalarterm"><a href="oaOccScalarTerm.html">oaOccScalarTerm</a></li><li data-class-item data-class-name="oaoccshape"><a href="oaOccShape.html">oaOccShape</a></li><li data-class-item data-class-name="oaoccterm"><a href="oaOccTerm.html">oaOccTerm</a></li><li data-class-item data-class-name="oaocctermarray"><a href="oaOccTermArray.html">oaOccTermArray</a></li><li data-class-item data-class-name="oaocctermconnectdef"><a href="oaOccTermConnectDef.html">oaOccTermConnectDef</a></li><li data-class-item data-class-name="oaocctext"><a href="oaOccText.html">oaOccText</a></li><li data-class-item data-class-name="oaocctextdisplay"><a href="oaOccTextDisplay.html">oaOccTextDisplay</a></li><li data-class-item data-class-name="oaocctextoverride"><a href="oaOccTextOverride.html">oaOccTextOverride</a></li><li data-class-item data-class-name="oaocctraverser"><a href="oaOccTraverser.html">oaOccTraverser</a></li><li data-class-item data-class-name="oaoccvectorinst"><a href="oaOccVectorInst.html">oaOccVectorInst</a></li><li data-class-item data-class-name="oaoccvectorinstbit"><a href="oaOccVectorInstBit.html">oaOccVectorInstBit</a></li><li data-class-item data-class-name="oaoccvectorinstdef"><a href="oaOccVectorInstDef.html">oaOccVectorInstDef</a></li><li data-class-item data-class-name="oaoccurrence"><a href="oaOccurrence.html">oaOccurrence</a></li><li data-class-item data-class-name="oaoppointheader"><a href="oaOpPointHeader.html">oaOpPointHeader</a></li><li data-class-item data-class-name="oaprboundary"><a href="oaPRBoundary.html">oaPRBoundary</a></li><li data-class-item data-class-name="oaparasiticnetwork"><a href="oaParasiticNetwork.html">oaParasiticNetwork</a></li><li data-class-item data-class-name="oapath"><a href="oaPath.html">oaPath</a></li><li data-class-item data-class-name="oapathseg"><a href="oaPathSeg.html">oaPathSeg</a></li><li data-class-item data-class-name="oapathstyle"><a href="oaPathStyle.html">oaPathStyle</a></li><li data-class-item data-class-name="oapcelldef"><a href="oaPcellDef.html">oaPcellDef</a></li><li data-class-item data-class-name="oapcellfileobserver"><a href="oaPcellFileObserver.html">oaPcellFileObserver</a></li><li data-class-item data-class-name="oapcelllink"><a href="oaPcellLink.html">oaPcellLink</a></li><li data-class-item data-class-name="oapcellobserver"><a href="oaPcellObserver.html">oaPcellObserver</a></li><li data-class-item data-class-name="oapielmore"><a href="oaPiElmore.html">oaPiElmore</a></li><li data-class-item data-class-name="oapipoleresidue"><a href="oaPiPoleResidue.html">oaPiPoleResidue</a></li><li data-class-item data-class-name="oapin"><a href="oaPin.html">oaPin</a></li><li data-class-item data-class-name="oapinconnectmethod"><a href="oaPinConnectMethod.html">oaPinConnectMethod</a></li><li data-class-item data-class-name="oapinfig"><a href="oaPinFig.html">oaPinFig</a></li><li data-class-item data-class-name="oapintype"><a href="oaPinType.html">oaPinType</a></li><li data-class-item data-class-name="oaplacementblockagequery"><a href="oaPlacementBlockageQuery.html">oaPlacementBlockageQuery</a></li><li data-class-item data-class-name="oaplacementstatus"><a href="oaPlacementStatus.html">oaPlacementStatus</a></li><li data-class-item data-class-name="oapoleresidue"><a href="oaPoleResidue.html">oaPoleResidue</a></li><li data-class-item data-class-name="oapolygon"><a href="oaPolygon.html">oaPolygon</a></li><li data-class-item data-class-name="oapropdisplay"><a href="oaPropDisplay.html">oaPropDisplay</a></li><li data-class-item data-class-name="oarect"><a href="oaRect.html">oaRect</a></li><li data-class-item data-class-name="oarecursionobserver"><a href="oaRecursionObserver.html">oaRecursionObserver</a></li><li data-class-item data-class-name="oareducedmodel"><a href="oaReducedModel.html">oaReducedModel</a></li><li data-class-item data-class-name="oaref"><a href="oaRef.html">oaRef</a></li><li data-class-item data-class-name="oarefheader"><a href="oaRefHeader.html">oaRefHeader</a></li><li data-class-item data-class-name="oaregionquery"><a href="oaRegionQuery.html">oaRegionQuery</a></li><li data-class-item data-class-name="oaresistor"><a href="oaResistor.html">oaResistor</a></li><li data-class-item data-class-name="oaroute"><a href="oaRoute.html">oaRoute</a></li><li data-class-item data-class-name="oaroutemethod"><a href="oaRouteMethod.html">oaRouteMethod</a></li><li data-class-item data-class-name="oarouteobjectarray"><a href="oaRouteObjectArray.html">oaRouteObjectArray</a></li><li data-class-item data-class-name="oaroutepattern"><a href="oaRoutePattern.html">oaRoutePattern</a></li><li data-class-item data-class-name="oaroutestatus"><a href="oaRouteStatus.html">oaRouteStatus</a></li><li data-class-item data-class-name="oaroutetopology"><a href="oaRouteTopology.html">oaRouteTopology</a></li><li data-class-item data-class-name="oarow"><a href="oaRow.html">oaRow</a></li><li data-class-item data-class-name="oarowfliptype"><a href="oaRowFlipType.html">oaRowFlipType</a></li><li data-class-item data-class-name="oarowheader"><a href="oaRowHeader.html">oaRowHeader</a></li><li data-class-item data-class-name="oarowquery"><a href="oaRowQuery.html">oaRowQuery</a></li><li data-class-item data-class-name="oarowspacingtype"><a href="oaRowSpacingType.html">oaRowSpacingType</a></li><li data-class-item data-class-name="oascalarinst"><a href="oaScalarInst.html">oaScalarInst</a></li><li data-class-item data-class-name="oascalarnet"><a href="oaScalarNet.html">oaScalarNet</a></li><li data-class-item data-class-name="oascalarterm"><a href="oaScalarTerm.html">oaScalarTerm</a></li><li data-class-item data-class-name="oascanchain"><a href="oaScanChain.html">oaScanChain</a></li><li data-class-item data-class-name="oascanchaininst"><a href="oaScanChainInst.html">oaScanChainInst</a></li><li data-class-item data-class-name="oascanchainset"><a href="oaScanChainSet.html">oaScanChainSet</a></li><li data-class-item data-class-name="oascanchainsettype"><a href="oaScanChainSetType.html">oaScanChainSetType</a></li><li data-class-item data-class-name="oascriptenginelink"><a href="oaScriptEngineLink.html">oaScriptEngineLink</a></li><li data-class-item data-class-name="oasegstyle"><a href="oaSegStyle.html">oaSegStyle</a></li><li data-class-item data-class-name="oaseriesrl"><a href="oaSeriesRL.html">oaSeriesRL</a></li><li data-class-item data-class-name="oashape"><a href="oaShape.html">oaShape</a></li><li data-class-item data-class-name="oashapequery"><a href="oaShapeQuery.html">oaShapeQuery</a></li><li data-class-item data-class-name="oasigtype"><a href="oaSigType.html">oaSigType</a></li><li data-class-item data-class-name="oasnapboundary"><a href="oaSnapBoundary.html">oaSnapBoundary</a></li><li data-class-item data-class-name="oasource"><a href="oaSource.html">oaSource</a></li><li data-class-item data-class-name="oastddevice"><a href="oaStdDevice.html">oaStdDevice</a></li><li data-class-item data-class-name="oastdvia"><a href="oaStdVia.html">oaStdVia</a></li><li data-class-item data-class-name="oastdviaheader"><a href="oaStdViaHeader.html">oaStdViaHeader</a></li><li data-class-item data-class-name="oasteiner"><a href="oaSteiner.html">oaSteiner</a></li><li data-class-item data-class-name="oasteinerquery"><a href="oaSteinerQuery.html">oaSteinerQuery</a></li><li data-class-item data-class-name="oasubnetwork"><a href="oaSubNetwork.html">oaSubNetwork</a></li><li data-class-item data-class-name="oasymmetry"><a href="oaSymmetry.html">oaSymmetry</a></li><li data-class-item data-class-name="oaterm"><a href="oaTerm.html">oaTerm</a></li><li data-class-item data-class-name="oatermarray"><a href="oaTermArray.html">oaTermArray</a></li><li data-class-item data-class-name="oatermattrtype"><a href="oaTermAttrType.html">oaTermAttrType</a></li><li data-class-item data-class-name="oatermconnectdef"><a href="oaTermConnectDef.html">oaTermConnectDef</a></li><li data-class-item data-class-name="oatermtype"><a href="oaTermType.html">oaTermType</a></li><li data-class-item data-class-name="oatext"><a href="oaText.html">oaText</a></li><li data-class-item data-class-name="oatextalign"><a href="oaTextAlign.html">oaTextAlign</a></li><li data-class-item data-class-name="oatextdisplay"><a href="oaTextDisplay.html">oaTextDisplay</a></li><li data-class-item data-class-name="oatextdisplaycollection"><a href="oaTextDisplayCollection.html">oaTextDisplayCollection</a></li><li data-class-item data-class-name="oatextdisplayformat"><a href="oaTextDisplayFormat.html">oaTextDisplayFormat</a></li><li data-class-item data-class-name="oatextdisplayiter"><a href="oaTextDisplayIter.html">oaTextDisplayIter</a></li><li data-class-item data-class-name="oatextlink"><a href="oaTextLink.html">oaTextLink</a></li><li data-class-item data-class-name="oatextoverride"><a href="oaTextOverride.html">oaTextOverride</a></li><li data-class-item data-class-name="oatrackpattern"><a class="active-link" href="oaTrackPattern.html">oaTrackPattern</a></li><li data-class-item data-class-name="oavectorinst"><a href="oaVectorInst.html">oaVectorInst</a></li><li data-class-item data-class-name="oavectorinstbit"><a href="oaVectorInstBit.html">oaVectorInstBit</a></li><li data-class-item data-class-name="oavectorinstdef"><a href="oaVectorInstDef.html">oaVectorInstDef</a></li><li data-class-item data-class-name="oavia"><a href="oaVia.html">oaVia</a></li><li data-class-item data-class-name="oaviadirection"><a href="oaViaDirection.html">oaViaDirection</a></li><li data-class-item data-class-name="oaviaheader"><a href="oaViaHeader.html">oaViaHeader</a></li><li data-class-item data-class-name="oaviaquery"><a href="oaViaQuery.html">oaViaQuery</a></li></ul></div></div></aside>
+    <main class="content">
+      <div class="content-grid">
+        <div class="doc">
+          <div class="crumbs"><a href="../index.html">首页</a> / <a href="index.html">design</a> / oaTrackPattern</div>
+          <h1 id="oatrackpattern">oaTrackPattern</h1>
+<p><strong>模块</strong>: <code>oapy._oa._design</code>
+<strong>导入</strong>: <code>from oapy._oa import _design</code></p>
+<h2 id="_1">概览</h2>
+<p><code>oaTrackPattern</code> 在 <code>oapy</code> 中可用，可通过 <code>_design</code> 模块访问。</p>
+<p>本页汇总 <code>oaTrackPattern</code> 当前在 <code>oapy</code> 中可用的 Python 接口。</p>
+<h2 id="_2">详细说明</h2>
+<p>The oaTrackPattern class defines the position and number of routing tracks。 Routing tracks are used by grided routers to determine preferred locations for routes。 Tracks are defined as a grid - possibly non uniform - covering the area of the design。 Track patterns are similar to RouteGridPitch and RouteGridOffset constraints (see the built-in Routing constraint section in Creating and Modeling Process Rules and Constraints in the Programmers Guide)。 The routing constraints are the overall technology plan。 Track patterns are generally initialized by a router after considering the routing constraints and the details of a given design such as the width of the available vias。 The track patterns often will be usable only by the router that created them。 TrackPatterns can be horizontal or vertical and at least one of each must exist in a design for it to have a usable routing grid。 Each TrackPattern declares a set of uniformly spaced routing tracks。 TrackPatterns with isHorizontal set will define a horizontally spaced set of vertical routing tracks, and TrackPatterns with isHorizontal unset will define a set of vertically spaced horizontal routing tracks。 The startCoord of the TrackPattern with isHorizontal set will be the left X coordinate of the first track and the startCoord of the TrackPattern with isHorizontal unset will define the bottom Y coordinate of the lowest track。 An oaTrackPattern can optionally have an oaLayerNumber, in which case the trackPattern only applies to the specified layer。 Non-uniform grids may be declared by using multiple TrackPatterns for a given direction。 The oaTrackPattern class can be observed by deriving from oaObserver<oaTrackPattern> 。</p>
+<h2 id="_3">方法总览</h2>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>Python 调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅</td>
+<td><code>obj.destroy()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isHorizontal()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getStartCoord()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getNumTracks()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getTrackSpacing()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.hasRoutingLayer()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getRoutingLayer()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setHorizontal(isHorizontal)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setStartCoord(start)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setNumTracks(num)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setTrackSpacing(spacing)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setRoutingLayer(layer)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.removeRoutingLayer()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_design.oaTrackPattern.create(block, isHorizontal, startCoord, numTracks, trackSpacing, routingLayer)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_design.oaTrackPattern.create(block, isHorizontal, startCoord, numTracks, trackSpacing)</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">方法说明</h2>
+<h3 id="objdestroy"><code>obj.destroy()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.destroy()</code></p>
+<p>This function deletes this trackPattern, removing it from the database。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaTrackPattern
+obj.destroy()
+</code></pre>
+<h3 id="objishorizontal"><code>obj.isHorizontal()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isHorizontal()</code></p>
+<p>This function returns the flag that indicates if this trackPattern is horizontal。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaTrackPattern
+obj.isHorizontal()
+</code></pre>
+<h3 id="objgetstartcoord"><code>obj.getStartCoord()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getStartCoord()</code></p>
+<p>This function gets the starting coordinates of the trackPattern。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaTrackPattern
+obj.getStartCoord()
+</code></pre>
+<h3 id="objgetnumtracks"><code>obj.getNumTracks()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getNumTracks()</code></p>
+<p>This function gets the number of track lines of this trackPattern。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaTrackPattern
+obj.getNumTracks()
+</code></pre>
+<h3 id="objgettrackspacing"><code>obj.getTrackSpacing()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getTrackSpacing()</code></p>
+<p>This function gets the space value between two track lines in this trackPattern。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaTrackPattern
+obj.getTrackSpacing()
+</code></pre>
+<h3 id="objhasroutinglayer"><code>obj.hasRoutingLayer()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.hasRoutingLayer()</code></p>
+<p>This function returns true if the trackPattern is assigned to a layer。 Otherwise, the function returns false。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaTrackPattern
+obj.hasRoutingLayer()
+</code></pre>
+<h3 id="objgetroutinglayer"><code>obj.getRoutingLayer()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getRoutingLayer()</code></p>
+<p>This function gets the layer number of this trackPattern。 If the trackPattern has not been assigned to a layer, the result is undefined。 See also hasRoutingLayer。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaTrackPattern
+obj.getRoutingLayer()
+</code></pre>
+<h3 id="objsethorizontalishorizontal"><code>obj.setHorizontal(isHorizontal)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setHorizontal(isHorizontal)</code></p>
+<p>This function sets the horizontal field of the trackPattern。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaTrackPattern
+obj.setHorizontal(isHorizontal)
+</code></pre>
+<h3 id="objsetstartcoordstart"><code>obj.setStartCoord(start)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setStartCoord(start)</code></p>
+<p>This function sets the starting coordinate field of the trackPattern。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaTrackPattern
+obj.setStartCoord(start)
+</code></pre>
+<h3 id="objsetnumtracksnum"><code>obj.setNumTracks(num)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setNumTracks(num)</code></p>
+<p>This function sets the number of the track lines of this trackPattern。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaTrackPattern
+obj.setNumTracks(num)
+</code></pre>
+<h3 id="objsettrackspacingspacing"><code>obj.setTrackSpacing(spacing)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setTrackSpacing(spacing)</code></p>
+<p>This function sets the trackSpacing of this trackPattern。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaTrackPattern
+obj.setTrackSpacing(spacing)
+</code></pre>
+<h3 id="objsetroutinglayerlayer"><code>obj.setRoutingLayer(layer)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setRoutingLayer(layer)</code></p>
+<p>This function sets the routing layer for this trackPattern。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaTrackPattern
+obj.setRoutingLayer(layer)
+</code></pre>
+<h3 id="objremoveroutinglayer"><code>obj.removeRoutingLayer()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.removeRoutingLayer()</code></p>
+<p>This function removes the routing layer from this trackPattern。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaTrackPattern
+obj.removeRoutingLayer()
+</code></pre>
+<h3 id="_designoatrackpatterncreateblock-ishorizontal-startcoord-numtracks-trackspacing-routinglayer"><code>_design.oaTrackPattern.create(block, isHorizontal, startCoord, numTracks, trackSpacing, routingLayer)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_design.oaTrackPattern.create(block, isHorizontal, startCoord, numTracks, trackSpacing, routingLayer)</code></p>
+<p>This function creates a new trackPattern in the specified block with the specified attributes。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>block</code>: The block in which to create the new TrackPattern。</li>
+<li><code>isHorizontal</code>: Determines if the pattern is horizontal。</li>
+<li><code>startCoord</code>: The starting coordinate for the pattern。</li>
+<li><code>numTracks</code>: The number of tracks defined by the pattern。</li>
+<li><code>trackSpacing</code>: The spacing for the pattern。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+_design.oaTrackPattern.create(block, isHorizontal, startCoord, numTracks, trackSpacing, routingLayer)
+</code></pre>
+<h3 id="_designoatrackpatterncreateblock-ishorizontal-startcoord-numtracks-trackspacing"><code>_design.oaTrackPattern.create(block, isHorizontal, startCoord, numTracks, trackSpacing)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_design.oaTrackPattern.create(block, isHorizontal, startCoord, numTracks, trackSpacing)</code></p>
+<p>This function creates a new trackPattern in the specified block with the specified attributes。 This trackPattern only applies to the specified layer。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>block</code>: The block in which to create the new TrackPattern。</li>
+<li><code>isHorizontal</code>: Determines if the pattern is horizontal。</li>
+<li><code>startCoord</code>: The starting coordinate for the pattern。</li>
+<li><code>numTracks</code>: The number of tracks defined by the pattern。</li>
+<li><code>trackSpacing</code>: The spacing for the pattern。</li>
+<li><code>routingLayer</code>: The layer this trackPattern applies to。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+_design.oaTrackPattern.create(block, isHorizontal, startCoord, numTracks, trackSpacing)
+</code></pre>
+        </div>
+        <aside class="toc-panel"><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false"><span>方法</span><span class="toc-toggle-indicator">展开</span></button><div class="toc-body"><h2>方法</h2><ul><li><a href="#obj-destroy"><code>obj.destroy()</code></a></li><li><a href="#obj-ishorizontal"><code>obj.isHorizontal()</code></a></li><li><a href="#obj-getstartcoord"><code>obj.getStartCoord()</code></a></li><li><a href="#obj-getnumtracks"><code>obj.getNumTracks()</code></a></li><li><a href="#obj-gettrackspacing"><code>obj.getTrackSpacing()</code></a></li><li><a href="#obj-hasroutinglayer"><code>obj.hasRoutingLayer()</code></a></li><li><a href="#obj-getroutinglayer"><code>obj.getRoutingLayer()</code></a></li><li><a href="#obj-sethorizontal-ishorizontal"><code>obj.setHorizontal(isHorizontal)</code></a></li><li><a href="#obj-setstartcoord-start"><code>obj.setStartCoord(start)</code></a></li><li><a href="#obj-setnumtracks-num"><code>obj.setNumTracks(num)</code></a></li><li><a href="#obj-settrackspacing-spacing"><code>obj.setTrackSpacing(spacing)</code></a></li><li><a href="#obj-setroutinglayer-layer"><code>obj.setRoutingLayer(layer)</code></a></li><li><a href="#obj-removeroutinglayer"><code>obj.removeRoutingLayer()</code></a></li><li><a href="#design-oatrackpattern-create-block-ishorizontal-startcoord-numtracks-trackspacing-routinglayer"><code>_design.oaTrackPattern.create(block, isHorizontal, startCoord, numTracks, trackSpacing, routingLayer)</code></a></li><li><a href="#design-oatrackpattern-create-block-ishorizontal-startcoord-numtracks-trackspacing"><code>_design.oaTrackPattern.create(block, isHorizontal, startCoord, numTracks, trackSpacing)</code></a></li></ul></div></aside>
+      </div>
+    </main>
+  </div>
+  <div class="footer">oapy 是 AIVI 项目的一部分。此站点提供当前 oapy Python API 的中文文档。</div>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.querySelector("[data-class-filter]");
+  if (input) {
+    input.addEventListener("input", () => {
+      const term = input.value.trim().toLowerCase();
+      document.querySelectorAll("[data-class-item]").forEach((item) => {
+        const name = item.getAttribute("data-class-name") || "";
+        item.classList.toggle("hidden", term && !name.includes(term));
+      });
+    });
+  }
+
+  const globalInput = document.querySelector("[data-global-search]");
+  if (globalInput) {
+    globalInput.addEventListener("input", () => {
+      const term = globalInput.value.trim().toLowerCase();
+      document.querySelectorAll("[data-search-item]").forEach((item) => {
+        const name = item.getAttribute("data-search-name") || "";
+        const module = item.getAttribute("data-search-module") || "";
+        const visible = !term || name.includes(term) || module.includes(term);
+        item.classList.toggle("hidden", !visible);
+      });
+    });
+  }
+
+  document.querySelectorAll("[data-toc-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const panel = button.closest(".toc-panel");
+      if (!panel) return;
+      const isOpen = panel.classList.toggle("open");
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      const indicator = button.querySelector(".toc-toggle-indicator");
+      if (indicator) {
+        indicator.textContent = isOpen ? "Hide" : "Show";
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

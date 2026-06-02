@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>oaLibDefList</title>
+  <style>
+body {
+  margin: 0;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  color: #f2d6c2;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #fff4ea;
+}
+
+.topbar {
+  border-bottom: 1px solid #6f3d2d;
+  background: #120f0f;
+}
+
+.topbar-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 14px 20px 10px;
+}
+
+.brand {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff8f2;
+  margin: 0 0 10px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tab {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  color: #f2d6c2;
+  font-size: 13px;
+}
+
+.tab.active {
+  background: #4b2317;
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.layout {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 28px;
+  padding: 24px 24px 40px;
+}
+
+.sidebar {
+  font-size: 13px;
+}
+
+.sidebar-panel {
+  border: 1px solid #6f3d2d;
+  margin-bottom: 16px;
+  background: #151111;
+}
+
+.sidebar-title {
+  background: #2a1713;
+  border-bottom: 1px solid #6f3d2d;
+  padding: 8px 10px;
+  font-weight: 700;
+  color: #fff1e8;
+}
+
+.sidebar-body {
+  padding: 8px 10px;
+}
+
+.sidebar-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.sidebar-search::placeholder {
+  color: #c8a995;
+}
+
+.sidebar-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-body li.hidden {
+  display: none;
+}
+
+.active-link {
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.sidebar-body li + li {
+  margin-top: 6px;
+}
+
+.content {
+  min-width: 0;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  align-items: start;
+}
+
+.doc {
+  border: 1px solid #6f3d2d;
+  background: #120f0f;
+  padding: 24px 28px 32px;
+  min-width: 0;
+}
+
+.toc-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 0;
+  position: sticky;
+  top: 16px;
+  margin-bottom: 16px;
+}
+
+.toc-toggle {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 0;
+  background: #2a1713;
+  color: #fff1e8;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.toc-toggle:hover {
+  background: #3a1d16;
+}
+
+.toc-toggle-indicator {
+  font-size: 12px;
+  color: #d6ac96;
+}
+
+.toc-body {
+  display: none;
+  padding: 14px 16px;
+}
+
+.toc-panel.open .toc-body {
+  display: block;
+}
+
+.toc-panel h2 {
+  margin: 0 0 10px;
+  padding: 0;
+  border: 0;
+  font-size: 18px;
+  color: #fff1e8;
+}
+
+.toc-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-panel li + li {
+  margin-top: 8px;
+}
+
+.toc-panel a {
+  font-size: 13px;
+  line-height: 1.35;
+  color: #f2d6c2;
+}
+
+.crumbs {
+  color: #c8a995;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.meta {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 10px 12px;
+  margin: 16px 0 20px;
+  font-size: 13px;
+}
+
+.meta div + div {
+  margin-top: 4px;
+}
+
+.doc h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  color: #fff8f2;
+}
+
+.doc h2 {
+  margin: 28px 0 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #6f3d2d;
+  font-size: 22px;
+  color: #fff1e8;
+}
+
+.doc h3 {
+  margin: 22px 0 10px;
+  font-size: 18px;
+  color: #f7e1d5;
+}
+
+.doc p, .doc li {
+  font-size: 14px;
+}
+
+.doc pre {
+  overflow-x: auto;
+  background: #0d0b0b;
+  border: 1px solid #6f3d2d;
+  padding: 12px 14px;
+}
+
+.doc code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  color: #f7e1d5;
+}
+
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 18px;
+  font-size: 13px;
+  table-layout: fixed;
+}
+
+.doc th, .doc td {
+  border: 1px solid #6f3d2d;
+  padding: 7px 9px;
+  vertical-align: top;
+  text-align: left;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.doc th {
+  background: #2a1713;
+  color: #fff1e8;
+}
+
+.doc blockquote {
+  margin: 14px 0;
+  padding: 8px 12px;
+  border-left: 4px solid #8a4a36;
+  background: #151111;
+  color: #f2d6c2;
+}
+
+.search-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+
+.search-panel input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 14px;
+}
+
+.search-panel input::placeholder {
+  color: #c8a995;
+}
+
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+}
+
+.search-results li {
+  border-top: 1px solid #4b2317;
+  padding: 10px 0;
+}
+
+.search-results li.hidden {
+  display: none;
+}
+
+.search-results a {
+  font-weight: 700;
+}
+
+.search-results .module-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border: 1px solid #8a4a36;
+  background: #2a1713;
+  color: #f2d6c2;
+  font-size: 12px;
+}
+
+.search-results .result-path {
+  margin-top: 4px;
+  color: #c8a995;
+  font-size: 12px;
+}
+
+.footer {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px 28px;
+  color: #b89481;
+  font-size: 12px;
+}
+
+.doc > * {
+  min-width: 0;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toc-panel {
+    position: static;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><a href="../index.html">AIVI / oapy API 中文文档</a></div>
+      <div class="tabs"><a class="tab" href="../base/index.html">base</a><a class="tab" href="../common/index.html">common</a><a class="tab" href="../cms/index.html">cms</a><a class="tab active" href="../dm/index.html">dm</a><a class="tab" href="../design/index.html">design</a><a class="tab" href="../tech/index.html">tech</a><a class="tab" href="../wafer/index.html">wafer</a></div>
+    </div>
+  </div>
+  <div class="layout">
+    <aside class="sidebar"><div class="sidebar-panel"><div class="sidebar-title">模块</div><div class="sidebar-body"><ul><li><a href="../classes.html">全部类</a></li><li><a href="../base/index.html">base</a></li><li><a href="../common/index.html">common</a></li><li><a href="../cms/index.html">cms</a></li><li><a class="active-link" href="../dm/index.html">dm</a></li><li><a href="../design/index.html">design</a></li><li><a href="../tech/index.html">tech</a></li><li><a href="../wafer/index.html">wafer</a></li></ul></div></div><div class="sidebar-panel"><div class="sidebar-title">dm 类</div><div class="sidebar-body"><input class="sidebar-search" type="search" placeholder="筛选类" data-class-filter><ul><li data-class-item data-class-name="oacell"><a href="oaCell.html">oaCell</a></li><li data-class-item data-class-name="oacelldmdata"><a href="oaCellDMData.html">oaCellDMData</a></li><li data-class-item data-class-name="oacellview"><a href="oaCellView.html">oaCellView</a></li><li data-class-item data-class-name="oacellviewdmdata"><a href="oaCellViewDMData.html">oaCellViewDMData</a></li><li data-class-item data-class-name="oadmattr"><a href="oaDMAttr.html">oaDMAttr</a></li><li data-class-item data-class-name="oadmattrarray"><a href="oaDMAttrArray.html">oaDMAttrArray</a></li><li data-class-item data-class-name="oadmcontainer"><a href="oaDMContainer.html">oaDMContainer</a></li><li data-class-item data-class-name="oadmdata"><a href="oaDMData.html">oaDMData</a></li><li data-class-item data-class-name="oadmdatatype"><a href="oaDMDataType.html">oaDMDataType</a></li><li data-class-item data-class-name="oadmerror"><a href="oaDMError.html">oaDMError</a></li><li data-class-item data-class-name="oadmexception"><a href="oaDMException.html">oaDMException</a></li><li data-class-item data-class-name="oadmfile"><a href="oaDMFile.html">oaDMFile</a></li><li data-class-item data-class-name="oadmlockstatus"><a href="oaDMLockStatus.html">oaDMLockStatus</a></li><li data-class-item data-class-name="oadmobject"><a href="oaDMObject.html">oaDMObject</a></li><li data-class-item data-class-name="oadmobjectiter"><a href="oaDMObjectIter.html">oaDMObjectIter</a></li><li data-class-item data-class-name="oadmobjectstatusref"><a href="oaDMObjectStatusRef.html">oaDMObjectStatusRef</a></li><li data-class-item data-class-name="oadmobjectstatusrefiter"><a href="oaDMObjectStatusRefIter.html">oaDMObjectStatusRefIter</a></li><li data-class-item data-class-name="oadmobjectversionref"><a href="oaDMObjectVersionRef.html">oaDMObjectVersionRef</a></li><li data-class-item data-class-name="oadmobjectversionrefiter"><a href="oaDMObjectVersionRefIter.html">oaDMObjectVersionRefIter</a></li><li data-class-item data-class-name="oadmpluginerror"><a href="oaDMPlugInError.html">oaDMPlugInError</a></li><li data-class-item data-class-name="oalib"><a href="oaLib.html">oaLib</a></li><li data-class-item data-class-name="oalibaccess"><a href="oaLibAccess.html">oaLibAccess</a></li><li data-class-item data-class-name="oalibaccesslevel"><a href="oaLibAccessLevel.html">oaLibAccessLevel</a></li><li data-class-item data-class-name="oalibdmdata"><a href="oaLibDMData.html">oaLibDMData</a></li><li data-class-item data-class-name="oalibdatatype"><a href="oaLibDataType.html">oaLibDataType</a></li><li data-class-item data-class-name="oalibdef"><a href="oaLibDef.html">oaLibDef</a></li><li data-class-item data-class-name="oalibdeflist"><a class="active-link" href="oaLibDefList.html">oaLibDefList</a></li><li data-class-item data-class-name="oalibdeflistmem"><a href="oaLibDefListMem.html">oaLibDefListMem</a></li><li data-class-item data-class-name="oalibdeflistref"><a href="oaLibDefListRef.html">oaLibDefListRef</a></li><li data-class-item data-class-name="oalibmode"><a href="oaLibMode.html">oaLibMode</a></li><li data-class-item data-class-name="oareservedviewtype"><a href="oaReservedViewType.html">oaReservedViewType</a></li><li data-class-item data-class-name="oasaverecovertype"><a href="oaSaveRecoverType.html">oaSaveRecoverType</a></li><li data-class-item data-class-name="oavccap"><a href="oaVCCap.html">oaVCCap</a></li><li data-class-item data-class-name="oavcmessagetype"><a href="oaVCMessageType.html">oaVCMessageType</a></li><li data-class-item data-class-name="oavcobserver"><a href="oaVCObserver.html">oaVCObserver</a></li><li data-class-item data-class-name="oavcobservercollection"><a href="oaVCObserverCollection.html">oaVCObserverCollection</a></li><li data-class-item data-class-name="oavcobserveriter"><a href="oaVCObserverIter.html">oaVCObserverIter</a></li><li data-class-item data-class-name="oavcobserverresult"><a href="oaVCObserverResult.html">oaVCObserverResult</a></li><li data-class-item data-class-name="oavcoperation"><a href="oaVCOperation.html">oaVCOperation</a></li><li data-class-item data-class-name="oavcquerydepth"><a href="oaVCQueryDepth.html">oaVCQueryDepth</a></li><li data-class-item data-class-name="oavcsystem"><a href="oaVCSystem.html">oaVCSystem</a></li><li data-class-item data-class-name="oavcversion"><a href="oaVCVersion.html">oaVCVersion</a></li><li data-class-item data-class-name="oavcversioniter"><a href="oaVCVersionIter.html">oaVCVersionIter</a></li><li data-class-item data-class-name="oaversioncomp"><a href="oaVersionComp.html">oaVersionComp</a></li><li data-class-item data-class-name="oaview"><a href="oaView.html">oaView</a></li><li data-class-item data-class-name="oaviewdmdata"><a href="oaViewDMData.html">oaViewDMData</a></li><li data-class-item data-class-name="oaviewtype"><a href="oaViewType.html">oaViewType</a></li></ul></div></div></aside>
+    <main class="content">
+      <div class="content-grid">
+        <div class="doc">
+          <div class="crumbs"><a href="../index.html">首页</a> / <a href="index.html">dm</a> / oaLibDefList</div>
+          <h1 id="oalibdeflist">oaLibDefList</h1>
+<p><strong>模块</strong>: <code>oapy._oa._dm</code>
+<strong>导入</strong>: <code>from oapy._oa import _dm</code></p>
+<h2 id="_1">概览</h2>
+<p><code>oaLibDefList</code> 在 <code>oapy</code> 中可用，可通过 <code>_dm</code> 模块访问。</p>
+<p>本页汇总 <code>oaLibDefList</code> 当前在 <code>oapy</code> 中可用的 Python 接口。</p>
+<h2 id="_2">详细说明</h2>
+<p>The oaLibDefList class contains functions that let an application use and manage a library definition file or a hierarchy of library definition files。 The oaLibDefList class provides functions for: Opening the libraries listed in and referenced by a top-level session default or user-specified library definition file (see oaLibDefList::openLibs ) Opening the libraries from a specific library definition file (see oaLibDefList::open ) Creating an oaLibDefList object for a specified file or changing the mode of accessing the file that is associated with an existing oaLibdefList (see oaLibDefList::get ) Opening the libraries associated with the libdef objects in the list (see oaLibDefList::openLibs ) Saving definitions and references contained in an oaLibDefList object to its associated file on disk (see oaLibDefList::save and oaLibDefList::saveAs ) Getting a collection of the members contained in an oaLibDefList (see oaLibDefList::getMembers ) An oaLibDefList object is associated with one library definition files。 For each session, there is a top-level oaLibDef object, and possibly one or more lower-level library definition objects that are referenced by an oaLibDefListRef member in the list。 In the library definition file representation this hierarchy is represented by the INCLUDE statement in the library definition files。 By default, the top-level library definition file name and path are defined by the LibDef plug-in and can be obtained by the ILibDef::getDefaultFileName and ILibDef::getDefaultPath respectively。 A specific file name can be specified to the oaLibDefList。 It is important for any application using oaLibDefList::open() or oaLibDefList::get() to declare an observer derived from oaObserver<oaLibDefList> so that it will be notified of ILibDef::open() errors through the oaLibDefList observer's onLoadWarnings function。 Failures related to library definition file can be very hard to diagnose without the use of this observer。 For a simple code example of the use of an oaLibDefList observer, see oaLibDefList Observer Example 。 An oaLibDefList object contains an ordered collection of oaLibDefListMem objects This includes two types of objects derived from the oaLibDefListMem : Library definitions ( oaLibDef objects) References to other oaLibDefLists ( oaLibDefListRef objects) In effect, library definition files can be nested by including a reference to another list as a list member。 Multiple levels of references result in a hierarchy of oaLibDefLists。 The order of the oaLibDefListMem objects in an oaLibDefList is meaningful, and it is used by oaLibDefList::openLibs to resolve conflicts among library definitions included in an oaLibDefList hierarchy。 To add new members to an oaLibDefList object, use oaLibDef::create() or oaLibDefListRef::create() 。 To remove members, use oaLibDefListMem::destroy() 。 Sample Usage For a sample user routine that gets and iterates through all the oaLibDefListMems in an oaLibDefList, see oaLibDefList::getMembers 。 For a sample routine that appends a new library definition to the library definition file associated with the session's oaLibDefList, see oaLibDefList::getTopList 。</p>
+<h2 id="_3">方法总览</h2>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>Python 调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅</td>
+<td><code>obj.open()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.save()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.saveAs(path)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getPath(path)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getFullPath(path)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getMode()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.destroy()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getMembers()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaLibDefList.openLibs()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaLibDefList.openLibs(path)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaLibDefList.getTopList()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaLibDefList.getDefaultPath(path)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaLibDefList.getDefaultFileName(libDefName)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaLibDefList.create(filePath)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaLibDefList.get(filePath, mode)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaLibDefList.find(filePath)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaLibDefList.getLibDefLists()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">方法说明</h2>
+<h3 id="objopen"><code>obj.open()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.open()</code></p>
+<p>This function opens all the libraries in this library definition file。 If a library with the same name as one in the list but with a different definition is already open, the opened library is closed and the new definition is used to open a new library。 This function issues onPreOpenLibs and onPostOpenLibs observer notifications。 Failure to open specific libraries in the list results in onLoadWarnings notifications。 However, such failure to open a particular library does not abort the operation。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibDefFileRecursiveInclude</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLibDefList
+obj.open()
+</code></pre>
+<h3 id="objsave"><code>obj.save()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.save()</code></p>
+<p>This function saves this oaLibDefList object to the file associated with it。 Note that this oaLibDefList object must be in a 'w'rite or 'a'ppend mode。 This function issues onPreSave and onPostSave notifications to oaLibDefList observers。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacSaveReadOnlyLibDefList</code>。</li>
+<li><code>oacLibDefListFileNotWritable</code>。</li>
+<li><code>oacLibDefListDirNotWritable</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLibDefList
+obj.save()
+</code></pre>
+<h3 id="objsaveaspath"><code>obj.saveAs(path)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.saveAs(path)</code></p>
+<p>This function saves this oaLibDefList object to the file specified by the path。 Note that this oaLibDefList object must be in a 'w'rite or 'a'ppend mode。 This function issues onPreSaveAs and onPostSaveAs notifications to oaLibDefList observers。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filePath</code>: Input parameter - absolute or relative path, including filename。 A relative path should be specified relative to the current working directory。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibDefListFileNotWritable</code>。</li>
+<li><code>oacLibDefListDirNotWritable</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLibDefList
+obj.saveAs(path)
+</code></pre>
+<h3 id="objgetpathpath"><code>obj.getPath(path)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getPath(path)</code></p>
+<p>This function returns the path to the file associated with this oaLibDefList object。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filePath</code>: Returned complete path, including filename, of the library definition file associated with this oaLibDefList object。 The complete path can be an absolute path or a relative path。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLibDefList
+obj.getPath(path)
+</code></pre>
+<h3 id="objgetfullpathpath"><code>obj.getFullPath(path)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getFullPath(path)</code></p>
+<p>This function returns the full path to the file associated with this oaLibDefList object。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>fullPath</code>: Returned full absolute path, including filename, of the lib.defs file associated with this oaLibDefList object。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLibDefList
+obj.getFullPath(path)
+</code></pre>
+<h3 id="objgetmode"><code>obj.getMode()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getMode()</code></p>
+<p>This function returns the mode of this oaLibDefList object, which can be one of 'r'ead, 'a'ppend, or 'w'rite (see oaLibDefList::get() for a description of each mode)。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLibDefList
+obj.getMode()
+</code></pre>
+<h3 id="objdestroy"><code>obj.destroy()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.destroy()</code></p>
+<p>This function destroys this oaLibDefList object。 No files are deleted from disk。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLibDefList
+obj.destroy()
+</code></pre>
+<h3 id="objgetmembers"><code>obj.getMembers()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getMembers()</code></p>
+<p>This function returns a collection of the oaLibDefList members in this library definition file。 Note that the oaLibDefList members are ordered, which means the order of the oaLibDefListMem objects returned from the iterator is meaningful and persistent。 Below is a sample recursive routine that gets and iterates through all the oaLibDefListMems in an oaLibDefList passed to the routine。 The purpose of the routine is to process all the library definitions found in the user's library definition file hierarchy at and below the level of the oaLibDefList passed to the routine。 walkLibDefList( oaLibDefList <em>list) { oaType memType; oaScalarName libName; oaString tempString; oaIter<oaLibDefListMem> listIter(list-&gt; getMembers ()); while ( oaLibDefListMem </em>listMem = listIter。 getNext ()) { switch (memType = listMem-&gt; getType ()) { case oacLibDefType : (( oaLibDef <em>)(listMem))-&gt;getLibName(libName); libName。 get (tempString); cout &lt;&lt; "Got Lib Def: Logical Library Name = " &lt;&lt; tempString &lt;&lt; endl; //process lib def 。 break ; case oacLibDefListRefType : (( oaLibDefListRef </em>)(listMem))-&gt;getRefListPath(tempString); oaLibDefList *nextList = oaLibDefList::get (tempString, 'r' ); walkLibDefList(nextList); break ; } } }。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLibDefList
+obj.getMembers()
+</code></pre>
+<h3 id="_dmoalibdeflistopenlibs"><code>_dm.oaLibDefList.openLibs()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaLibDefList.openLibs()</code></p>
+<p>This function loads the library definition file specified by filePath。 If a relative path is specified, it should be relative to the current working directory。 If the file is not found or cannot be read, an oacLibDefListFileNotReadable error is thrown。 If the library definition is found, this function reads the library definitions listed in the file and any definitions listed in other library definition files included in the file and creates new oaLibDefList and oaLibDefListMem objects。 If reading the library definition file was successful, the function then sets the topList and opens all the libraries based on the listed definitions。 If a library with the same name as one in the list but with a different definition is already open, the open library is closed and the new definition is used to open the library。 No libraries are opened if the plug-in ILibDef::open() function reports an error in reading and parsing the library definition file(s)。 In this case, oaObserver<oaLibDefList>::onLoadWarnings() are triggered by the plug-in to notify the application of the errors encountered while reading the file。 Note: It is important for any application using openLibs() to declare an observer derived from oaObserver<oaLibDefList> so that it can receive notification of errors through the oaLibDefList observer's onLoadWarnings function。 Library-related failures can be very hard to diagnose without the use of this observer。 For a simple code example of the use of an oaLibDefList observer, see oaLibDefList Observer Example 。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filePath</code>: An absolute or relative path, including the file name。 A relative path is relative to the current working directory。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibDefListFileNotReadable</code>: oacPlugInInterfaceException。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaLibDefList.openLibs()
+</code></pre>
+<h3 id="_dmoalibdeflistopenlibspath"><code>_dm.oaLibDefList.openLibs(path)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaLibDefList.openLibs(path)</code></p>
+<p>This function searches for a default library definition file in the default library definition path as defined by the LibDef plug-in。 If the file is not found or cannot be read, an oacLibDefListFileNotReadable error is thrown。 If the library definition is found, this function reads the library definitions listed in the file and any definitions listed in other library definition files included in the file and creates new oaLibDefList and oaLibDefListMem objects。 If reading the library definition file was successful, the function then sets the topList and opens all the libraries based on the listed definitions。 If a library with the same name as one in the list but with a different definition is already open, the open library is closed and the new definition is used to open the library。 No libraries are opened if the plug-in ILibDef::open() function reports an error in reading and parsing the library definition file(s)。 In this case, oaObserver<oaLibDefList>::onLoadWarnings() are triggered by the plug-in to notify the the application of the errors encountered while reading the file。 Note: It is important for any application using openLibs() to declare an observer derived from oaObserver<oaLibDefList> so that it can receive notification of errors through the oaLibDefList observer's onLoadWarnings function。 Library-related failures can be very hard to diagnose without the use of this observer。 For a simple code example of the use of an oaLibDefList observer, see oaLibDefList Observer Example 。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaLibDefList.openLibs(path)
+</code></pre>
+<h3 id="_dmoalibdeflistgettoplist"><code>_dm.oaLibDefList.getTopList()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaLibDefList.getTopList()</code></p>
+<p>This function gets the current top oaLibDefList for this session。 The current top oaLibDefList for this session is established by the top-level oaLibDefList used in the most recent successful oaLibDefList::openLibs() call。 If the openLibs() function has not been called in this session, or if the last call of this function failed this function returns NULL。 Below is a sample routine that gets the top list for an oaLibDefList, changes its mode to append, creates a new library definition (which adds the new library definition to the end of the oaLibDefList object), then saves the updated list to the file on disk associated with the list。 oaLibDefList::openLibs ( "myLibDefFile" ) oaString libraryPath( "./DesignLib" ); oaString library( "DesignLib" ); oaScalarName libraryName(oaNs,library); oaLibDefList <em>list = oaLibDefList::getTopList (); if (list) { oaString topListPath; list-&gt; getPath (topListPath); list-&gt; get (topListPath, 'a' ); oaLibDef </em>newLibDef = oaLibDef::create (list,libraryName,libraryPath); list-&gt; save (); }。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaLibDefList.getTopList()
+</code></pre>
+<h3 id="_dmoalibdeflistgetdefaultpathpath"><code>_dm.oaLibDefList.getDefaultPath(path)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaLibDefList.getDefaultPath(path)</code></p>
+<p>This function returns the path for the default library definition file。 This path is defined by the LibDef plug-in。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filePath</code>: Complete path, including filename, to the found default library definition file。 The complete path can be an absolute path or a relative path。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaLibDefList.getDefaultPath(path)
+</code></pre>
+<h3 id="_dmoalibdeflistgetdefaultfilenamelibdefname"><code>_dm.oaLibDefList.getDefaultFileName(libDefName)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaLibDefList.getDefaultFileName(libDefName)</code></p>
+<p>This function returns the default name for a library definition file when none is specified。 For example the native OpenAccess library definition file name is "libs.def"。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>libDefName</code>: The returned default file name。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaLibDefList.getDefaultFileName(libDefName)
+</code></pre>
+<h3 id="_dmoalibdeflistcreatefilepath"><code>_dm.oaLibDefList.create(filePath)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaLibDefList.create(filePath)</code></p>
+<p>This function creates an new library definition file at the specified full path (including the filename)。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaLibDefList.create(filePath)
+</code></pre>
+<h3 id="_dmoalibdeflistgetfilepath-mode"><code>_dm.oaLibDefList.get(filePath, mode)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaLibDefList.get(filePath, mode)</code></p>
+<p>This function finds, or creates, the library definition list associated with an oaLibDefList object according to the specified filePath and mode。 This function returns a pointer to the oaLibDefList, which can be a new oaLibDefList parsed from the library definition file or pre-existing one。 If an existing list is not found, this function constructs a new list of the library definitions (oaLibDefs) and library definition file references (oaLibDefListRefs) found in the specified library definition file only。 It does not traverse the library definition list hierarchy and add library definitions contained in other referenced files to the list。 For a sample user routine that gets and iterates through all the oaLibDefListMems listed in and referenced by an oaLibDefList object, see oaLibDefList::getMembers 。 The filePath specifies a library definition file to be associated with the returned list object。 The library definition list will be read in from the file in 'r'ead-only or 'a'ppend mode, or an empty list will be created in 'w'rite mode。 The list can later be saved to the file (with an oaLibDefList::save ) only if the preceding get() specified the 'a'ppend' or 'w'rite mode。 'a': append mode - The list is constructed by reading in the contents of the specified file。 The list can be subsequently saved。 An exception is thrown if the file exists and is not writable or if the file exists and is a symbolic link。 'w': write mode - An empty list is constructed and returned。 If the file at the specified path exists, it is truncated during a subsequent save() call (an exception is thrown if that file exists but is not writable)。 If the file does not exist, it is created when this list is saved。 Example Suppose the library definition listed in the file specified by filePath has already been constructed through a previous oaLibDefList::openLibs(filePath) call。 Then, calling oaLibDefList::get (filePath, 'r') or oaLibDefList::get (filePath, 'a') will only affect the mode of the existing list, while oaLibDefList::get (filePath, 'w') also will truncate the list。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filePath</code>: The complete absolute or relative path to the file associated with this oaLibDefList。 A relative path is relative to the current working directory。</li>
+<li><code>mode</code>: The mode in which the oaLibDefList is accessed, which is one of the following:。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibDefListFileNotReadable</code>。</li>
+<li><code>oacLibDefListFileNotWritable</code>。</li>
+<li><code>oacUndefinedLibDefListMode</code>。</li>
+<li><code>oacLibDefFileCannotAppendSymbolicLink</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaLibDefList.get(filePath, mode)
+</code></pre>
+<h3 id="_dmoalibdeflistfindfilepath"><code>_dm.oaLibDefList.find(filePath)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaLibDefList.find(filePath)</code></p>
+<p>This function finds the oaLibDefList object associated with the specified filePath。 A NULL pointer is returned if the list is not found。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filePath</code>: The complete relative or absolute path to the file associated with this oaLibDefList。 Relative paths are relative to the current working directory。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaLibDefList.find(filePath)
+</code></pre>
+<h3 id="_dmoalibdeflistgetlibdeflists"><code>_dm.oaLibDefList.getLibDefLists()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaLibDefList.getLibDefLists()</code></p>
+<p>This function returns a collection of all the oaLibDefList objects in this session。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaLibDefList.getLibDefLists()
+</code></pre>
+        </div>
+        <aside class="toc-panel"><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false"><span>方法</span><span class="toc-toggle-indicator">展开</span></button><div class="toc-body"><h2>方法</h2><ul><li><a href="#obj-open"><code>obj.open()</code></a></li><li><a href="#obj-save"><code>obj.save()</code></a></li><li><a href="#obj-saveas-path"><code>obj.saveAs(path)</code></a></li><li><a href="#obj-getpath-path"><code>obj.getPath(path)</code></a></li><li><a href="#obj-getfullpath-path"><code>obj.getFullPath(path)</code></a></li><li><a href="#obj-getmode"><code>obj.getMode()</code></a></li><li><a href="#obj-destroy"><code>obj.destroy()</code></a></li><li><a href="#obj-getmembers"><code>obj.getMembers()</code></a></li><li><a href="#dm-oalibdeflist-openlibs"><code>_dm.oaLibDefList.openLibs()</code></a></li><li><a href="#dm-oalibdeflist-openlibs-path"><code>_dm.oaLibDefList.openLibs(path)</code></a></li><li><a href="#dm-oalibdeflist-gettoplist"><code>_dm.oaLibDefList.getTopList()</code></a></li><li><a href="#dm-oalibdeflist-getdefaultpath-path"><code>_dm.oaLibDefList.getDefaultPath(path)</code></a></li><li><a href="#dm-oalibdeflist-getdefaultfilename-libdefname"><code>_dm.oaLibDefList.getDefaultFileName(libDefName)</code></a></li><li><a href="#dm-oalibdeflist-create-filepath"><code>_dm.oaLibDefList.create(filePath)</code></a></li><li><a href="#dm-oalibdeflist-get-filepath-mode"><code>_dm.oaLibDefList.get(filePath, mode)</code></a></li><li><a href="#dm-oalibdeflist-find-filepath"><code>_dm.oaLibDefList.find(filePath)</code></a></li><li><a href="#dm-oalibdeflist-getlibdeflists"><code>_dm.oaLibDefList.getLibDefLists()</code></a></li></ul></div></aside>
+      </div>
+    </main>
+  </div>
+  <div class="footer">oapy 是 AIVI 项目的一部分。此站点提供当前 oapy Python API 的中文文档。</div>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.querySelector("[data-class-filter]");
+  if (input) {
+    input.addEventListener("input", () => {
+      const term = input.value.trim().toLowerCase();
+      document.querySelectorAll("[data-class-item]").forEach((item) => {
+        const name = item.getAttribute("data-class-name") || "";
+        item.classList.toggle("hidden", term && !name.includes(term));
+      });
+    });
+  }
+
+  const globalInput = document.querySelector("[data-global-search]");
+  if (globalInput) {
+    globalInput.addEventListener("input", () => {
+      const term = globalInput.value.trim().toLowerCase();
+      document.querySelectorAll("[data-search-item]").forEach((item) => {
+        const name = item.getAttribute("data-search-name") || "";
+        const module = item.getAttribute("data-search-module") || "";
+        const visible = !term || name.includes(term) || module.includes(term);
+        item.classList.toggle("hidden", !visible);
+      });
+    });
+  }
+
+  document.querySelectorAll("[data-toc-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const panel = button.closest(".toc-panel");
+      if (!panel) return;
+      const isOpen = panel.classList.toggle("open");
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      const indicator = button.querySelector(".toc-toggle-indicator");
+      if (indicator) {
+        indicator.textContent = isOpen ? "Hide" : "Show";
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

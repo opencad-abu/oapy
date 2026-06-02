@@ -1,0 +1,1032 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>oaLib</title>
+  <style>
+body {
+  margin: 0;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  color: #f2d6c2;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #fff4ea;
+}
+
+.topbar {
+  border-bottom: 1px solid #6f3d2d;
+  background: #120f0f;
+}
+
+.topbar-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 14px 20px 10px;
+}
+
+.brand {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff8f2;
+  margin: 0 0 10px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tab {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  color: #f2d6c2;
+  font-size: 13px;
+}
+
+.tab.active {
+  background: #4b2317;
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.layout {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 28px;
+  padding: 24px 24px 40px;
+}
+
+.sidebar {
+  font-size: 13px;
+}
+
+.sidebar-panel {
+  border: 1px solid #6f3d2d;
+  margin-bottom: 16px;
+  background: #151111;
+}
+
+.sidebar-title {
+  background: #2a1713;
+  border-bottom: 1px solid #6f3d2d;
+  padding: 8px 10px;
+  font-weight: 700;
+  color: #fff1e8;
+}
+
+.sidebar-body {
+  padding: 8px 10px;
+}
+
+.sidebar-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.sidebar-search::placeholder {
+  color: #c8a995;
+}
+
+.sidebar-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-body li.hidden {
+  display: none;
+}
+
+.active-link {
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.sidebar-body li + li {
+  margin-top: 6px;
+}
+
+.content {
+  min-width: 0;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  align-items: start;
+}
+
+.doc {
+  border: 1px solid #6f3d2d;
+  background: #120f0f;
+  padding: 24px 28px 32px;
+  min-width: 0;
+}
+
+.toc-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 0;
+  position: sticky;
+  top: 16px;
+  margin-bottom: 16px;
+}
+
+.toc-toggle {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 0;
+  background: #2a1713;
+  color: #fff1e8;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.toc-toggle:hover {
+  background: #3a1d16;
+}
+
+.toc-toggle-indicator {
+  font-size: 12px;
+  color: #d6ac96;
+}
+
+.toc-body {
+  display: none;
+  padding: 14px 16px;
+}
+
+.toc-panel.open .toc-body {
+  display: block;
+}
+
+.toc-panel h2 {
+  margin: 0 0 10px;
+  padding: 0;
+  border: 0;
+  font-size: 18px;
+  color: #fff1e8;
+}
+
+.toc-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-panel li + li {
+  margin-top: 8px;
+}
+
+.toc-panel a {
+  font-size: 13px;
+  line-height: 1.35;
+  color: #f2d6c2;
+}
+
+.crumbs {
+  color: #c8a995;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.meta {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 10px 12px;
+  margin: 16px 0 20px;
+  font-size: 13px;
+}
+
+.meta div + div {
+  margin-top: 4px;
+}
+
+.doc h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  color: #fff8f2;
+}
+
+.doc h2 {
+  margin: 28px 0 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #6f3d2d;
+  font-size: 22px;
+  color: #fff1e8;
+}
+
+.doc h3 {
+  margin: 22px 0 10px;
+  font-size: 18px;
+  color: #f7e1d5;
+}
+
+.doc p, .doc li {
+  font-size: 14px;
+}
+
+.doc pre {
+  overflow-x: auto;
+  background: #0d0b0b;
+  border: 1px solid #6f3d2d;
+  padding: 12px 14px;
+}
+
+.doc code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  color: #f7e1d5;
+}
+
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 18px;
+  font-size: 13px;
+  table-layout: fixed;
+}
+
+.doc th, .doc td {
+  border: 1px solid #6f3d2d;
+  padding: 7px 9px;
+  vertical-align: top;
+  text-align: left;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.doc th {
+  background: #2a1713;
+  color: #fff1e8;
+}
+
+.doc blockquote {
+  margin: 14px 0;
+  padding: 8px 12px;
+  border-left: 4px solid #8a4a36;
+  background: #151111;
+  color: #f2d6c2;
+}
+
+.search-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+
+.search-panel input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 14px;
+}
+
+.search-panel input::placeholder {
+  color: #c8a995;
+}
+
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+}
+
+.search-results li {
+  border-top: 1px solid #4b2317;
+  padding: 10px 0;
+}
+
+.search-results li.hidden {
+  display: none;
+}
+
+.search-results a {
+  font-weight: 700;
+}
+
+.search-results .module-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border: 1px solid #8a4a36;
+  background: #2a1713;
+  color: #f2d6c2;
+  font-size: 12px;
+}
+
+.search-results .result-path {
+  margin-top: 4px;
+  color: #c8a995;
+  font-size: 12px;
+}
+
+.footer {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px 28px;
+  color: #b89481;
+  font-size: 12px;
+}
+
+.doc > * {
+  min-width: 0;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toc-panel {
+    position: static;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><a href="../index.html">AIVI / oapy API 中文文档</a></div>
+      <div class="tabs"><a class="tab" href="../base/index.html">base</a><a class="tab" href="../common/index.html">common</a><a class="tab" href="../cms/index.html">cms</a><a class="tab active" href="../dm/index.html">dm</a><a class="tab" href="../design/index.html">design</a><a class="tab" href="../tech/index.html">tech</a><a class="tab" href="../wafer/index.html">wafer</a></div>
+    </div>
+  </div>
+  <div class="layout">
+    <aside class="sidebar"><div class="sidebar-panel"><div class="sidebar-title">模块</div><div class="sidebar-body"><ul><li><a href="../classes.html">全部类</a></li><li><a href="../base/index.html">base</a></li><li><a href="../common/index.html">common</a></li><li><a href="../cms/index.html">cms</a></li><li><a class="active-link" href="../dm/index.html">dm</a></li><li><a href="../design/index.html">design</a></li><li><a href="../tech/index.html">tech</a></li><li><a href="../wafer/index.html">wafer</a></li></ul></div></div><div class="sidebar-panel"><div class="sidebar-title">dm 类</div><div class="sidebar-body"><input class="sidebar-search" type="search" placeholder="筛选类" data-class-filter><ul><li data-class-item data-class-name="oacell"><a href="oaCell.html">oaCell</a></li><li data-class-item data-class-name="oacelldmdata"><a href="oaCellDMData.html">oaCellDMData</a></li><li data-class-item data-class-name="oacellview"><a href="oaCellView.html">oaCellView</a></li><li data-class-item data-class-name="oacellviewdmdata"><a href="oaCellViewDMData.html">oaCellViewDMData</a></li><li data-class-item data-class-name="oadmattr"><a href="oaDMAttr.html">oaDMAttr</a></li><li data-class-item data-class-name="oadmattrarray"><a href="oaDMAttrArray.html">oaDMAttrArray</a></li><li data-class-item data-class-name="oadmcontainer"><a href="oaDMContainer.html">oaDMContainer</a></li><li data-class-item data-class-name="oadmdata"><a href="oaDMData.html">oaDMData</a></li><li data-class-item data-class-name="oadmdatatype"><a href="oaDMDataType.html">oaDMDataType</a></li><li data-class-item data-class-name="oadmerror"><a href="oaDMError.html">oaDMError</a></li><li data-class-item data-class-name="oadmexception"><a href="oaDMException.html">oaDMException</a></li><li data-class-item data-class-name="oadmfile"><a href="oaDMFile.html">oaDMFile</a></li><li data-class-item data-class-name="oadmlockstatus"><a href="oaDMLockStatus.html">oaDMLockStatus</a></li><li data-class-item data-class-name="oadmobject"><a href="oaDMObject.html">oaDMObject</a></li><li data-class-item data-class-name="oadmobjectiter"><a href="oaDMObjectIter.html">oaDMObjectIter</a></li><li data-class-item data-class-name="oadmobjectstatusref"><a href="oaDMObjectStatusRef.html">oaDMObjectStatusRef</a></li><li data-class-item data-class-name="oadmobjectstatusrefiter"><a href="oaDMObjectStatusRefIter.html">oaDMObjectStatusRefIter</a></li><li data-class-item data-class-name="oadmobjectversionref"><a href="oaDMObjectVersionRef.html">oaDMObjectVersionRef</a></li><li data-class-item data-class-name="oadmobjectversionrefiter"><a href="oaDMObjectVersionRefIter.html">oaDMObjectVersionRefIter</a></li><li data-class-item data-class-name="oadmpluginerror"><a href="oaDMPlugInError.html">oaDMPlugInError</a></li><li data-class-item data-class-name="oalib"><a class="active-link" href="oaLib.html">oaLib</a></li><li data-class-item data-class-name="oalibaccess"><a href="oaLibAccess.html">oaLibAccess</a></li><li data-class-item data-class-name="oalibaccesslevel"><a href="oaLibAccessLevel.html">oaLibAccessLevel</a></li><li data-class-item data-class-name="oalibdmdata"><a href="oaLibDMData.html">oaLibDMData</a></li><li data-class-item data-class-name="oalibdatatype"><a href="oaLibDataType.html">oaLibDataType</a></li><li data-class-item data-class-name="oalibdef"><a href="oaLibDef.html">oaLibDef</a></li><li data-class-item data-class-name="oalibdeflist"><a href="oaLibDefList.html">oaLibDefList</a></li><li data-class-item data-class-name="oalibdeflistmem"><a href="oaLibDefListMem.html">oaLibDefListMem</a></li><li data-class-item data-class-name="oalibdeflistref"><a href="oaLibDefListRef.html">oaLibDefListRef</a></li><li data-class-item data-class-name="oalibmode"><a href="oaLibMode.html">oaLibMode</a></li><li data-class-item data-class-name="oareservedviewtype"><a href="oaReservedViewType.html">oaReservedViewType</a></li><li data-class-item data-class-name="oasaverecovertype"><a href="oaSaveRecoverType.html">oaSaveRecoverType</a></li><li data-class-item data-class-name="oavccap"><a href="oaVCCap.html">oaVCCap</a></li><li data-class-item data-class-name="oavcmessagetype"><a href="oaVCMessageType.html">oaVCMessageType</a></li><li data-class-item data-class-name="oavcobserver"><a href="oaVCObserver.html">oaVCObserver</a></li><li data-class-item data-class-name="oavcobservercollection"><a href="oaVCObserverCollection.html">oaVCObserverCollection</a></li><li data-class-item data-class-name="oavcobserveriter"><a href="oaVCObserverIter.html">oaVCObserverIter</a></li><li data-class-item data-class-name="oavcobserverresult"><a href="oaVCObserverResult.html">oaVCObserverResult</a></li><li data-class-item data-class-name="oavcoperation"><a href="oaVCOperation.html">oaVCOperation</a></li><li data-class-item data-class-name="oavcquerydepth"><a href="oaVCQueryDepth.html">oaVCQueryDepth</a></li><li data-class-item data-class-name="oavcsystem"><a href="oaVCSystem.html">oaVCSystem</a></li><li data-class-item data-class-name="oavcversion"><a href="oaVCVersion.html">oaVCVersion</a></li><li data-class-item data-class-name="oavcversioniter"><a href="oaVCVersionIter.html">oaVCVersionIter</a></li><li data-class-item data-class-name="oaversioncomp"><a href="oaVersionComp.html">oaVersionComp</a></li><li data-class-item data-class-name="oaview"><a href="oaView.html">oaView</a></li><li data-class-item data-class-name="oaviewdmdata"><a href="oaViewDMData.html">oaViewDMData</a></li><li data-class-item data-class-name="oaviewtype"><a href="oaViewType.html">oaViewType</a></li></ul></div></div></aside>
+    <main class="content">
+      <div class="content-grid">
+        <div class="doc">
+          <div class="crumbs"><a href="../index.html">首页</a> / <a href="index.html">dm</a> / oaLib</div>
+          <h1 id="oalib">oaLib</h1>
+<p><strong>模块</strong>: <code>oapy._oa._dm</code>
+<strong>导入</strong>: <code>from oapy._oa import _dm</code></p>
+<h2 id="_1">概览</h2>
+<p><code>oaLib</code> 是 <code>oapy</code> 提供的库管理入口，用于创建、打开和查询 OA 库。</p>
+<p>本页汇总 <code>oaLib</code> 当前在 <code>oapy</code> 中可用的 Python 接口。</p>
+<h2 id="_2">详细说明</h2>
+<p>An oaLib is a collection of design data represented as a library database and library data。 The library database contains all information about the on-disk library including the cells, views, cellViews, associated data files on disk, and associated information about this data。 Libraries have several different roles and purposes: Design libraries contain the user-created parts of a design hierarchy, including all the data and design components that make up a design。 Reference libraries contain the master copies of the cells you can reference in a design。 Technology libraries contain the technology parameters that correspond to a particular design methodology and fabrication technology。 These parameters typically are contained in a technology database ( oaTech )。 It is possible to store all these types of data in a single library。 Usually, however, the reference data and technology parameters are stored in a single library。 A library is also a logical container object that contains cells, views, cellViews, and files, as follows: A cell ( oaCell ) is a container object that contains cellViews and files。 A single cell contains the data that describe an individual building block of a chip or system。 A cell can contain multiple cellViews, each of which represent a different view of this cell。 A view ( oaView ) is a container object that contains cellViews and files。 A view is a specific representation of a cell。 Different views can represent levels of abstraction for a design (behavior or gate), or different stages in the design process (RTL, post-synthesis, placed, routed)。 Each view has a designated viewType, which is persistent。 The oaViewType utility class is used to represent a viewType。 There are several reserved viewTypes used by OpenAccess, which are represented in the oaReservedViewType enum wrapper class。 You can specify the view type with the viewType argument to oaDesign::open 。 A cellView ( oaCellView ) is a container object that contains files。 CellViews also can contain OpenAccess databases such as an oaDesign or oaWafer 。 A cellView will always have a single oaDMFile that holds the primary data for the cellView and is known as the primary file。 This correlates to the master file definition in previous versions of OpenAccess。 The view's viewType attribute indicates the type of this file。 The primary oaDMFile can be empty (or not exist on disk)。 A file ( oaDMFile ) contains data。 Files can be created or modified using the oaDMFile API。 The oaLib class can be observed by deriving from oaObserver<oaLib> 。 Library Access Before any library structure data -- such as oaCells, oaViews, oaCellViews, oaDMFiles, and their attributes -- is accessed, the application must obtain read library access。 Before changing anything in the library structure, the application must obtain write library access。 Read and write library access is obtained through the appropriate oaLib::getAccess call。 For example, read-only oaLib functions, such as oaLib::getCells , oaLib::getViews , and oaLib::getCellViews , require read access to the library, and set() functions, such as oaLib::setAttributes , require write access to the library。 However, oaLib static functions and oaLib functions that access static data on an oaLib, such as oaLib::create , oaLib::open , or oaLib::find , do not require library access。 Note: If an oaLib function requires library access, this requirement is noted in the function description。 If the library access must be write access, this requirement also is noted。 You can use oaLib::hasAccess(), oaLib::hasWriteAccess and oaLib::getAccessType() to obtain information about library access status。 Library access persists until ended through an oaLib::releaseAccess call。 The OpenAccess design, wafer, tech, and parasitic database functions have library access built in -- users do not have to obtain library access to open or modify the oaDesign , oaWafer , oaTech , and parasitics databases。 Before opening any of these database objects, OpenAccess first looks to see if the user has obtained library access; if not, OpenAccess will attempt to get access。 If Open Access cannot get library access, an exception is thrown。 When OA obtains library access, it is held for as short a time as possible within the span of the API call。 For more Information on accessing and working with OpenAccess libraries, see OpenAccess 2.2 Libraries and Design Management in the Programmers Guide。</p>
+<h2 id="_3">方法总览</h2>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>Python 调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅</td>
+<td><code>obj.close()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getName(name)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getName(ns, out)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getPath(path)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getFullPath(fullPath)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getWritePath(writePath)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getMode()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getDMSystemName(dmSystem)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getAttributes(attrs)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isReadable()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isWritable()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isMarkedToBeClosed()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setAttributes(attrs)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getAccess(accessType, timeout=0)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.releaseAccess()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getAccessLevel()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.hasVC()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.calcVMSize()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getControlledObjects(depth=oacCellViewFileVCQueryDepth, top=NULL, localOnly=false)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getWorkingVersions(depth=oacCellViewFileVCQueryDepth)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getCells()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getViews()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getViewsByName(name)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getCellViews()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getGroups()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getGroups(def)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getGroupsByName(name)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaLib.create(name, libPath, mode=oacSharedLibMode, dmSystem="oaDMSystem", dmAttrList=NULL)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaLib.open(name, libPath, writePath="", mode=oacSharedLibMode)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaLib.find(name)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaLib.exists(libPath)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaLib.getOpenLibs()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">方法说明</h2>
+<h3 id="objclose"><code>obj.close()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.close()</code></p>
+<p>This function closes the library。 All of its contents become inaccessible, all its library access calls are released, and its non-committed changes are lost。 Note: This function does not require library access。 For more information on library access, see classoaLib.html Library Access in the detailed description for oaLib。 classoaLib.html classoaLib.html。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.close()
+</code></pre>
+<h3 id="objgetnamename"><code>obj.getName(name)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getName(name)</code></p>
+<p>This function returns the name of this library。 The name is returned as an oaString mapped to the specified namespace。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getName(name)
+</code></pre>
+<h3 id="objgetnamens-out"><code>obj.getName(ns, out)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getName(ns, out)</code></p>
+<p>This function returns the name of this library。 The name is returned as an oaScalarName 。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getName(ns, out)
+</code></pre>
+<h3 id="objgetpathpath"><code>obj.getPath(path)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getPath(path)</code></p>
+<p>This function returns the path to this library。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>path</code>: the path to the library directory is returned in this oaString 。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getPath(path)
+</code></pre>
+<h3 id="objgetfullpathfullpath"><code>obj.getFullPath(fullPath)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getFullPath(fullPath)</code></p>
+<p>This function returns the full (absolute) path to this library。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>fullPath</code>: output parameter - the returned full (absolute) path to this library。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getFullPath(fullPath)
+</code></pre>
+<h3 id="objgetwritepathwritepath"><code>obj.getWritePath(writePath)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getWritePath(writePath)</code></p>
+<p>This function returns the write path to this library。 This is the path to the directory that may be used as a place to create temporary files (using oaDMObject::getTempFile )。 The writePath is a non-persistent attribute of the library。 If the library is opened using oaLib::create , the writePath is the same as the library path。 If the library is opened using oaLib::open , the writePath can be specified through the oaLib::open API。 When a library is specified in the library definition file (see oaLibDefList Detailed Description), the writePath may be specified as an attribute using the ASSIGN syntax, with the library attribute name of "writePath"。 If the writePath is not specified, it will default to the library path。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>writePath</code>: the returned write path for this library。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getWritePath(writePath)
+</code></pre>
+<h3 id="objgetmode"><code>obj.getMode()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getMode()</code></p>
+<p>This function returns the access mode of this library。 This is the mode that was passed in when the library was opened or created。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getMode()
+</code></pre>
+<h3 id="objgetdmsystemnamedmsystem"><code>obj.getDMSystemName(dmSystem)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getDMSystemName(dmSystem)</code></p>
+<p>This function returns the name of the DMSystem associated with this library。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>dmSystem</code>: output parameter - the returned name of the DMSystem associated with this file。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getDMSystemName(dmSystem)
+</code></pre>
+<h3 id="objgetattributesattrs"><code>obj.getAttributes(attrs)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getAttributes(attrs)</code></p>
+<p>This function returns the attributes defined for this library and its Design Management (DM) and Version Control (VC) systems when the library was created。 Note: This function requires access to this library (through oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if access to the library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>attrs</code>: Contains the list of attributes associated with the library and its DM and VC systems。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getAttributes(attrs)
+</code></pre>
+<h3 id="objisreadable"><code>obj.isReadable()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isReadable()</code></p>
+<p>This function returns true if the library is readable; false if not。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.isReadable()
+</code></pre>
+<h3 id="objiswritable"><code>obj.isWritable()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isWritable()</code></p>
+<p>This function returns true if the library is writable; false if not。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.isWritable()
+</code></pre>
+<h3 id="objismarkedtobeclosed"><code>obj.isMarkedToBeClosed()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isMarkedToBeClosed()</code></p>
+<p>This function returns a boolean indicating whether or not this library is marked to be closed。 Libraries can be marked "to be closed" when the current session's library definitions are being reloaded from the library definitions file。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.isMarkedToBeClosed()
+</code></pre>
+<h3 id="objsetattributesattrs"><code>obj.setAttributes(attrs)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setAttributes(attrs)</code></p>
+<p>This function sets the attributes specified in the given attrList array for this library and its associated Design Management (DM) and Version Control (VC) systems。 The attributes are specific to the DM and VC systems, which may impose restrictions on what attributes may be changed。 Note: This function requires write access to this library (through oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if write access to this library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>attrs</code>: Contains the attributes to set for the library and its associated DM and VC systems。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.setAttributes(attrs)
+</code></pre>
+<h3 id="objgetaccessaccesstype-timeout0"><code>obj.getAccess(accessType, timeout=0)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getAccess(accessType, timeout=0)</code></p>
+<p>This function tries to get the requested access for the library。 A boolean is returned which indicates success or failure。 Library access cannot be upgraded (changed from read to write), so an exception is thrown if this is attempted。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>accessType</code>: the type of access requested on this library。</li>
+<li><code>timeout</code>: an optional timeout in seconds for the function to wait to obtain the requested access。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessCannotUpgrade</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getAccess(accessType, timeout=0)
+</code></pre>
+<h3 id="objreleaseaccess"><code>obj.releaseAccess()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.releaseAccess()</code></p>
+<p>This function requests that the current access on this library be released。 An exception is thrown if the library is not currently being accessed。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibReleaseNoAccess</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.releaseAccess()
+</code></pre>
+<h3 id="objgetaccesslevel"><code>obj.getAccessLevel()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getAccessLevel()</code></p>
+<p>This function returns the level of access that the user has on the library。 There are three levels of access: no access, read access, and write access。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getAccessLevel()
+</code></pre>
+<h3 id="objhasvc"><code>obj.hasVC()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.hasVC()</code></p>
+<p>This function returns a boolean that indicates whether or not the library has a version control system associated with it。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.hasVC()
+</code></pre>
+<h3 id="objcalcvmsize"><code>obj.calcVMSize()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.calcVMSize()</code></p>
+<p>This function calculates and returns the amount of virtual memory this library database is currently using。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.calcVMSize()
+</code></pre>
+<h3 id="objgetcontrolledobjectsdepthoaccellviewfilevcquerydepth-topnull-localonlyfalse"><code>obj.getControlledObjects(depth=oacCellViewFileVCQueryDepth, top=NULL, localOnly=false)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getControlledObjects(depth=oacCellViewFileVCQueryDepth, top=NULL, localOnly=false)</code></p>
+<p>This function returns an array of the objects that the version control system reports as being controlled in this library。 Note: This function requires access to this library (through oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if access to this library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib。 oacCellVCQueryDepth: stop the query at the Cell level, not including "cell files" oacViewVCQueryDepth: stop the query at the View level, not including "view files" oacCellViewVCQueryDepth: stop the query at the CellView level, not including "cellView" files oacCellViewFileVCQueryDepth: stop the query at the CellView file level。 This is currently the lowest level oacMaxQueryDepth: query to the bottom of the hierarchy。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>depth</code>: this parameter is used to control the depth that this function will go in the hierarchy when applying this operation。 The enum values have the following meanings:。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getControlledObjects(depth=oacCellViewFileVCQueryDepth, top=NULL, localOnly=false)
+</code></pre>
+<h3 id="objgetworkingversionsdepthoaccellviewfilevcquerydepth"><code>obj.getWorkingVersions(depth=oacCellViewFileVCQueryDepth)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getWorkingVersions(depth=oacCellViewFileVCQueryDepth)</code></p>
+<p>This function retrieves the version information of this library。 The version information reported back is the version of the file that is currently visible in the user's workspace。 The objects in the array must all be versionable and belong to this library。 Note: This function requires access to this library (through oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if access to this library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib。 oacCellVCQueryDepth: stop the query at the Cell level, not including "cell files" oacViewVCQueryDepth: stop the query at the View level, not including "view files" oacCellViewVCQueryDepth: stop the query at the CellView level, not including "cellView" files oacCellViewFileVCQueryDepth: stop the query at the CellView file level。 This is currently the lowest level oacMaxQueryDepth: query to the bottom of the hierarchy。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>depth</code>: this parameter is used to control the depth that this function will go in the hierarchy when applying this operation。 The enum values have the following meanings:。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getWorkingVersions(depth=oacCellViewFileVCQueryDepth)
+</code></pre>
+<h3 id="objgetcells"><code>obj.getCells()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getCells()</code></p>
+<p>This function returns a collection of cells in this library。 Note: This function requires access to this library (through oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if access to this library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getCells()
+</code></pre>
+<h3 id="objgetviews"><code>obj.getViews()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getViews()</code></p>
+<p>This function returns a collection of views in this library。 Note: This function requires access to this library (through oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if access to this library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getViews()
+</code></pre>
+<h3 id="objgetviewsbynamename"><code>obj.getViewsByName(name)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getViewsByName(name)</code></p>
+<p>This function returns a collection of views in this library database with the specified name。 Note: This function requires access to this library (through oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if access to this library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getViewsByName(name)
+</code></pre>
+<h3 id="objgetcellviews"><code>obj.getCellViews()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getCellViews()</code></p>
+<p>This function returns a collection of cellViews in this library。 Note: This function requires access to this library (through oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if access to this library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getCellViews()
+</code></pre>
+<h3 id="objgetgroups"><code>obj.getGroups()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getGroups()</code></p>
+<p>This functions return a collection of groups in this lib database with the specified group definition。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>def</code>: input group definition。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getGroups()
+</code></pre>
+<h3 id="objgetgroupsdef"><code>obj.getGroups(def)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getGroups(def)</code></p>
+<p>This function returns a collection of groups in this lib database。 Note: This function requires access to this library (through oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if access to this library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getGroups(def)
+</code></pre>
+<h3 id="objgetgroupsbynamename"><code>obj.getGroupsByName(name)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getGroupsByName(name)</code></p>
+<p>This function returns a collection of groups in this library database with the specified name。 Note: This function requires access to this library (through oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if access to the library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaLib
+obj.getGroupsByName(name)
+</code></pre>
+<h3 id="_dmoalibcreatename-libpath-modeoacsharedlibmode-dmsystemoadmsystem-dmattrlistnull"><code>_dm.oaLib.create(name, libPath, mode=oacSharedLibMode, dmSystem="oaDMSystem", dmAttrList=NULL)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaLib.create(name, libPath, mode=oacSharedLibMode, dmSystem="oaDMSystem", dmAttrList=NULL)</code></p>
+<p>This function creates the library using the specified name and attributes。 The directory specified by libPath will be created to hold the library files。 Example: If libPath is specified as usr1/mylibs/project1/cells , the /usr1/mylibs/project1/ parent directory must exist and /usr1/mylibs/project1/cells must not exist。 Note that the creator of a library is responsible for adding the library definition (library name and path) of the newly-created library in the library definition file used by OpenAccess applications (see oaLibDefFile::addLib for more information)。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<blockquote>
+<p><code>oapy</code> 额外提供了便捷短重载 <code>oaLib.create(name, libPath)</code>。</p>
+</blockquote>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>name</code>: the name of the library to create。</li>
+<li><code>libPath</code>: an absolute or relative path to the library directory。 The specified directory will be created to hold the library files。</li>
+<li><code>mode</code>: the access mode of the library to create。</li>
+<li><code>dmSystem</code>: the dmSystem name of the library to create。</li>
+<li><code>dmAttrList</code>: A list of persistent attributes to be given to the new library。 The set of valid attribute names and values are defined by a specific DM system and the Version Control system that it uses。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibNameExists</code>: - a library with the specified name already exists。</li>
+<li><code>oacLibCouldNotCreate</code>: - libPath is an empty string; it specifies the name of an existing file or a non-empty directory; or the directory specified by libPath is not writeable。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+lib = _dm.oaLib.create(&quot;demo_lib&quot;, &quot;/tmp/demo_lib&quot;)
+</code></pre>
+<h3 id="_dmoalibopenname-libpath-writepath-modeoacsharedlibmode"><code>_dm.oaLib.open(name, libPath, writePath="", mode=oacSharedLibMode)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaLib.open(name, libPath, writePath="", mode=oacSharedLibMode)</code></p>
+<p>This function opens an existing library at the given path, using the specified name and attributes。 An oacCannotOpenOpenedLib exception is thrown if the library is open。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>name</code>: the name of the library to open。</li>
+<li><code>libPath</code>: an absolute or relative path to the library directory。</li>
+<li><code>writePath</code>: the path that is writable for the opened library。</li>
+<li><code>mode</code>: the mode of the library to open。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacCannotOpenOpenedLib</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+lib = _dm.oaLib.open(&quot;demo_lib&quot;, &quot;/tmp/demo_lib&quot;)
+</code></pre>
+<h3 id="_dmoalibfindname"><code>_dm.oaLib.find(name)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaLib.find(name)</code></p>
+<p>This function attempts to find an open library with the specified name。 If found, a pointer to the library is returned。 If the library cannot be found, NULL is returned。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>name</code>: the name of the library to be found。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaLib.find(name)
+</code></pre>
+<h3 id="_dmoalibexistslibpath"><code>_dm.oaLib.exists(libPath)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaLib.exists(libPath)</code></p>
+<p>This function returns true if a library directory exists at the given libPath。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>libPath</code>: an absolute or relative path to the library directory。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaLib.exists(libPath)
+</code></pre>
+<h3 id="_dmoalibgetopenlibs"><code>_dm.oaLib.getOpenLibs()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaLib.getOpenLibs()</code></p>
+<p>This function returns a collection of open library databases。 Note: This function does not require library access。 For more information on library access, see Library Access in the detailed description for oaLib。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaLib.getOpenLibs()
+</code></pre>
+        </div>
+        <aside class="toc-panel"><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false"><span>方法</span><span class="toc-toggle-indicator">展开</span></button><div class="toc-body"><h2>方法</h2><ul><li><a href="#obj-close"><code>obj.close()</code></a></li><li><a href="#obj-getname-name"><code>obj.getName(name)</code></a></li><li><a href="#obj-getname-ns-out"><code>obj.getName(ns, out)</code></a></li><li><a href="#obj-getpath-path"><code>obj.getPath(path)</code></a></li><li><a href="#obj-getfullpath-fullpath"><code>obj.getFullPath(fullPath)</code></a></li><li><a href="#obj-getwritepath-writepath"><code>obj.getWritePath(writePath)</code></a></li><li><a href="#obj-getmode"><code>obj.getMode()</code></a></li><li><a href="#obj-getdmsystemname-dmsystem"><code>obj.getDMSystemName(dmSystem)</code></a></li><li><a href="#obj-getattributes-attrs"><code>obj.getAttributes(attrs)</code></a></li><li><a href="#obj-isreadable"><code>obj.isReadable()</code></a></li><li><a href="#obj-iswritable"><code>obj.isWritable()</code></a></li><li><a href="#obj-ismarkedtobeclosed"><code>obj.isMarkedToBeClosed()</code></a></li><li><a href="#obj-setattributes-attrs"><code>obj.setAttributes(attrs)</code></a></li><li><a href="#obj-getaccess-accesstype-timeout-0"><code>obj.getAccess(accessType, timeout=0)</code></a></li><li><a href="#obj-releaseaccess"><code>obj.releaseAccess()</code></a></li><li><a href="#obj-getaccesslevel"><code>obj.getAccessLevel()</code></a></li><li><a href="#obj-hasvc"><code>obj.hasVC()</code></a></li><li><a href="#obj-calcvmsize"><code>obj.calcVMSize()</code></a></li><li><a href="#obj-getcontrolledobjects-depth-oaccellviewfilevcquerydepth-top-null-localonly-false"><code>obj.getControlledObjects(depth=oacCellViewFileVCQueryDepth, top=NULL, localOnly=false)</code></a></li><li><a href="#obj-getworkingversions-depth-oaccellviewfilevcquerydepth"><code>obj.getWorkingVersions(depth=oacCellViewFileVCQueryDepth)</code></a></li><li><a href="#obj-getcells"><code>obj.getCells()</code></a></li><li><a href="#obj-getviews"><code>obj.getViews()</code></a></li><li><a href="#obj-getviewsbyname-name"><code>obj.getViewsByName(name)</code></a></li><li><a href="#obj-getcellviews"><code>obj.getCellViews()</code></a></li><li><a href="#obj-getgroups"><code>obj.getGroups()</code></a></li><li><a href="#obj-getgroups-def"><code>obj.getGroups(def)</code></a></li><li><a href="#obj-getgroupsbyname-name"><code>obj.getGroupsByName(name)</code></a></li><li><a href="#dm-oalib-create-name-libpath-mode-oacsharedlibmode-dmsystem-oadmsystem-dmattrlist-null"><code>_dm.oaLib.create(name, libPath, mode=oacSharedLibMode, dmSystem=&quot;oaDMSystem&quot;, dmAttrList=NULL)</code></a></li><li><a href="#dm-oalib-open-name-libpath-writepath-mode-oacsharedlibmode"><code>_dm.oaLib.open(name, libPath, writePath=&quot;&quot;, mode=oacSharedLibMode)</code></a></li><li><a href="#dm-oalib-find-name"><code>_dm.oaLib.find(name)</code></a></li><li><a href="#dm-oalib-exists-libpath"><code>_dm.oaLib.exists(libPath)</code></a></li><li><a href="#dm-oalib-getopenlibs"><code>_dm.oaLib.getOpenLibs()</code></a></li></ul></div></aside>
+      </div>
+    </main>
+  </div>
+  <div class="footer">oapy 是 AIVI 项目的一部分。此站点提供当前 oapy Python API 的中文文档。</div>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.querySelector("[data-class-filter]");
+  if (input) {
+    input.addEventListener("input", () => {
+      const term = input.value.trim().toLowerCase();
+      document.querySelectorAll("[data-class-item]").forEach((item) => {
+        const name = item.getAttribute("data-class-name") || "";
+        item.classList.toggle("hidden", term && !name.includes(term));
+      });
+    });
+  }
+
+  const globalInput = document.querySelector("[data-global-search]");
+  if (globalInput) {
+    globalInput.addEventListener("input", () => {
+      const term = globalInput.value.trim().toLowerCase();
+      document.querySelectorAll("[data-search-item]").forEach((item) => {
+        const name = item.getAttribute("data-search-name") || "";
+        const module = item.getAttribute("data-search-module") || "";
+        const visible = !term || name.includes(term) || module.includes(term);
+        item.classList.toggle("hidden", !visible);
+      });
+    });
+  }
+
+  document.querySelectorAll("[data-toc-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const panel = button.closest(".toc-panel");
+      if (!panel) return;
+      const isOpen = panel.classList.toggle("open");
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      const indicator = button.querySelector(".toc-toggle-indicator");
+      if (indicator) {
+        indicator.textContent = isOpen ? "Hide" : "Show";
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>oaOccInstTerm</title>
+  <style>
+body {
+  margin: 0;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  color: #f2d6c2;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #fff4ea;
+}
+
+.topbar {
+  border-bottom: 1px solid #6f3d2d;
+  background: #120f0f;
+}
+
+.topbar-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 14px 20px 10px;
+}
+
+.brand {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff8f2;
+  margin: 0 0 10px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tab {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  color: #f2d6c2;
+  font-size: 13px;
+}
+
+.tab.active {
+  background: #4b2317;
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.layout {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 28px;
+  padding: 24px 24px 40px;
+}
+
+.sidebar {
+  font-size: 13px;
+}
+
+.sidebar-panel {
+  border: 1px solid #6f3d2d;
+  margin-bottom: 16px;
+  background: #151111;
+}
+
+.sidebar-title {
+  background: #2a1713;
+  border-bottom: 1px solid #6f3d2d;
+  padding: 8px 10px;
+  font-weight: 700;
+  color: #fff1e8;
+}
+
+.sidebar-body {
+  padding: 8px 10px;
+}
+
+.sidebar-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.sidebar-search::placeholder {
+  color: #c8a995;
+}
+
+.sidebar-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-body li.hidden {
+  display: none;
+}
+
+.active-link {
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.sidebar-body li + li {
+  margin-top: 6px;
+}
+
+.content {
+  min-width: 0;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  align-items: start;
+}
+
+.doc {
+  border: 1px solid #6f3d2d;
+  background: #120f0f;
+  padding: 24px 28px 32px;
+  min-width: 0;
+}
+
+.toc-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 0;
+  position: sticky;
+  top: 16px;
+  margin-bottom: 16px;
+}
+
+.toc-toggle {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 0;
+  background: #2a1713;
+  color: #fff1e8;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.toc-toggle:hover {
+  background: #3a1d16;
+}
+
+.toc-toggle-indicator {
+  font-size: 12px;
+  color: #d6ac96;
+}
+
+.toc-body {
+  display: none;
+  padding: 14px 16px;
+}
+
+.toc-panel.open .toc-body {
+  display: block;
+}
+
+.toc-panel h2 {
+  margin: 0 0 10px;
+  padding: 0;
+  border: 0;
+  font-size: 18px;
+  color: #fff1e8;
+}
+
+.toc-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-panel li + li {
+  margin-top: 8px;
+}
+
+.toc-panel a {
+  font-size: 13px;
+  line-height: 1.35;
+  color: #f2d6c2;
+}
+
+.crumbs {
+  color: #c8a995;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.meta {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 10px 12px;
+  margin: 16px 0 20px;
+  font-size: 13px;
+}
+
+.meta div + div {
+  margin-top: 4px;
+}
+
+.doc h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  color: #fff8f2;
+}
+
+.doc h2 {
+  margin: 28px 0 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #6f3d2d;
+  font-size: 22px;
+  color: #fff1e8;
+}
+
+.doc h3 {
+  margin: 22px 0 10px;
+  font-size: 18px;
+  color: #f7e1d5;
+}
+
+.doc p, .doc li {
+  font-size: 14px;
+}
+
+.doc pre {
+  overflow-x: auto;
+  background: #0d0b0b;
+  border: 1px solid #6f3d2d;
+  padding: 12px 14px;
+}
+
+.doc code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  color: #f7e1d5;
+}
+
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 18px;
+  font-size: 13px;
+  table-layout: fixed;
+}
+
+.doc th, .doc td {
+  border: 1px solid #6f3d2d;
+  padding: 7px 9px;
+  vertical-align: top;
+  text-align: left;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.doc th {
+  background: #2a1713;
+  color: #fff1e8;
+}
+
+.doc blockquote {
+  margin: 14px 0;
+  padding: 8px 12px;
+  border-left: 4px solid #8a4a36;
+  background: #151111;
+  color: #f2d6c2;
+}
+
+.search-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+
+.search-panel input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 14px;
+}
+
+.search-panel input::placeholder {
+  color: #c8a995;
+}
+
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+}
+
+.search-results li {
+  border-top: 1px solid #4b2317;
+  padding: 10px 0;
+}
+
+.search-results li.hidden {
+  display: none;
+}
+
+.search-results a {
+  font-weight: 700;
+}
+
+.search-results .module-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border: 1px solid #8a4a36;
+  background: #2a1713;
+  color: #f2d6c2;
+  font-size: 12px;
+}
+
+.search-results .result-path {
+  margin-top: 4px;
+  color: #c8a995;
+  font-size: 12px;
+}
+
+.footer {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px 28px;
+  color: #b89481;
+  font-size: 12px;
+}
+
+.doc > * {
+  min-width: 0;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toc-panel {
+    position: static;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><a href="../index.html">AIVI / oapy API 中文文档</a></div>
+      <div class="tabs"><a class="tab" href="../base/index.html">base</a><a class="tab" href="../common/index.html">common</a><a class="tab" href="../cms/index.html">cms</a><a class="tab" href="../dm/index.html">dm</a><a class="tab active" href="../design/index.html">design</a><a class="tab" href="../tech/index.html">tech</a><a class="tab" href="../wafer/index.html">wafer</a></div>
+    </div>
+  </div>
+  <div class="layout">
+    <aside class="sidebar"><div class="sidebar-panel"><div class="sidebar-title">模块</div><div class="sidebar-body"><ul><li><a href="../classes.html">全部类</a></li><li><a href="../base/index.html">base</a></li><li><a href="../common/index.html">common</a></li><li><a href="../cms/index.html">cms</a></li><li><a href="../dm/index.html">dm</a></li><li><a class="active-link" href="../design/index.html">design</a></li><li><a href="../tech/index.html">tech</a></li><li><a href="../wafer/index.html">wafer</a></li></ul></div></div><div class="sidebar-panel"><div class="sidebar-title">design 类</div><div class="sidebar-body"><input class="sidebar-search" type="search" placeholder="筛选类" data-class-filter><ul><li data-class-item data-class-name="iregionqueryplugmgr"><a href="IRegionQueryPlugMgr.html">IRegionQueryPlugMgr</a></li><li data-class-item data-class-name="oaanalysisoppoint"><a href="oaAnalysisOpPoint.html">oaAnalysisOpPoint</a></li><li data-class-item data-class-name="oaanalysispoint"><a href="oaAnalysisPoint.html">oaAnalysisPoint</a></li><li data-class-item data-class-name="oaanalysispointarray"><a href="oaAnalysisPointArray.html">oaAnalysisPointArray</a></li><li data-class-item data-class-name="oaarc"><a href="oaArc.html">oaArc</a></li><li data-class-item data-class-name="oaareablockage"><a href="oaAreaBlockage.html">oaAreaBlockage</a></li><li data-class-item data-class-name="oaareaboundary"><a href="oaAreaBoundary.html">oaAreaBoundary</a></li><li data-class-item data-class-name="oaareahalo"><a href="oaAreaHalo.html">oaAreaHalo</a></li><li data-class-item data-class-name="oaarrayinst"><a href="oaArrayInst.html">oaArrayInst</a></li><li data-class-item data-class-name="oaassignassignment"><a href="oaAssignAssignment.html">oaAssignAssignment</a></li><li data-class-item data-class-name="oaassignvalue"><a href="oaAssignValue.html">oaAssignValue</a></li><li data-class-item data-class-name="oaassignednetspec"><a href="oaAssignedNetSpec.html">oaAssignedNetSpec</a></li><li data-class-item data-class-name="oaassignment"><a href="oaAssignment.html">oaAssignment</a></li><li data-class-item data-class-name="oaassignmentattrtype"><a href="oaAssignmentAttrType.html">oaAssignmentAttrType</a></li><li data-class-item data-class-name="oaassignmentdef"><a href="oaAssignmentDef.html">oaAssignmentDef</a></li><li data-class-item data-class-name="oaattrdisplay"><a href="oaAttrDisplay.html">oaAttrDisplay</a></li><li data-class-item data-class-name="oaattrtype"><a href="oaAttrType.html">oaAttrType</a></li><li data-class-item data-class-name="oabasememnetcollection"><a href="oaBaseMemNetCollection.html">oaBaseMemNetCollection</a></li><li data-class-item data-class-name="oabasememnetiter"><a href="oaBaseMemNetIter.html">oaBaseMemNetIter</a></li><li data-class-item data-class-name="oabitinst"><a href="oaBitInst.html">oaBitInst</a></li><li data-class-item data-class-name="oabitnet"><a href="oaBitNet.html">oaBitNet</a></li><li data-class-item data-class-name="oabitorder"><a href="oaBitOrder.html">oaBitOrder</a></li><li data-class-item data-class-name="oabitterm"><a href="oaBitTerm.html">oaBitTerm</a></li><li data-class-item data-class-name="oablock"><a href="oaBlock.html">oaBlock</a></li><li data-class-item data-class-name="oablockdomainvisibility"><a href="oaBlockDomainVisibility.html">oaBlockDomainVisibility</a></li><li data-class-item data-class-name="oablockobject"><a href="oaBlockObject.html">oaBlockObject</a></li><li data-class-item data-class-name="oablockage"><a href="oaBlockage.html">oaBlockage</a></li><li data-class-item data-class-name="oablockagequery"><a href="oaBlockageQuery.html">oaBlockageQuery</a></li><li data-class-item data-class-name="oablockagetype"><a href="oaBlockageType.html">oaBlockageType</a></li><li data-class-item data-class-name="oaboundary"><a href="oaBoundary.html">oaBoundary</a></li><li data-class-item data-class-name="oaboundaryquery"><a href="oaBoundaryQuery.html">oaBoundaryQuery</a></li><li data-class-item data-class-name="oabundlenet"><a href="oaBundleNet.html">oaBundleNet</a></li><li data-class-item data-class-name="oabundleterm"><a href="oaBundleTerm.html">oaBundleTerm</a></li><li data-class-item data-class-name="oabusnet"><a href="oaBusNet.html">oaBusNet</a></li><li data-class-item data-class-name="oabusnetbit"><a href="oaBusNetBit.html">oaBusNetBit</a></li><li data-class-item data-class-name="oabusnetdef"><a href="oaBusNetDef.html">oaBusNetDef</a></li><li data-class-item data-class-name="oabusterm"><a href="oaBusTerm.html">oaBusTerm</a></li><li data-class-item data-class-name="oabustermbit"><a href="oaBusTermBit.html">oaBusTermBit</a></li><li data-class-item data-class-name="oabustermdef"><a href="oaBusTermDef.html">oaBusTermDef</a></li><li data-class-item data-class-name="oacmap"><a href="oaCMap.html">oaCMap</a></li><li data-class-item data-class-name="oacelltype"><a href="oaCellType.html">oaCellType</a></li><li data-class-item data-class-name="oacluster"><a href="oaCluster.html">oaCluster</a></li><li data-class-item data-class-name="oaclusterboundary"><a href="oaClusterBoundary.html">oaClusterBoundary</a></li><li data-class-item data-class-name="oaclustertype"><a href="oaClusterType.html">oaClusterType</a></li><li data-class-item data-class-name="oaconnfig"><a href="oaConnFig.html">oaConnFig</a></li><li data-class-item data-class-name="oaconnstatus"><a href="oaConnStatus.html">oaConnStatus</a></li><li data-class-item data-class-name="oaconnectdef"><a href="oaConnectDef.html">oaConnectDef</a></li><li data-class-item data-class-name="oacoreboxspec"><a href="oaCoreBoxSpec.html">oaCoreBoxSpec</a></li><li data-class-item data-class-name="oacouplingcap"><a href="oaCouplingCap.html">oaCouplingCap</a></li><li data-class-item data-class-name="oacustomvia"><a href="oaCustomVia.html">oaCustomVia</a></li><li data-class-item data-class-name="oacustomviaheader"><a href="oaCustomViaHeader.html">oaCustomViaHeader</a></li><li data-class-item data-class-name="oadesign"><a href="oaDesign.html">oaDesign</a></li><li data-class-item data-class-name="oadesignarray"><a href="oaDesignArray.html">oaDesignArray</a></li><li data-class-item data-class-name="oadesignattrtype"><a href="oaDesignAttrType.html">oaDesignAttrType</a></li><li data-class-item data-class-name="oadesigndatatype"><a href="oaDesignDataType.html">oaDesignDataType</a></li><li data-class-item data-class-name="oadesignerror"><a href="oaDesignError.html">oaDesignError</a></li><li data-class-item data-class-name="oadesignexception"><a href="oaDesignException.html">oaDesignException</a></li><li data-class-item data-class-name="oadesignobject"><a href="oaDesignObject.html">oaDesignObject</a></li><li data-class-item data-class-name="oadesignundoobserver"><a href="oaDesignUndoObserver.html">oaDesignUndoObserver</a></li><li data-class-item data-class-name="oadesignundoobserverbase"><a href="oaDesignUndoObserverBase.html">oaDesignUndoObserverBase</a></li><li data-class-item data-class-name="oadesignviavariantheader"><a href="oaDesignViaVariantHeader.html">oaDesignViaVariantHeader</a></li><li data-class-item data-class-name="oadevice"><a href="oaDevice.html">oaDevice</a></li><li data-class-item data-class-name="oadiode"><a href="oaDiode.html">oaDiode</a></li><li data-class-item data-class-name="oadonut"><a href="oaDonut.html">oaDonut</a></li><li data-class-item data-class-name="oadot"><a href="oaDot.html">oaDot</a></li><li data-class-item data-class-name="oaellipse"><a href="oaEllipse.html">oaEllipse</a></li><li data-class-item data-class-name="oaelmore"><a href="oaElmore.html">oaElmore</a></li><li data-class-item data-class-name="oaendstyle"><a href="oaEndStyle.html">oaEndStyle</a></li><li data-class-item data-class-name="oaendpointtype"><a href="oaEndpointType.html">oaEndpointType</a></li><li data-class-item data-class-name="oaevaltext"><a href="oaEvalText.html">oaEvalText</a></li><li data-class-item data-class-name="oaevaltextlink"><a href="oaEvalTextLink.html">oaEvalTextLink</a></li><li data-class-item data-class-name="oafig"><a href="oaFig.html">oaFig</a></li><li data-class-item data-class-name="oafiggroup"><a href="oaFigGroup.html">oaFigGroup</a></li><li data-class-item data-class-name="oafiggroupmem"><a href="oaFigGroupMem.html">oaFigGroupMem</a></li><li data-class-item data-class-name="oafiggroupquery"><a href="oaFigGroupQuery.html">oaFigGroupQuery</a></li><li data-class-item data-class-name="oafiggroupstatus"><a href="oaFigGroupStatus.html">oaFigGroupStatus</a></li><li data-class-item data-class-name="oafont"><a href="oaFont.html">oaFont</a></li><li data-class-item data-class-name="oagcellpattern"><a href="oaGCellPattern.html">oaGCellPattern</a></li><li data-class-item data-class-name="oagroundednode"><a href="oaGroundedNode.html">oaGroundedNode</a></li><li data-class-item data-class-name="oaguide"><a href="oaGuide.html">oaGuide</a></li><li data-class-item data-class-name="oaguidequery"><a href="oaGuideQuery.html">oaGuideQuery</a></li><li data-class-item data-class-name="oahierpath"><a href="oaHierPath.html">oaHierPath</a></li><li data-class-item data-class-name="oainductor"><a href="oaInductor.html">oaInductor</a></li><li data-class-item data-class-name="oainst"><a href="oaInst.html">oaInst</a></li><li data-class-item data-class-name="oainstattrdisplay"><a href="oaInstAttrDisplay.html">oaInstAttrDisplay</a></li><li data-class-item data-class-name="oainstattrtype"><a href="oaInstAttrType.html">oaInstAttrType</a></li><li data-class-item data-class-name="oainstheader"><a href="oaInstHeader.html">oaInstHeader</a></li><li data-class-item data-class-name="oainstpropdisplay"><a href="oaInstPropDisplay.html">oaInstPropDisplay</a></li><li data-class-item data-class-name="oainstquery"><a href="oaInstQuery.html">oaInstQuery</a></li><li data-class-item data-class-name="oainstterm"><a href="oaInstTerm.html">oaInstTerm</a></li><li data-class-item data-class-name="oainsttermattrtype"><a href="oaInstTermAttrType.html">oaInstTermAttrType</a></li><li data-class-item data-class-name="oalppheader"><a href="oaLPPHeader.html">oaLPPHeader</a></li><li data-class-item data-class-name="oalayerblockage"><a href="oaLayerBlockage.html">oaLayerBlockage</a></li><li data-class-item data-class-name="oalayerhalo"><a href="oaLayerHalo.html">oaLayerHalo</a></li><li data-class-item data-class-name="oalayerheader"><a href="oaLayerHeader.html">oaLayerHeader</a></li><li data-class-item data-class-name="oalayerheaderarray"><a href="oaLayerHeaderArray.html">oaLayerHeaderArray</a></li><li data-class-item data-class-name="oalayerrangeblockage"><a href="oaLayerRangeBlockage.html">oaLayerRangeBlockage</a></li><li data-class-item data-class-name="oalayerrangeblockagequery"><a href="oaLayerRangeBlockageQuery.html">oaLayerRangeBlockageQuery</a></li><li data-class-item data-class-name="oalayerrangehalo"><a href="oaLayerRangeHalo.html">oaLayerRangeHalo</a></li><li data-class-item data-class-name="oaline"><a href="oaLine.html">oaLine</a></li><li data-class-item data-class-name="oalumpedelmore"><a href="oaLumpedElmore.html">oaLumpedElmore</a></li><li data-class-item data-class-name="oamarker"><a href="oaMarker.html">oaMarker</a></li><li data-class-item data-class-name="oamarkerdeletewhen"><a href="oaMarkerDeleteWhen.html">oaMarkerDeleteWhen</a></li><li data-class-item data-class-name="oamarkerquery"><a href="oaMarkerQuery.html">oaMarkerQuery</a></li><li data-class-item data-class-name="oamarkerseverity"><a href="oaMarkerSeverity.html">oaMarkerSeverity</a></li><li data-class-item data-class-name="oamemnetcollection"><a href="oaMemNetCollection.html">oaMemNetCollection</a></li><li data-class-item data-class-name="oamemnetiter"><a href="oaMemNetIter.html">oaMemNetIter</a></li><li data-class-item data-class-name="oamodassignassignment"><a href="oaModAssignAssignment.html">oaModAssignAssignment</a></li><li data-class-item data-class-name="oamodassignvalue"><a href="oaModAssignValue.html">oaModAssignValue</a></li><li data-class-item data-class-name="oamodassignment"><a href="oaModAssignment.html">oaModAssignment</a></li><li data-class-item data-class-name="oamodbitinst"><a href="oaModBitInst.html">oaModBitInst</a></li><li data-class-item data-class-name="oamodbitnet"><a href="oaModBitNet.html">oaModBitNet</a></li><li data-class-item data-class-name="oamodbitterm"><a href="oaModBitTerm.html">oaModBitTerm</a></li><li data-class-item data-class-name="oamodbundlenet"><a href="oaModBundleNet.html">oaModBundleNet</a></li><li data-class-item data-class-name="oamodbundleterm"><a href="oaModBundleTerm.html">oaModBundleTerm</a></li><li data-class-item data-class-name="oamodbusnet"><a href="oaModBusNet.html">oaModBusNet</a></li><li data-class-item data-class-name="oamodbusnetbit"><a href="oaModBusNetBit.html">oaModBusNetBit</a></li><li data-class-item data-class-name="oamodbusnetdef"><a href="oaModBusNetDef.html">oaModBusNetDef</a></li><li data-class-item data-class-name="oamodbusterm"><a href="oaModBusTerm.html">oaModBusTerm</a></li><li data-class-item data-class-name="oamodbustermbit"><a href="oaModBusTermBit.html">oaModBusTermBit</a></li><li data-class-item data-class-name="oamodbustermdef"><a href="oaModBusTermDef.html">oaModBusTermDef</a></li><li data-class-item data-class-name="oamodconnectdef"><a href="oaModConnectDef.html">oaModConnectDef</a></li><li data-class-item data-class-name="oamoddesigninst"><a href="oaModDesignInst.html">oaModDesignInst</a></li><li data-class-item data-class-name="oamodinst"><a href="oaModInst.html">oaModInst</a></li><li data-class-item data-class-name="oamodinstheader"><a href="oaModInstHeader.html">oaModInstHeader</a></li><li data-class-item data-class-name="oamodinstterm"><a href="oaModInstTerm.html">oaModInstTerm</a></li><li data-class-item data-class-name="oamodmemnetcollection"><a href="oaModMemNetCollection.html">oaModMemNetCollection</a></li><li data-class-item data-class-name="oamodmemnetiter"><a href="oaModMemNetIter.html">oaModMemNetIter</a></li><li data-class-item data-class-name="oamodmodulebitinst"><a href="oaModModuleBitInst.html">oaModModuleBitInst</a></li><li data-class-item data-class-name="oamodmoduleinst"><a href="oaModModuleInst.html">oaModModuleInst</a></li><li data-class-item data-class-name="oamodmoduleinstheader"><a href="oaModModuleInstHeader.html">oaModModuleInstHeader</a></li><li data-class-item data-class-name="oamodmodulescalarinst"><a href="oaModModuleScalarInst.html">oaModModuleScalarInst</a></li><li data-class-item data-class-name="oamodmodulevectorinst"><a href="oaModModuleVectorInst.html">oaModModuleVectorInst</a></li><li data-class-item data-class-name="oamodmodulevectorinstbit"><a href="oaModModuleVectorInstBit.html">oaModModuleVectorInstBit</a></li><li data-class-item data-class-name="oamodnet"><a href="oaModNet.html">oaModNet</a></li><li data-class-item data-class-name="oamodnetconnectdef"><a href="oaModNetConnectDef.html">oaModNetConnectDef</a></li><li data-class-item data-class-name="oamodnettermarray"><a href="oaModNetTermArray.html">oaModNetTermArray</a></li><li data-class-item data-class-name="oamodnettermnamearray"><a href="oaModNetTermNameArray.html">oaModNetTermNameArray</a></li><li data-class-item data-class-name="oamodnettermposarray"><a href="oaModNetTermPosArray.html">oaModNetTermPosArray</a></li><li data-class-item data-class-name="oamodobject"><a href="oaModObject.html">oaModObject</a></li><li data-class-item data-class-name="oamodscalarinst"><a href="oaModScalarInst.html">oaModScalarInst</a></li><li data-class-item data-class-name="oamodscalarnet"><a href="oaModScalarNet.html">oaModScalarNet</a></li><li data-class-item data-class-name="oamodscalarterm"><a href="oaModScalarTerm.html">oaModScalarTerm</a></li><li data-class-item data-class-name="oamodterm"><a href="oaModTerm.html">oaModTerm</a></li><li data-class-item data-class-name="oamodtermarray"><a href="oaModTermArray.html">oaModTermArray</a></li><li data-class-item data-class-name="oamodtermconnectdef"><a href="oaModTermConnectDef.html">oaModTermConnectDef</a></li><li data-class-item data-class-name="oamodvectorinst"><a href="oaModVectorInst.html">oaModVectorInst</a></li><li data-class-item data-class-name="oamodvectorinstbit"><a href="oaModVectorInstBit.html">oaModVectorInstBit</a></li><li data-class-item data-class-name="oamodvectorinstdef"><a href="oaModVectorInstDef.html">oaModVectorInstDef</a></li><li data-class-item data-class-name="oamodule"><a href="oaModule.html">oaModule</a></li><li data-class-item data-class-name="oamutualinductor"><a href="oaMutualInductor.html">oaMutualInductor</a></li><li data-class-item data-class-name="oanet"><a href="oaNet.html">oaNet</a></li><li data-class-item data-class-name="oanetattrtype"><a href="oaNetAttrType.html">oaNetAttrType</a></li><li data-class-item data-class-name="oanetconnectdef"><a href="oaNetConnectDef.html">oaNetConnectDef</a></li><li data-class-item data-class-name="oanettermarray"><a href="oaNetTermArray.html">oaNetTermArray</a></li><li data-class-item data-class-name="oanettermnamearray"><a href="oaNetTermNameArray.html">oaNetTermNameArray</a></li><li data-class-item data-class-name="oanettermpair"><a href="oaNetTermPair.html">oaNetTermPair</a></li><li data-class-item data-class-name="oanettermposarray"><a href="oaNetTermPosArray.html">oaNetTermPosArray</a></li><li data-class-item data-class-name="oanode"><a href="oaNode.html">oaNode</a></li><li data-class-item data-class-name="oaoccarc"><a href="oaOccArc.html">oaOccArc</a></li><li data-class-item data-class-name="oaoccarrayinst"><a href="oaOccArrayInst.html">oaOccArrayInst</a></li><li data-class-item data-class-name="oaoccassignassignment"><a href="oaOccAssignAssignment.html">oaOccAssignAssignment</a></li><li data-class-item data-class-name="oaoccassignvalue"><a href="oaOccAssignValue.html">oaOccAssignValue</a></li><li data-class-item data-class-name="oaoccassignment"><a href="oaOccAssignment.html">oaOccAssignment</a></li><li data-class-item data-class-name="oaoccattrdisplay"><a href="oaOccAttrDisplay.html">oaOccAttrDisplay</a></li><li data-class-item data-class-name="oaoccbitinst"><a href="oaOccBitInst.html">oaOccBitInst</a></li><li data-class-item data-class-name="oaoccbitnet"><a href="oaOccBitNet.html">oaOccBitNet</a></li><li data-class-item data-class-name="oaoccbitterm"><a href="oaOccBitTerm.html">oaOccBitTerm</a></li><li data-class-item data-class-name="oaoccbundlenet"><a href="oaOccBundleNet.html">oaOccBundleNet</a></li><li data-class-item data-class-name="oaoccbundleterm"><a href="oaOccBundleTerm.html">oaOccBundleTerm</a></li><li data-class-item data-class-name="oaoccbusnet"><a href="oaOccBusNet.html">oaOccBusNet</a></li><li data-class-item data-class-name="oaoccbusnetbit"><a href="oaOccBusNetBit.html">oaOccBusNetBit</a></li><li data-class-item data-class-name="oaoccbusnetdef"><a href="oaOccBusNetDef.html">oaOccBusNetDef</a></li><li data-class-item data-class-name="oaoccbusterm"><a href="oaOccBusTerm.html">oaOccBusTerm</a></li><li data-class-item data-class-name="oaoccbustermbit"><a href="oaOccBusTermBit.html">oaOccBusTermBit</a></li><li data-class-item data-class-name="oaoccbustermdef"><a href="oaOccBusTermDef.html">oaOccBusTermDef</a></li><li data-class-item data-class-name="oaoccconnectdef"><a href="oaOccConnectDef.html">oaOccConnectDef</a></li><li data-class-item data-class-name="oaoccdesigninst"><a href="oaOccDesignInst.html">oaOccDesignInst</a></li><li data-class-item data-class-name="oaoccdonut"><a href="oaOccDonut.html">oaOccDonut</a></li><li data-class-item data-class-name="oaoccdot"><a href="oaOccDot.html">oaOccDot</a></li><li data-class-item data-class-name="oaoccellipse"><a href="oaOccEllipse.html">oaOccEllipse</a></li><li data-class-item data-class-name="oaoccevaltext"><a href="oaOccEvalText.html">oaOccEvalText</a></li><li data-class-item data-class-name="oaoccinst"><a href="oaOccInst.html">oaOccInst</a></li><li data-class-item data-class-name="oaoccinstattrdisplay"><a href="oaOccInstAttrDisplay.html">oaOccInstAttrDisplay</a></li><li data-class-item data-class-name="oaoccinstheader"><a href="oaOccInstHeader.html">oaOccInstHeader</a></li><li data-class-item data-class-name="oaoccinstpropdisplay"><a href="oaOccInstPropDisplay.html">oaOccInstPropDisplay</a></li><li data-class-item data-class-name="oaoccinstterm"><a class="active-link" href="oaOccInstTerm.html">oaOccInstTerm</a></li><li data-class-item data-class-name="oaoccline"><a href="oaOccLine.html">oaOccLine</a></li><li data-class-item data-class-name="oaoccmemnetcollection"><a href="oaOccMemNetCollection.html">oaOccMemNetCollection</a></li><li data-class-item data-class-name="oaoccmemnetiter"><a href="oaOccMemNetIter.html">oaOccMemNetIter</a></li><li data-class-item data-class-name="oaoccmodulebitinst"><a href="oaOccModuleBitInst.html">oaOccModuleBitInst</a></li><li data-class-item data-class-name="oaoccmoduleinst"><a href="oaOccModuleInst.html">oaOccModuleInst</a></li><li data-class-item data-class-name="oaoccmoduleinstheader"><a href="oaOccModuleInstHeader.html">oaOccModuleInstHeader</a></li><li data-class-item data-class-name="oaoccmodulescalarinst"><a href="oaOccModuleScalarInst.html">oaOccModuleScalarInst</a></li><li data-class-item data-class-name="oaoccmodulevectorinst"><a href="oaOccModuleVectorInst.html">oaOccModuleVectorInst</a></li><li data-class-item data-class-name="oaoccmodulevectorinstbit"><a href="oaOccModuleVectorInstBit.html">oaOccModuleVectorInstBit</a></li><li data-class-item data-class-name="oaoccnet"><a href="oaOccNet.html">oaOccNet</a></li><li data-class-item data-class-name="oaoccnetconnectdef"><a href="oaOccNetConnectDef.html">oaOccNetConnectDef</a></li><li data-class-item data-class-name="oaoccobject"><a href="oaOccObject.html">oaOccObject</a></li><li data-class-item data-class-name="oaoccpath"><a href="oaOccPath.html">oaOccPath</a></li><li data-class-item data-class-name="oaoccpathseg"><a href="oaOccPathSeg.html">oaOccPathSeg</a></li><li data-class-item data-class-name="oaoccpolygon"><a href="oaOccPolygon.html">oaOccPolygon</a></li><li data-class-item data-class-name="oaoccproducer"><a href="oaOccProducer.html">oaOccProducer</a></li><li data-class-item data-class-name="oaoccpropdisplay"><a href="oaOccPropDisplay.html">oaOccPropDisplay</a></li><li data-class-item data-class-name="oaoccrect"><a href="oaOccRect.html">oaOccRect</a></li><li data-class-item data-class-name="oaoccscalarinst"><a href="oaOccScalarInst.html">oaOccScalarInst</a></li><li data-class-item data-class-name="oaoccscalarnet"><a href="oaOccScalarNet.html">oaOccScalarNet</a></li><li data-class-item data-class-name="oaoccscalarterm"><a href="oaOccScalarTerm.html">oaOccScalarTerm</a></li><li data-class-item data-class-name="oaoccshape"><a href="oaOccShape.html">oaOccShape</a></li><li data-class-item data-class-name="oaoccterm"><a href="oaOccTerm.html">oaOccTerm</a></li><li data-class-item data-class-name="oaocctermarray"><a href="oaOccTermArray.html">oaOccTermArray</a></li><li data-class-item data-class-name="oaocctermconnectdef"><a href="oaOccTermConnectDef.html">oaOccTermConnectDef</a></li><li data-class-item data-class-name="oaocctext"><a href="oaOccText.html">oaOccText</a></li><li data-class-item data-class-name="oaocctextdisplay"><a href="oaOccTextDisplay.html">oaOccTextDisplay</a></li><li data-class-item data-class-name="oaocctextoverride"><a href="oaOccTextOverride.html">oaOccTextOverride</a></li><li data-class-item data-class-name="oaocctraverser"><a href="oaOccTraverser.html">oaOccTraverser</a></li><li data-class-item data-class-name="oaoccvectorinst"><a href="oaOccVectorInst.html">oaOccVectorInst</a></li><li data-class-item data-class-name="oaoccvectorinstbit"><a href="oaOccVectorInstBit.html">oaOccVectorInstBit</a></li><li data-class-item data-class-name="oaoccvectorinstdef"><a href="oaOccVectorInstDef.html">oaOccVectorInstDef</a></li><li data-class-item data-class-name="oaoccurrence"><a href="oaOccurrence.html">oaOccurrence</a></li><li data-class-item data-class-name="oaoppointheader"><a href="oaOpPointHeader.html">oaOpPointHeader</a></li><li data-class-item data-class-name="oaprboundary"><a href="oaPRBoundary.html">oaPRBoundary</a></li><li data-class-item data-class-name="oaparasiticnetwork"><a href="oaParasiticNetwork.html">oaParasiticNetwork</a></li><li data-class-item data-class-name="oapath"><a href="oaPath.html">oaPath</a></li><li data-class-item data-class-name="oapathseg"><a href="oaPathSeg.html">oaPathSeg</a></li><li data-class-item data-class-name="oapathstyle"><a href="oaPathStyle.html">oaPathStyle</a></li><li data-class-item data-class-name="oapcelldef"><a href="oaPcellDef.html">oaPcellDef</a></li><li data-class-item data-class-name="oapcellfileobserver"><a href="oaPcellFileObserver.html">oaPcellFileObserver</a></li><li data-class-item data-class-name="oapcelllink"><a href="oaPcellLink.html">oaPcellLink</a></li><li data-class-item data-class-name="oapcellobserver"><a href="oaPcellObserver.html">oaPcellObserver</a></li><li data-class-item data-class-name="oapielmore"><a href="oaPiElmore.html">oaPiElmore</a></li><li data-class-item data-class-name="oapipoleresidue"><a href="oaPiPoleResidue.html">oaPiPoleResidue</a></li><li data-class-item data-class-name="oapin"><a href="oaPin.html">oaPin</a></li><li data-class-item data-class-name="oapinconnectmethod"><a href="oaPinConnectMethod.html">oaPinConnectMethod</a></li><li data-class-item data-class-name="oapinfig"><a href="oaPinFig.html">oaPinFig</a></li><li data-class-item data-class-name="oapintype"><a href="oaPinType.html">oaPinType</a></li><li data-class-item data-class-name="oaplacementblockagequery"><a href="oaPlacementBlockageQuery.html">oaPlacementBlockageQuery</a></li><li data-class-item data-class-name="oaplacementstatus"><a href="oaPlacementStatus.html">oaPlacementStatus</a></li><li data-class-item data-class-name="oapoleresidue"><a href="oaPoleResidue.html">oaPoleResidue</a></li><li data-class-item data-class-name="oapolygon"><a href="oaPolygon.html">oaPolygon</a></li><li data-class-item data-class-name="oapropdisplay"><a href="oaPropDisplay.html">oaPropDisplay</a></li><li data-class-item data-class-name="oarect"><a href="oaRect.html">oaRect</a></li><li data-class-item data-class-name="oarecursionobserver"><a href="oaRecursionObserver.html">oaRecursionObserver</a></li><li data-class-item data-class-name="oareducedmodel"><a href="oaReducedModel.html">oaReducedModel</a></li><li data-class-item data-class-name="oaref"><a href="oaRef.html">oaRef</a></li><li data-class-item data-class-name="oarefheader"><a href="oaRefHeader.html">oaRefHeader</a></li><li data-class-item data-class-name="oaregionquery"><a href="oaRegionQuery.html">oaRegionQuery</a></li><li data-class-item data-class-name="oaresistor"><a href="oaResistor.html">oaResistor</a></li><li data-class-item data-class-name="oaroute"><a href="oaRoute.html">oaRoute</a></li><li data-class-item data-class-name="oaroutemethod"><a href="oaRouteMethod.html">oaRouteMethod</a></li><li data-class-item data-class-name="oarouteobjectarray"><a href="oaRouteObjectArray.html">oaRouteObjectArray</a></li><li data-class-item data-class-name="oaroutepattern"><a href="oaRoutePattern.html">oaRoutePattern</a></li><li data-class-item data-class-name="oaroutestatus"><a href="oaRouteStatus.html">oaRouteStatus</a></li><li data-class-item data-class-name="oaroutetopology"><a href="oaRouteTopology.html">oaRouteTopology</a></li><li data-class-item data-class-name="oarow"><a href="oaRow.html">oaRow</a></li><li data-class-item data-class-name="oarowfliptype"><a href="oaRowFlipType.html">oaRowFlipType</a></li><li data-class-item data-class-name="oarowheader"><a href="oaRowHeader.html">oaRowHeader</a></li><li data-class-item data-class-name="oarowquery"><a href="oaRowQuery.html">oaRowQuery</a></li><li data-class-item data-class-name="oarowspacingtype"><a href="oaRowSpacingType.html">oaRowSpacingType</a></li><li data-class-item data-class-name="oascalarinst"><a href="oaScalarInst.html">oaScalarInst</a></li><li data-class-item data-class-name="oascalarnet"><a href="oaScalarNet.html">oaScalarNet</a></li><li data-class-item data-class-name="oascalarterm"><a href="oaScalarTerm.html">oaScalarTerm</a></li><li data-class-item data-class-name="oascanchain"><a href="oaScanChain.html">oaScanChain</a></li><li data-class-item data-class-name="oascanchaininst"><a href="oaScanChainInst.html">oaScanChainInst</a></li><li data-class-item data-class-name="oascanchainset"><a href="oaScanChainSet.html">oaScanChainSet</a></li><li data-class-item data-class-name="oascanchainsettype"><a href="oaScanChainSetType.html">oaScanChainSetType</a></li><li data-class-item data-class-name="oascriptenginelink"><a href="oaScriptEngineLink.html">oaScriptEngineLink</a></li><li data-class-item data-class-name="oasegstyle"><a href="oaSegStyle.html">oaSegStyle</a></li><li data-class-item data-class-name="oaseriesrl"><a href="oaSeriesRL.html">oaSeriesRL</a></li><li data-class-item data-class-name="oashape"><a href="oaShape.html">oaShape</a></li><li data-class-item data-class-name="oashapequery"><a href="oaShapeQuery.html">oaShapeQuery</a></li><li data-class-item data-class-name="oasigtype"><a href="oaSigType.html">oaSigType</a></li><li data-class-item data-class-name="oasnapboundary"><a href="oaSnapBoundary.html">oaSnapBoundary</a></li><li data-class-item data-class-name="oasource"><a href="oaSource.html">oaSource</a></li><li data-class-item data-class-name="oastddevice"><a href="oaStdDevice.html">oaStdDevice</a></li><li data-class-item data-class-name="oastdvia"><a href="oaStdVia.html">oaStdVia</a></li><li data-class-item data-class-name="oastdviaheader"><a href="oaStdViaHeader.html">oaStdViaHeader</a></li><li data-class-item data-class-name="oasteiner"><a href="oaSteiner.html">oaSteiner</a></li><li data-class-item data-class-name="oasteinerquery"><a href="oaSteinerQuery.html">oaSteinerQuery</a></li><li data-class-item data-class-name="oasubnetwork"><a href="oaSubNetwork.html">oaSubNetwork</a></li><li data-class-item data-class-name="oasymmetry"><a href="oaSymmetry.html">oaSymmetry</a></li><li data-class-item data-class-name="oaterm"><a href="oaTerm.html">oaTerm</a></li><li data-class-item data-class-name="oatermarray"><a href="oaTermArray.html">oaTermArray</a></li><li data-class-item data-class-name="oatermattrtype"><a href="oaTermAttrType.html">oaTermAttrType</a></li><li data-class-item data-class-name="oatermconnectdef"><a href="oaTermConnectDef.html">oaTermConnectDef</a></li><li data-class-item data-class-name="oatermtype"><a href="oaTermType.html">oaTermType</a></li><li data-class-item data-class-name="oatext"><a href="oaText.html">oaText</a></li><li data-class-item data-class-name="oatextalign"><a href="oaTextAlign.html">oaTextAlign</a></li><li data-class-item data-class-name="oatextdisplay"><a href="oaTextDisplay.html">oaTextDisplay</a></li><li data-class-item data-class-name="oatextdisplaycollection"><a href="oaTextDisplayCollection.html">oaTextDisplayCollection</a></li><li data-class-item data-class-name="oatextdisplayformat"><a href="oaTextDisplayFormat.html">oaTextDisplayFormat</a></li><li data-class-item data-class-name="oatextdisplayiter"><a href="oaTextDisplayIter.html">oaTextDisplayIter</a></li><li data-class-item data-class-name="oatextlink"><a href="oaTextLink.html">oaTextLink</a></li><li data-class-item data-class-name="oatextoverride"><a href="oaTextOverride.html">oaTextOverride</a></li><li data-class-item data-class-name="oatrackpattern"><a href="oaTrackPattern.html">oaTrackPattern</a></li><li data-class-item data-class-name="oavectorinst"><a href="oaVectorInst.html">oaVectorInst</a></li><li data-class-item data-class-name="oavectorinstbit"><a href="oaVectorInstBit.html">oaVectorInstBit</a></li><li data-class-item data-class-name="oavectorinstdef"><a href="oaVectorInstDef.html">oaVectorInstDef</a></li><li data-class-item data-class-name="oavia"><a href="oaVia.html">oaVia</a></li><li data-class-item data-class-name="oaviadirection"><a href="oaViaDirection.html">oaViaDirection</a></li><li data-class-item data-class-name="oaviaheader"><a href="oaViaHeader.html">oaViaHeader</a></li><li data-class-item data-class-name="oaviaquery"><a href="oaViaQuery.html">oaViaQuery</a></li></ul></div></div></aside>
+    <main class="content">
+      <div class="content-grid">
+        <div class="doc">
+          <div class="crumbs"><a href="../index.html">首页</a> / <a href="index.html">design</a> / oaOccInstTerm</div>
+          <h1 id="oaoccinstterm">oaOccInstTerm</h1>
+<p><strong>模块</strong>: <code>oapy._oa._design</code>
+<strong>导入</strong>: <code>from oapy._oa import _design</code></p>
+<h2 id="_1">概览</h2>
+<p><code>oaOccInstTerm</code> 在 <code>oapy</code> 中可用，可通过 <code>_design</code> 模块访问。</p>
+<p>本页汇总 <code>oaOccInstTerm</code> 当前在 <code>oapy</code> 中可用的 Python 接口。</p>
+<h2 id="_2">详细说明</h2>
+<p>The oaOccInstTerm class is an abstract base class for all types of connections between a net and a terminal in the master of an instance in the occurrence domain。 The connection is proper if the number of bits in the net is equal to the number of bits implied by the instTerm's terminal name。 In the case of oaOccVectorInsts, the net width must be multiplied by the number of bits represented by the instance name。 When oaInstTerm objects are created in the block domain and oaModInstTerm objects are created in the module domain, corresponding oaOccInstTerm objects are automatically created in the occurrence domain。 Each oaOccInstTerm can correspond to one oaModInstTerm , or one oaInstTerm , or one of each。 oaOccInstTerms may exist that do not have a proper corresponding terminal in the master of its oaOccInst 。 This allows instTerms to be created when the instance master is not read in, and it allows changes to instTerms that happen before the master is updated。 The traversal from an instTerm to its corresponding terminal will not succeed unless a terminal with an exactly matching name is present in the master。 oaModInstTerm , oaOccInstTerm, and oaInstTerm each represent instances of terminals in different hierarchy domains, where in each case the instance master represents a level of hierarchy in the design。 For oaOccInstTerm, its instance's master is an oaOccurrence , and each oaOccInst of an oaOccurrence will have a set of zero or more occInstTerms。 For oaModInstTerm , the instance master is an oaModule 。 For oaInstTerm , the master is an oaBlock 。 When an instTerm is created by specifying a terminal or terminal name, the instTerm is said to connect by name。 Binding is done to the named terminal if it exists in the instance master。 The width of the connection must match the width of the associated net。 When an instTerm is created by specifying a terminal position, the instTerm is said to connect by position。 Binding is to the terminal in the master that is assigned to the position and if the resulting connection width matches the width of the corresponding net。 To avoid confusion, the instTerms associated with a particular instance must either all be connected by name or all by connected by position。 The oaOccInstTerm class can be observed by deriving from oaObserver<oaOccInstTerm> 。</p>
+<h2 id="_3">方法总览</h2>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>Python 调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅</td>
+<td><code>obj.getBit(bitIndex)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getNet(preferred=false)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getInst()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getTerm(expand=true)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getTerm(expand, d)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getTermName(name)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getTermName(ns, name)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getTermPosition()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getNumBits()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getAssignedNet(ignoreDefault=false)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getAssignedNet(spec, ignoreDefault=false)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getInstTerm()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getModInstTerm()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getReflection(d)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isBound()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isBound(d)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isImplicit()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.usesTermPosition()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_design.oaOccInstTerm.find(inst, term)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_design.oaOccInstTerm.find(inst, term)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_design.oaOccInstTerm.find(inst, term)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_design.oaOccInstTerm.find(inst, termName)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_design.oaOccInstTerm.find(inst, termPosition)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_design.oaOccInstTerm.find(inst, term, domain)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_design.oaOccInstTerm.find(inst, termName, domain)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_design.oaOccInstTerm.find(inst, termPosition, domain)</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">方法说明</h2>
+<h3 id="objgetbitbitindex"><code>obj.getBit(bitIndex)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getBit(bitIndex)</code></p>
+<p>This function returns a pointer to the occInstTerm that corresponds to the specified bitIndex bit of this occInstTerm。 For single-bit instTerms, this function returns this occInstTerm if the bitIndex value is zero。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidInstTermBitIndex</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.getBit(bitIndex)
+</code></pre>
+<h3 id="objgetnetpreferredfalse"><code>obj.getNet(preferred=false)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getNet(preferred=false)</code></p>
+<p>This function returns the occurrence net associated with this occInstTerm。 NULL is returned if the instTerm was created with a NULL net or if the instTerm has been disconnected from the net。 If preferred is true, the preferred equivalent net associated with the net will be returned instead。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>preferred</code>: indicates whether to return the preferred equivalent。</li>
+</ul>
+<p><strong>返回</strong></p>
+<ul>
+<li>A pointer to an oaOccNet。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.getNet(preferred=false)
+</code></pre>
+<h3 id="objgetinst"><code>obj.getInst()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getInst()</code></p>
+<p>This function returns a pointer to the occurrence instance that this instTerm is associated with。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.getInst()
+</code></pre>
+<h3 id="objgettermexpandtrue"><code>obj.getTerm(expand=true)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getTerm(expand=true)</code></p>
+<p>This function returns the terminal associated with this instTerm。 An attempt is made to bind the master if the instTerm is unbound。 By default, the terminal reflected in the block domain is traversed。 NULL is returned if the instance is unbound, the terminal is not found in the master, or the corresponding term in the block domain is hidden but not overridden。 An exception is thrown if the instance for this instTerm is a vectorInst or an implicit vectorInstBit since there is no occurrence hierarchy beneath those types of instances。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>expand</code>: Specifies whether to expand the occurrence hierarchy to include the master occurrence for this occInstTerm, if it is not already expanded in the current session。</li>
+<li><code>d</code>: The domain to traverse。 Either oacModDomain or the default oacBlockDomain。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacCannotProcessDomainArgument</code>。</li>
+<li><code>oacCannotGetVectorInstOccurrence</code>。</li>
+<li><code>oacCannotGetImplicitInstOccurrence</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.getTerm(expand=true)
+</code></pre>
+<h3 id="objgettermexpand-d"><code>obj.getTerm(expand, d)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getTerm(expand, d)</code></p>
+<p>This function returns the occurrence terminal associated with this instTerm。 If expand is true, and the instTerm is currently unbound, this function attempts to bind the master。 NULL is returned if the instance cannot be bound or the terminal is not found in the master。 An exception is thrown if the instance is a vectorInst or an implicit vectorInstBit because there is no occurrence hierarchy beneath these types of instances。 Use caution when the expand argument is set to the default value of true。 Expanding the occurrence hierarchy into all the leaf instances of many designs requires large amounts of memory to hold all the referenced occurrence objects。 At the leaf level, information should be referenced in the block or the module instead。 For example, to get the terminal and its oaTermType for any oaOccInstTerm pointed to by a variable occITerm , you might use code such as: oaModInstTerm <em>modITerm occITerm-&gt; getModInstTerm() ; oaModTerm </em>modTerm = modITerm-&gt; getTerm() ; if (modTerm) { oaTermType termType = modTerm-&gt;getTermType(); } Or oaInstTerm <em>blkITerm = occITerm-&gt; getInstTerm() ; oaTerm </em>blkTerm = blkITerm-&gt; getTerm() ; if (blkTerm) { oaTermType termType = blkTerm-&gt;getTermType(); }。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>expand</code>: Specifies whether to expand the occurrence hierarchy to include the master occurrence for this occInstTerm, if it has not yet been expanded in the current session。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.getTerm(expand, d)
+</code></pre>
+<h3 id="objgettermnamename"><code>obj.getTermName(name)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getTermName(name)</code></p>
+<p>This function returns the name of the terminal associated with this instTerm in the nameSpace specified。 A name is returned even if the instTerm is not bound。 The existence of a terminal name does not necessarily guarantee that the corresponding terminal exists in the instance master。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>ns</code>: The nameSpace for processing the name。</li>
+<li><code>name</code>: The string that the terminal name is returned in。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInstTermConnectsByPosition</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.getTermName(name)
+</code></pre>
+<h3 id="objgettermnamens-name"><code>obj.getTermName(ns, name)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getTermName(ns, name)</code></p>
+<p>This function returns the name of the terminal associated with this instTerm in the given name argument。 A name is returned even if the instTerm is not bound。 The existence of a terminal name does not guarantee that the terminal exists in the corresponding instance master。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>name</code>: The name object to return the terminal name in。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInstTermConnectsByPosition</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.getTermName(ns, name)
+</code></pre>
+<h3 id="objgettermposition"><code>obj.getTermPosition()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getTermPosition()</code></p>
+<p>This function returns the terminal position that this instTerm connects to。 If this instTerm is not bound by position, the value oacNullIndex is returned。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInstTermConnectsByName</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.getTermPosition()
+</code></pre>
+<h3 id="objgetnumbits"><code>obj.getNumBits()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getNumBits()</code></p>
+<p>This function returns the number of bits for this instTerm。 This value is equal to the number of bits in the associated net。 If the instTerm has no net, the value is calculated from the number of bits in the corresponding terminal multiplied by the number of bits in the corresponding instance。 If the terminal is not bound, the number of bits for the terminal is derived from the terminal name。 If the terminal is not bound and the instTerm connects by position, the number of bits cannot be determined if there is no net, and a value of zero is returned。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.getNumBits()
+</code></pre>
+<h3 id="objgetassignednetignoredefaultfalse"><code>obj.getAssignedNet(ignoreDefault=false)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getAssignedNet(ignoreDefault=false)</code></p>
+<p>This function returns the occurrence net assigned to this instTerm as per the inherited connections specification。 NULL will be returned in the following cases: There is no effective connectDef associated with this instTerm There is an effective connectDef but no matching assignment, and 'ignoreDefault' is true。 Exceptions are thrown for cases when an assignment is found but a net with that name does not exist or if the default net name needs to be used, 'ignoreDefault' is false, but there is no net that matches the default net name specified。 This version is for diagnostic use and returns the set of connectDefs and/or assignments that were looked at in the hierarchy for resolving the assigned net via the 'spec' parameter。 Clients can inspect the array which will consist of pointers to either connectDef or assignment objects in the module or occurrence domains。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>spec</code>: An array that gets populated with pointers to design objects that indicate the assigned net specification。</li>
+<li><code>ignoreDefault</code>: Indicates if the default net name in the specification should be ignored。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacCannotFindSpecAssignedDefOccNet</code>。</li>
+<li><code>oacCannotFindSpecAssignedOccNet</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.getAssignedNet(ignoreDefault=false)
+</code></pre>
+<h3 id="objgetassignednetspec-ignoredefaultfalse"><code>obj.getAssignedNet(spec, ignoreDefault=false)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getAssignedNet(spec, ignoreDefault=false)</code></p>
+<p>This function returns the occurrence net assigned to this instTerm as per the inherited connections specification。 NULL will be returned in the following cases: There is no effective connectDef associated with this instTerm There is an effective connectDef but no matching assignment, and 'ignoreDefault' is true。 Exceptions are thrown for cases when an assignment is found but a net with that name does not exist or if the default net name needs to be used, 'ignoreDefault' is false, but there is no net that matches the default net name specified。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>ignoreDefault</code>: Indicates if the default net name in the specification should be ignored。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacCannotFindSpecAssignedDefOccNet</code>。</li>
+<li><code>oacCannotFindSpecAssignedOccNet</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.getAssignedNet(spec, ignoreDefault=false)
+</code></pre>
+<h3 id="objgetinstterm"><code>obj.getInstTerm()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getInstTerm()</code></p>
+<p>This function gets the oaInstTerm in the block domain that this occInstTerm corresponds to。 If this occInstTerm is derived from an oaModInstTerm that is not visible to the block domain, then it will not have an oaInstTerm and this function will return NULL。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.getInstTerm()
+</code></pre>
+<h3 id="objgetmodinstterm"><code>obj.getModInstTerm()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getModInstTerm()</code></p>
+<p>This function gets the oaModInstTerm in the module domain that this occInstTerm corresponds to。 If this occInstTerm is on an oaOccModuleInst then it will always have a corresponding oaModInstTerm 。 If it is derived from an oaInstTerm that is not visible to the module domain, then it will not have an oaModInstTerm and this function will return NULL。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.getModInstTerm()
+</code></pre>
+<h3 id="objgetreflectiond"><code>obj.getReflection(d)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getReflection(d)</code></p>
+<p>This function returns the object pointer corresponding to the reflection of the current object in the specified domain。 If an object is overriden, it returns the pointer to the hidden or overriding sibling dependent on the specified domain。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>d</code>: The domain of the reflected object, which is either oacModDomain or the default oacBlockDomain。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacCannotProcessDomainArgument</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.getReflection(d)
+</code></pre>
+<h3 id="objisbound"><code>obj.isBound()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isBound()</code></p>
+<p>This function returns a boolean value that indicates whether the associated terminal exists in the instance master and whether the instance associated with this instTerm is bound with respect to the specified domain。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>d</code>: The domain for which binding is checked。 Either oacModDomain or the default oacBlockDomain。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacCannotProcessDomainArgument</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.isBound()
+</code></pre>
+<h3 id="objisboundd"><code>obj.isBound(d)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isBound(d)</code></p>
+<p>This function returns a boolean value that indicates whether the instance associated with this instTerm is bound and whether the associated terminal exists in the instance master。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.isBound(d)
+</code></pre>
+<h3 id="objisimplicit"><code>obj.isImplicit()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isImplicit()</code></p>
+<p>This function returns a boolean value indicating whether this instTerm is implicit, having been created as a result of the creation of a multi-bit instTerm。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.isImplicit()
+</code></pre>
+<h3 id="objusestermposition"><code>obj.usesTermPosition()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.usesTermPosition()</code></p>
+<p>This function returns a boolean indicating whether this instTerm was created to connect to a terminal position。 This function returns 'true' if this instTerm binds to a particular terminal position。 It returns 'false' if this instTerm binds to a terminal by name。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+# assume obj is a oaOccInstTerm
+obj.usesTermPosition()
+</code></pre>
+<h3 id="_designoaoccinsttermfindinst-term"><code>_design.oaOccInstTerm.find(inst, term)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_design.oaOccInstTerm.find(inst, term)</code></p>
+<p>This function searches all of the instTerms associated with the specified instance and returns the one that makes a connection to the specified terminal position。 NULL is returned if no terminal exists in the instance master at the specified position。 If the reflected block domain terminal was hidden and overridden, the domain argument determines whether the returned terminal corresponds to the hidden (oacModDomain) or overriding (oacBlockDomain) object。 The default is to return the override terminal。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>inst</code>: The instance whose instTerms are searched。</li>
+<li><code>termPosition</code>: The terminal position used in the search。</li>
+<li><code>d</code>: The domain (oacModDomain or oacBlockDomain value) that reflects the terminal to match。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInstTermInstUsesTermPosition</code>。</li>
+<li><code>oacCannotProcessDomainArgument</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+_design.oaOccInstTerm.find(inst, term)
+</code></pre>
+<h3 id="_designoaoccinsttermfindinst-term_1"><code>_design.oaOccInstTerm.find(inst, term)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_design.oaOccInstTerm.find(inst, term)</code></p>
+<p>This function searches all of the instTerms associated with the specified instance and returns the one that is associated with the specified terminal name。 NULL is returned if no such terminal exists on the instance。 If the reflected block domain terminal was hidden and overridden, the domain argument determines whether the returned oaOccInstTerm corresponds to the hidden (oacModDomain) or overriding (oacBlockDomain) object。 The default is to return the override terminal。 If the termName is hierarchical, then this function searches through the hierarchy path for the specified instTerm。 If the termName is a bundle name, and any of its members has hierarchy, all of its members must have the same level of hierarchy or an exception is thrown。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>inst</code>: The instance whose instTerms are searched。</li>
+<li><code>termName</code>: The terminal name to use in the search。</li>
+<li><code>d</code>: The domain (oacModDomain or oacBlockDomain value) that reflects the terminal to match。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacCannotProcessDomainArgument</code>。</li>
+<li><code>oacInstTermInstUsesTermPosition</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+_design.oaOccInstTerm.find(inst, term)
+</code></pre>
+<h3 id="_designoaoccinsttermfindinst-term_2"><code>_design.oaOccInstTerm.find(inst, term)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_design.oaOccInstTerm.find(inst, term)</code></p>
+<p>This function searches all of the instTerms associated with the specified instance and returns the one that is associated with the specified terminal。 NULL is returned if no such terminal exists on the instance。 If the reflected block domain terminal was hidden and overridden, the domain argument determines whether the returned terminal corresponds to the hidden (oacModDomain) or overriding (oacBlockDomain) object。 The default is to return the override terminal。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>inst</code>: The instance whose instTerms are searched。</li>
+<li><code>term</code>: The terminal to use in the search。</li>
+<li><code>d</code>: The domain (oacModDomain or oacBlockDomain value) that reflects the terminal to match。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInstTermInstUsesTermPosition</code>。</li>
+<li><code>oacCannotProcessDomainArgument</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+_design.oaOccInstTerm.find(inst, term)
+</code></pre>
+<h3 id="_designoaoccinsttermfindinst-termname"><code>_design.oaOccInstTerm.find(inst, termName)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_design.oaOccInstTerm.find(inst, termName)</code></p>
+<p>This function searches all of the instTerms associated with the specified instance and returns the one that makes a connection to the specified terminal position。 NULL is returned if no terminal exists in the instance master at the specified position。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>inst</code>: The instance whose instTerms are searched。</li>
+<li><code>termPosition</code>: The terminal position used in the search。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInstTermInstUsesTermName</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+_design.oaOccInstTerm.find(inst, termName)
+</code></pre>
+<h3 id="_designoaoccinsttermfindinst-termposition"><code>_design.oaOccInstTerm.find(inst, termPosition)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_design.oaOccInstTerm.find(inst, termPosition)</code></p>
+<p>This function searches all of the instTerms associated with the specified instance and returns the one that is associated with the specified terminal name。 NULL is returned if no such terminal exists on the instance。 If the termName is hierarchical, then this function searches through the hierarchy path for the specified instTerm。 If the termName is a bundle name, and any of its members has hierarchy, all of its members must have the same level of hierarchy or an exception is thrown。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>inst</code>: The instance whose instTerms are searched。</li>
+<li><code>termName</code>: The terminal name to use in the search。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInstTermInstUsesTermPosition</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+_design.oaOccInstTerm.find(inst, termPosition)
+</code></pre>
+<h3 id="_designoaoccinsttermfindinst-term-domain"><code>_design.oaOccInstTerm.find(inst, term, domain)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_design.oaOccInstTerm.find(inst, term, domain)</code></p>
+<p>This function returns the occInstTerm that is associated with the given oaOccInst and oaTerm 。 It returns NULL if no such occInstTerm exists on the instance。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>inst</code>: The instance whose instTerms are searched。</li>
+<li><code>term</code>: The terminal to use in the search。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInstTermInstUsesTermPosition</code>。</li>
+<li><code>oacTermNotInInstMasterForInstTerm</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+_design.oaOccInstTerm.find(inst, term, domain)
+</code></pre>
+<h3 id="_designoaoccinsttermfindinst-termname-domain"><code>_design.oaOccInstTerm.find(inst, termName, domain)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_design.oaOccInstTerm.find(inst, termName, domain)</code></p>
+<p>This function returns the occInstTerm that is associated with the given oaOccInst and oaModTerm 。 It returns NULL if no such occInstTerm exists on the instance。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>inst</code>: The instance whose instTerms are searched。</li>
+<li><code>term</code>: The terminal to use in the search。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInstTermInstUsesTermPosition</code>。</li>
+<li><code>oacTermNotInInstMasterForInstTerm</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+_design.oaOccInstTerm.find(inst, termName, domain)
+</code></pre>
+<h3 id="_designoaoccinsttermfindinst-termposition-domain"><code>_design.oaOccInstTerm.find(inst, termPosition, domain)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_design.oaOccInstTerm.find(inst, termPosition, domain)</code></p>
+<p>This function searches all of the instTerms associated with the specified instance and returns the one that is associated with the specified terminal。 NULL is returned if no such terminal exists on the instance。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>inst</code>: The instance whose instTerms are searched。</li>
+<li><code>term</code>: The terminal to use in the search。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacTermNotInInstMasterForInstTerm</code>。</li>
+<li><code>oacInstTermInstUsesTermPosition</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _design
+
+_design.oaOccInstTerm.find(inst, termPosition, domain)
+</code></pre>
+        </div>
+        <aside class="toc-panel"><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false"><span>方法</span><span class="toc-toggle-indicator">展开</span></button><div class="toc-body"><h2>方法</h2><ul><li><a href="#obj-getbit-bitindex"><code>obj.getBit(bitIndex)</code></a></li><li><a href="#obj-getnet-preferred-false"><code>obj.getNet(preferred=false)</code></a></li><li><a href="#obj-getinst"><code>obj.getInst()</code></a></li><li><a href="#obj-getterm-expand-true"><code>obj.getTerm(expand=true)</code></a></li><li><a href="#obj-getterm-expand-d"><code>obj.getTerm(expand, d)</code></a></li><li><a href="#obj-gettermname-name"><code>obj.getTermName(name)</code></a></li><li><a href="#obj-gettermname-ns-name"><code>obj.getTermName(ns, name)</code></a></li><li><a href="#obj-gettermposition"><code>obj.getTermPosition()</code></a></li><li><a href="#obj-getnumbits"><code>obj.getNumBits()</code></a></li><li><a href="#obj-getassignednet-ignoredefault-false"><code>obj.getAssignedNet(ignoreDefault=false)</code></a></li><li><a href="#obj-getassignednet-spec-ignoredefault-false"><code>obj.getAssignedNet(spec, ignoreDefault=false)</code></a></li><li><a href="#obj-getinstterm"><code>obj.getInstTerm()</code></a></li><li><a href="#obj-getmodinstterm"><code>obj.getModInstTerm()</code></a></li><li><a href="#obj-getreflection-d"><code>obj.getReflection(d)</code></a></li><li><a href="#obj-isbound"><code>obj.isBound()</code></a></li><li><a href="#obj-isbound-d"><code>obj.isBound(d)</code></a></li><li><a href="#obj-isimplicit"><code>obj.isImplicit()</code></a></li><li><a href="#obj-usestermposition"><code>obj.usesTermPosition()</code></a></li><li><a href="#design-oaoccinstterm-find-inst-term"><code>_design.oaOccInstTerm.find(inst, term)</code></a></li><li><a href="#design-oaoccinstterm-find-inst-term"><code>_design.oaOccInstTerm.find(inst, term)</code></a></li><li><a href="#design-oaoccinstterm-find-inst-term"><code>_design.oaOccInstTerm.find(inst, term)</code></a></li><li><a href="#design-oaoccinstterm-find-inst-termname"><code>_design.oaOccInstTerm.find(inst, termName)</code></a></li><li><a href="#design-oaoccinstterm-find-inst-termposition"><code>_design.oaOccInstTerm.find(inst, termPosition)</code></a></li><li><a href="#design-oaoccinstterm-find-inst-term-domain"><code>_design.oaOccInstTerm.find(inst, term, domain)</code></a></li><li><a href="#design-oaoccinstterm-find-inst-termname-domain"><code>_design.oaOccInstTerm.find(inst, termName, domain)</code></a></li><li><a href="#design-oaoccinstterm-find-inst-termposition-domain"><code>_design.oaOccInstTerm.find(inst, termPosition, domain)</code></a></li></ul></div></aside>
+      </div>
+    </main>
+  </div>
+  <div class="footer">oapy 是 AIVI 项目的一部分。此站点提供当前 oapy Python API 的中文文档。</div>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.querySelector("[data-class-filter]");
+  if (input) {
+    input.addEventListener("input", () => {
+      const term = input.value.trim().toLowerCase();
+      document.querySelectorAll("[data-class-item]").forEach((item) => {
+        const name = item.getAttribute("data-class-name") || "";
+        item.classList.toggle("hidden", term && !name.includes(term));
+      });
+    });
+  }
+
+  const globalInput = document.querySelector("[data-global-search]");
+  if (globalInput) {
+    globalInput.addEventListener("input", () => {
+      const term = globalInput.value.trim().toLowerCase();
+      document.querySelectorAll("[data-search-item]").forEach((item) => {
+        const name = item.getAttribute("data-search-name") || "";
+        const module = item.getAttribute("data-search-module") || "";
+        const visible = !term || name.includes(term) || module.includes(term);
+        item.classList.toggle("hidden", !visible);
+      });
+    });
+  }
+
+  document.querySelectorAll("[data-toc-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const panel = button.closest(".toc-panel");
+      if (!panel) return;
+      const isOpen = panel.classList.toggle("open");
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      const indicator = button.querySelector(".toc-toggle-indicator");
+      if (indicator) {
+        indicator.textContent = isOpen ? "Hide" : "Show";
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

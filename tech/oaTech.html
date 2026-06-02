@@ -1,0 +1,2987 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>oaTech</title>
+  <style>
+body {
+  margin: 0;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  color: #f2d6c2;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #fff4ea;
+}
+
+.topbar {
+  border-bottom: 1px solid #6f3d2d;
+  background: #120f0f;
+}
+
+.topbar-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 14px 20px 10px;
+}
+
+.brand {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff8f2;
+  margin: 0 0 10px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tab {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  color: #f2d6c2;
+  font-size: 13px;
+}
+
+.tab.active {
+  background: #4b2317;
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.layout {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 28px;
+  padding: 24px 24px 40px;
+}
+
+.sidebar {
+  font-size: 13px;
+}
+
+.sidebar-panel {
+  border: 1px solid #6f3d2d;
+  margin-bottom: 16px;
+  background: #151111;
+}
+
+.sidebar-title {
+  background: #2a1713;
+  border-bottom: 1px solid #6f3d2d;
+  padding: 8px 10px;
+  font-weight: 700;
+  color: #fff1e8;
+}
+
+.sidebar-body {
+  padding: 8px 10px;
+}
+
+.sidebar-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.sidebar-search::placeholder {
+  color: #c8a995;
+}
+
+.sidebar-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-body li.hidden {
+  display: none;
+}
+
+.active-link {
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.sidebar-body li + li {
+  margin-top: 6px;
+}
+
+.content {
+  min-width: 0;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  align-items: start;
+}
+
+.doc {
+  border: 1px solid #6f3d2d;
+  background: #120f0f;
+  padding: 24px 28px 32px;
+  min-width: 0;
+}
+
+.toc-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 0;
+  position: sticky;
+  top: 16px;
+  margin-bottom: 16px;
+}
+
+.toc-toggle {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 0;
+  background: #2a1713;
+  color: #fff1e8;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.toc-toggle:hover {
+  background: #3a1d16;
+}
+
+.toc-toggle-indicator {
+  font-size: 12px;
+  color: #d6ac96;
+}
+
+.toc-body {
+  display: none;
+  padding: 14px 16px;
+}
+
+.toc-panel.open .toc-body {
+  display: block;
+}
+
+.toc-panel h2 {
+  margin: 0 0 10px;
+  padding: 0;
+  border: 0;
+  font-size: 18px;
+  color: #fff1e8;
+}
+
+.toc-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-panel li + li {
+  margin-top: 8px;
+}
+
+.toc-panel a {
+  font-size: 13px;
+  line-height: 1.35;
+  color: #f2d6c2;
+}
+
+.crumbs {
+  color: #c8a995;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.meta {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 10px 12px;
+  margin: 16px 0 20px;
+  font-size: 13px;
+}
+
+.meta div + div {
+  margin-top: 4px;
+}
+
+.doc h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  color: #fff8f2;
+}
+
+.doc h2 {
+  margin: 28px 0 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #6f3d2d;
+  font-size: 22px;
+  color: #fff1e8;
+}
+
+.doc h3 {
+  margin: 22px 0 10px;
+  font-size: 18px;
+  color: #f7e1d5;
+}
+
+.doc p, .doc li {
+  font-size: 14px;
+}
+
+.doc pre {
+  overflow-x: auto;
+  background: #0d0b0b;
+  border: 1px solid #6f3d2d;
+  padding: 12px 14px;
+}
+
+.doc code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  color: #f7e1d5;
+}
+
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 18px;
+  font-size: 13px;
+  table-layout: fixed;
+}
+
+.doc th, .doc td {
+  border: 1px solid #6f3d2d;
+  padding: 7px 9px;
+  vertical-align: top;
+  text-align: left;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.doc th {
+  background: #2a1713;
+  color: #fff1e8;
+}
+
+.doc blockquote {
+  margin: 14px 0;
+  padding: 8px 12px;
+  border-left: 4px solid #8a4a36;
+  background: #151111;
+  color: #f2d6c2;
+}
+
+.search-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+
+.search-panel input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 14px;
+}
+
+.search-panel input::placeholder {
+  color: #c8a995;
+}
+
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+}
+
+.search-results li {
+  border-top: 1px solid #4b2317;
+  padding: 10px 0;
+}
+
+.search-results li.hidden {
+  display: none;
+}
+
+.search-results a {
+  font-weight: 700;
+}
+
+.search-results .module-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border: 1px solid #8a4a36;
+  background: #2a1713;
+  color: #f2d6c2;
+  font-size: 12px;
+}
+
+.search-results .result-path {
+  margin-top: 4px;
+  color: #c8a995;
+  font-size: 12px;
+}
+
+.footer {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px 28px;
+  color: #b89481;
+  font-size: 12px;
+}
+
+.doc > * {
+  min-width: 0;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toc-panel {
+    position: static;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><a href="../index.html">AIVI / oapy API 中文文档</a></div>
+      <div class="tabs"><a class="tab" href="../base/index.html">base</a><a class="tab" href="../common/index.html">common</a><a class="tab" href="../cms/index.html">cms</a><a class="tab" href="../dm/index.html">dm</a><a class="tab" href="../design/index.html">design</a><a class="tab active" href="../tech/index.html">tech</a><a class="tab" href="../wafer/index.html">wafer</a></div>
+    </div>
+  </div>
+  <div class="layout">
+    <aside class="sidebar"><div class="sidebar-panel"><div class="sidebar-title">模块</div><div class="sidebar-body"><ul><li><a href="../classes.html">全部类</a></li><li><a href="../base/index.html">base</a></li><li><a href="../common/index.html">common</a></li><li><a href="../cms/index.html">cms</a></li><li><a href="../dm/index.html">dm</a></li><li><a href="../design/index.html">design</a></li><li><a class="active-link" href="../tech/index.html">tech</a></li><li><a href="../wafer/index.html">wafer</a></li></ul></div></div><div class="sidebar-panel"><div class="sidebar-title">tech 类</div><div class="sidebar-body"><input class="sidebar-search" type="search" placeholder="筛选类" data-class-filter><ul><li data-class-item data-class-name="oaanalysislib"><a href="oaAnalysisLib.html">oaAnalysisLib</a></li><li data-class-item data-class-name="oaantennaarea"><a href="oaAntennaArea.html">oaAntennaArea</a></li><li data-class-item data-class-name="oaantennaareaarray"><a href="oaAntennaAreaArray.html">oaAntennaAreaArray</a></li><li data-class-item data-class-name="oaantennadata"><a href="oaAntennaData.html">oaAntennaData</a></li><li data-class-item data-class-name="oaantennamodel"><a href="oaAntennaModel.html">oaAntennaModel</a></li><li data-class-item data-class-name="oaantennaratioarrayvalue"><a href="oaAntennaRatioArrayValue.html">oaAntennaRatioArrayValue</a></li><li data-class-item data-class-name="oaantennaratiovalue"><a href="oaAntennaRatioValue.html">oaAntennaRatioValue</a></li><li data-class-item data-class-name="oaarraysitedef"><a href="oaArraySiteDef.html">oaArraySiteDef</a></li><li data-class-item data-class-name="oaclearancemeasure"><a href="oaClearanceMeasure.html">oaClearanceMeasure</a></li><li data-class-item data-class-name="oacustomviadef"><a href="oaCustomViaDef.html">oaCustomViaDef</a></li><li data-class-item data-class-name="oacustomviavariant"><a href="oaCustomViaVariant.html">oaCustomViaVariant</a></li><li data-class-item data-class-name="oaderivedlayer"><a href="oaDerivedLayer.html">oaDerivedLayer</a></li><li data-class-item data-class-name="oaderivedlayerconnectivitytype"><a href="oaDerivedLayerConnectivityType.html">oaDerivedLayerConnectivityType</a></li><li data-class-item data-class-name="oaderivedlayerdef"><a href="oaDerivedLayerDef.html">oaDerivedLayerDef</a></li><li data-class-item data-class-name="oaderivedlayerparam"><a href="oaDerivedLayerParam.html">oaDerivedLayerParam</a></li><li data-class-item data-class-name="oaderivedlayerparamarray"><a href="oaDerivedLayerParamArray.html">oaDerivedLayerParamArray</a></li><li data-class-item data-class-name="oaderivedlayerparamdef"><a href="oaDerivedLayerParamDef.html">oaDerivedLayerParamDef</a></li><li data-class-item data-class-name="oaderivedlayerparamtype"><a href="oaDerivedLayerParamType.html">oaDerivedLayerParamType</a></li><li data-class-item data-class-name="oalayer"><a href="oaLayer.html">oaLayer</a></li><li data-class-item data-class-name="oalayerarray"><a href="oaLayerArray.html">oaLayerArray</a></li><li data-class-item data-class-name="oalayerarrayconstraint"><a href="oaLayerArrayConstraint.html">oaLayerArrayConstraint</a></li><li data-class-item data-class-name="oalayerarrayvalue"><a href="oaLayerArrayValue.html">oaLayerArrayValue</a></li><li data-class-item data-class-name="oalayerconstraint"><a href="oaLayerConstraint.html">oaLayerConstraint</a></li><li data-class-item data-class-name="oalayernamearray"><a href="oaLayerNameArray.html">oaLayerNameArray</a></li><li data-class-item data-class-name="oalayerop"><a href="oaLayerOp.html">oaLayerOp</a></li><li data-class-item data-class-name="oalayerpairconstraint"><a href="oaLayerPairConstraint.html">oaLayerPairConstraint</a></li><li data-class-item data-class-name="oalayervalue"><a href="oaLayerValue.html">oaLayerValue</a></li><li data-class-item data-class-name="oamaterial"><a href="oaMaterial.html">oaMaterial</a></li><li data-class-item data-class-name="oaoppoint"><a href="oaOpPoint.html">oaOpPoint</a></li><li data-class-item data-class-name="oaphysicallayer"><a href="oaPhysicalLayer.html">oaPhysicalLayer</a></li><li data-class-item data-class-name="oaprefroutingdir"><a href="oaPrefRoutingDir.html">oaPrefRoutingDir</a></li><li data-class-item data-class-name="oapurpose"><a href="oaPurpose.html">oaPurpose</a></li><li data-class-item data-class-name="oapurposearray"><a href="oaPurposeArray.html">oaPurposeArray</a></li><li data-class-item data-class-name="oapurposetype"><a href="oaPurposeType.html">oaPurposeType</a></li><li data-class-item data-class-name="oapurposevalue"><a href="oaPurposeValue.html">oaPurposeValue</a></li><li data-class-item data-class-name="oascalarsitedef"><a href="oaScalarSiteDef.html">oaScalarSiteDef</a></li><li data-class-item data-class-name="oasitedef"><a href="oaSiteDef.html">oaSiteDef</a></li><li data-class-item data-class-name="oasitedeftype"><a href="oaSiteDefType.html">oaSiteDefType</a></li><li data-class-item data-class-name="oasitepattern"><a href="oaSitePattern.html">oaSitePattern</a></li><li data-class-item data-class-name="oasiteref"><a href="oaSiteRef.html">oaSiteRef</a></li><li data-class-item data-class-name="oasizeop"><a href="oaSizeOp.html">oaSizeOp</a></li><li data-class-item data-class-name="oasizedlayer"><a href="oaSizedLayer.html">oaSizedLayer</a></li><li data-class-item data-class-name="oastdviadef"><a href="oaStdViaDef.html">oaStdViaDef</a></li><li data-class-item data-class-name="oastdviavariant"><a href="oaStdViaVariant.html">oaStdViaVariant</a></li><li data-class-item data-class-name="oatech"><a class="active-link" href="oaTech.html">oaTech</a></li><li data-class-item data-class-name="oatecharray"><a href="oaTechArray.html">oaTechArray</a></li><li data-class-item data-class-name="oatechconflicttype"><a href="oaTechConflictType.html">oaTechConflictType</a></li><li data-class-item data-class-name="oatechdatatype"><a href="oaTechDataType.html">oaTechDataType</a></li><li data-class-item data-class-name="oatecherror"><a href="oaTechError.html">oaTechError</a></li><li data-class-item data-class-name="oatechexception"><a href="oaTechException.html">oaTechException</a></li><li data-class-item data-class-name="oatechheader"><a href="oaTechHeader.html">oaTechHeader</a></li><li data-class-item data-class-name="oatechheaderarray"><a href="oaTechHeaderArray.html">oaTechHeaderArray</a></li><li data-class-item data-class-name="oatechlayerheader"><a href="oaTechLayerHeader.html">oaTechLayerHeader</a></li><li data-class-item data-class-name="oatechobject"><a href="oaTechObject.html">oaTechObject</a></li><li data-class-item data-class-name="oatechundoobserver"><a href="oaTechUndoObserver.html">oaTechUndoObserver</a></li><li data-class-item data-class-name="oatechundoobserverbase"><a href="oaTechUndoObserverBase.html">oaTechUndoObserverBase</a></li><li data-class-item data-class-name="oatechviadefheader"><a href="oaTechViaDefHeader.html">oaTechViaDefHeader</a></li><li data-class-item data-class-name="oatechviavariantheader"><a href="oaTechViaVariantHeader.html">oaTechViaVariantHeader</a></li><li data-class-item data-class-name="oauserunitstype"><a href="oaUserUnitsType.html">oaUserUnitsType</a></li><li data-class-item data-class-name="oaviadef"><a href="oaViaDef.html">oaViaDef</a></li><li data-class-item data-class-name="oaviadef2dtblvalue"><a href="oaViaDef2DTblValue.html">oaViaDef2DTblValue</a></li><li data-class-item data-class-name="oaviadefarray"><a href="oaViaDefArray.html">oaViaDefArray</a></li><li data-class-item data-class-name="oaviadefarrayvalue"><a href="oaViaDefArrayValue.html">oaViaDefArrayValue</a></li><li data-class-item data-class-name="oaviadefnamearray"><a href="oaViaDefNameArray.html">oaViaDefNameArray</a></li><li data-class-item data-class-name="oaviaparam"><a href="oaViaParam.html">oaViaParam</a></li><li data-class-item data-class-name="oaviaparamtype"><a href="oaViaParamType.html">oaViaParamType</a></li><li data-class-item data-class-name="oaviaspec"><a href="oaViaSpec.html">oaViaSpec</a></li><li data-class-item data-class-name="oaviatopology"><a href="oaViaTopology.html">oaViaTopology</a></li><li data-class-item data-class-name="oaviatopology2dtblvalue"><a href="oaViaTopology2DTblValue.html">oaViaTopology2DTblValue</a></li><li data-class-item data-class-name="oaviatopologyarray"><a href="oaViaTopologyArray.html">oaViaTopologyArray</a></li><li data-class-item data-class-name="oaviatopologyarrayvalue"><a href="oaViaTopologyArrayValue.html">oaViaTopologyArrayValue</a></li><li data-class-item data-class-name="oaviatopologytype"><a href="oaViaTopologyType.html">oaViaTopologyType</a></li><li data-class-item data-class-name="oaviavariant"><a href="oaViaVariant.html">oaViaVariant</a></li><li data-class-item data-class-name="oaviavariantheader"><a href="oaViaVariantHeader.html">oaViaVariantHeader</a></li></ul></div></div></aside>
+    <main class="content">
+      <div class="content-grid">
+        <div class="doc">
+          <div class="crumbs"><a href="../index.html">首页</a> / <a href="index.html">tech</a> / oaTech</div>
+          <h1 id="oatech">oaTech</h1>
+<p><strong>模块</strong>: <code>oapy._oa._tech</code>
+<strong>导入</strong>: <code>from oapy._oa import _tech</code></p>
+<h2 id="_1">概览</h2>
+<p><code>oaTech</code> 在 <code>oapy</code> 中可用，可通过 <code>_tech</code> 模块访问。</p>
+<p>本页汇总 <code>oaTech</code> 当前在 <code>oapy</code> 中可用的 Python 接口。</p>
+<h2 id="_2">详细说明</h2>
+<p>The oaTech class implements a technology database (oaTech), which contains process information。 A library ( oaLib ) typically contains a single technology database, and all the designs in the library use that technology database。 Alternatively, a user can define an attachment from one library to the technology database in another library。 In this case, all the designs in the library use the attached technology database。 Whether in the same library or in a different library, the main technology database associated with a design is known as its primary technology database。 Any technology database can contain references to other technology databases。 A reference is a mechanism that allows a technology database to inherit information from one or more technology databases。 This approach is known as using incremental technology databases 。 A referenced technology database can itself reference other technology databases to form a chain, known as a graph of technology databases。 All the technology information in a graph is available to the design library。 When a design is opened, the primary technology database is opened, and if there are any references, the graph of technology databases is opened as well。 For more information, refer to Incremental Technology Databases in the Using Technology Databases section of the Programmers Guide。 When a technology database contained within a library is opened, it is associated with the library and remains the technology database for that library until the database is purged or the library is closed。 When a technology database is associated with a library through attachment, an application can remove the association ( oaTech::detach ) and re-associate the library to another technology database in a different library ( oaTech::attach )。 The oaTech class can be observed by deriving from oaObserver<oaTech> 。 Attached oaTech Databases A user can use oaTech::attach to associate a library with a technology database in a different library。 In addition, the associations can be made through any number of libraries (using multiple applications of oaTech::attach ) as long as the intermediate libraries do not contain technology databases themselves and the final target library does contain a technology database。 Note: To support backward data compatibility, the previous mechanism for attaching technology libraries is still supported。 Namely, a string property called techLibName in a librarys oaLibDMData database still specifies the name of the target library。 The oaTech::attach function creates the techLibName property when it is called。 In order to construct the name of the library, the techLibName string is interpreted in the oaNativeNS namespace。</p>
+<h2 id="_3">方法总览</h2>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>Python 调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅</td>
+<td><code>obj.close()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.purge()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.save()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.save(type)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.saveAs(libName)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.reopen(mode)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.revert()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getLibName(libName)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getLibName(ns, out)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getLib()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getCreateTime()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getReadInTime()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getLastSavedTime()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getTimeStamp(type)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getTimeStamp(def)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.enableTimeStamps(value=true)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getMode()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getRefCount()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isModified()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isRecovered()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getDBUPerUU(viewType)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getDBUPerUU(viewType, local)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getUserUnits(viewType)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getUserUnits(viewType, local)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getClearanceMeasure()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getClearanceMeasure(local)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getDefaultManufacturingGrid()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getDefaultManufacturingGrid(local)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isGateGrounded()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isGateGrounded(local)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getTechHeaders(refHeaders, local=false)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.hasUnboundRefs()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setDBUPerUU(viewType, value)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setUserUnits(viewType, value)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setClearanceMeasure(measure)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setDefaultManufacturingGrid(grid)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setGateGrounded(gateGrounded)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.unsetDBUPerUU(viewType)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.unsetUserUnits(viewType)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.unsetClearanceMeasure()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.unsetDefaultManufacturingGrid()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.unsetGateGrounded()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isDBUPerUUSet(viewType)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isUserUnitsSet(viewType)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isClearanceMeasureSet()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isDefaultManufacturingGridSet()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isGateGroundedSet()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setRefs(refs)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.unsetRefs()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setProcessFamily(processFamily)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.unsetProcessFamily()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getProcessFamily(processFamily, local=false)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.hasProcessFamily(local=false)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.validate()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.uuToDBU(viewType, value)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.uuToDBUDistance(viewType, value)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.uuToDBUArea(viewType, value)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.dbuToUU(viewType, value)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.dbuToUUDistance(viewType, value)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.dbuToUUArea(viewType, value)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.enableUndo(value, undoModel)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.redo()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.undo()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isUndoEnabled()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.isInUndo()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setCp(checkPointID=UINT_MAX)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.unsetCp()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getNumUndoCpRecs()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getCpID()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getNumUndoRecsOnCp()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getUndoModel()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.calcVMSize()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.minimizeVM()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.hasDefaultConstraintGroup()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getDefaultConstraintGroup()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getFoundryRules()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getFeatures(dataModelRev, features)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getAnalysisLibs()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getAnalysisLibs(filterFlags)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getLayers()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getLayers(filterFlags)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getOpPoints()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getOpPoints(filterFlags)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getPurposes()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getPurposes(filterFlags)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getSiteDefs()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getSiteDefs(filterFlags)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getValues()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getValues(filterFlags)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getViaDefs()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getViaDefs(filterFlags)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getViaSpecs()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getViaSpecs(filterFlags)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getViaVariants(filterFlags=oacViaVariantIterAll)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getViaVariantHeaders(filterFlags=oacViaVariantHeaderIterAll)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getLayerHeaders()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getViaDefHeaders()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getConstraints(def=NULL)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getConstraints(def, filterFlags)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getConstraintGroups()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getConstraintGroups(filterFlags)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getConstraintGroups(def, filterFlags=oacTechConstraintGroupIterAll)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getConstraintParams()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getConstraintParams(filterFlags)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getConstraintGroupHeaders()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getDerivedLayerParams(filterFlags=oacTechDerivedLayerParamIterAll)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getAppObjectDefs()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getAppObjects(def)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getAppDefsByDataType(dataType)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getGroups()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getGroups(def)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getGroupsByName(name)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getUsedIn()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.create(libName)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.create(lib)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.open(libName, mode='r')</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.open(lib, mode='r')</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.recover(libName, type)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.find(libName)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.find(lib)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.destroy(libName)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.destroy(lib)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.destroy(libName, type)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.exists(libName, inherited=true)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.exists(lib, inherited=true)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.exists(libName, type)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.exists(lib, type)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.getDefaultDBUPerUU(viewType)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.getDefaultUserUnits(viewType)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.getDefaultDefaultManufacturingGrid()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.getDefaultClearanceMeasure()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.getDefaultIsGateGrounded()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.attach(lib, attachLibName)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.detach(lib)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.hasAttachment(lib)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.getAttachment(lib, attachLibName)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.getRevNumber()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_tech.oaTech.getOpenTechs()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">方法说明</h2>
+<h3 id="objclose"><code>obj.close()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.close()</code></p>
+<p>This function decrements the reference count of this tech database by one。 If the count reaches zero, this tech database is purged from memory。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.close()
+</code></pre>
+<h3 id="objpurge"><code>obj.purge()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.purge()</code></p>
+<p>This function closes this tech database, removing it from memory regardless of its reference count。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.purge()
+</code></pre>
+<h3 id="objsave"><code>obj.save()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.save()</code></p>
+<p>This function saves the oaSaveRecoverType file to disk。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>type</code>: Either oacAutoSaveType or oacCriticalSaveType。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacSaveReadOnlyTech</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.save()
+</code></pre>
+<h3 id="objsavetype"><code>obj.save(type)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.save(type)</code></p>
+<p>This function saves the tech database to disk。 The tech remains open and all of its in-memory data remains valid。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacSaveReadOnlyTech</code>。</li>
+<li><code>oacDataNotCompatibleOnSave</code>: Design contains incompatible data and cannot be saved。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.save(type)
+</code></pre>
+<h3 id="objsaveaslibname"><code>obj.saveAs(libName)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.saveAs(libName)</code></p>
+<p>This function saves the tech database to the disk in the tech file associated with the specified library name。 The tech remains open and all of its in-memory data remains valid。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>libName</code>: The name of the library in which to save the oaTech database。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacTechLibNotFound</code>。</li>
+<li><code>oacDataNotCompatibleOnSave</code>: Design contains incompatible data and cannot be saved。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.saveAs(libName)
+</code></pre>
+<h3 id="objreopenmode"><code>obj.reopen(mode)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.reopen(mode)</code></p>
+<p>This function reopens this tech database using the specified access mode。 You can reset or truncate the contents of the tech database depending on the new access mode。 This function does not affect the reference count of the tech database。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>mode</code>: The mode in which to open the design。 'r' for read 'w' for write (truncate by deleting existing data) 'a' for append 'A' for append in override mode, which is not typically used。 Refer to Compatibility for OpenAccess Applications and Data in the Programmers Guide for more information。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacOpenOnTechBeingPurged</code>。</li>
+<li><code>oacDataNotCompatibleOnOpenInAppendMode</code>: The design contains new features that are not understood by this version of OpenAccess and cannot be opened in append mode。</li>
+<li><code>oacDataNotCompatibleOnOpenInEditableMode</code>: The design contains new features that are not understood by this version of OpenAccess and cannot be opened in 'a'ppend or 'A'ppend mode。</li>
+<li><code>oacCannotDowngradeDatabase</code>: The database was opened in A mode and cannot be reopened in 'a' mode。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.reopen(mode)
+</code></pre>
+<h3 id="objrevert"><code>obj.revert()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.revert()</code></p>
+<p>This function reloads the contents of this tech database from disk。 If the tech database is open in write mode, it is simply truncated。 This function does not affect the access mode of the tech database。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.revert()
+</code></pre>
+<h3 id="objgetlibnamelibname"><code>obj.getLibName(libName)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getLibName(libName)</code></p>
+<p>This function returns the name of the library associated with this tech database。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>ns</code>: The name space to check for the library name。</li>
+<li><code>out</code>: The name of the library used by this oaTech database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getLibName(libName)
+</code></pre>
+<h3 id="objgetlibnamens-out"><code>obj.getLibName(ns, out)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getLibName(ns, out)</code></p>
+<p>This function returns the name of the library associated with this tech database。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>libName</code>: Name of the library associated with this oaTech database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getLibName(ns, out)
+</code></pre>
+<h3 id="objgetlib"><code>obj.getLib()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getLib()</code></p>
+<p>This function returns a pointer to the library object containing this tech database。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getLib()
+</code></pre>
+<h3 id="objgetcreatetime"><code>obj.getCreateTime()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getCreateTime()</code></p>
+<p>This function returns the time at which this tech database was created。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getCreateTime()
+</code></pre>
+<h3 id="objgetreadintime"><code>obj.getReadInTime()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getReadInTime()</code></p>
+<p>This function returns the time this tech database was read。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getReadInTime()
+</code></pre>
+<h3 id="objgetlastsavedtime"><code>obj.getLastSavedTime()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getLastSavedTime()</code></p>
+<p>This function returns the time at which this tech database was last modified。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getLastSavedTime()
+</code></pre>
+<h3 id="objgettimestamptype"><code>obj.getTimeStamp(type)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getTimeStamp(type)</code></p>
+<p>This function returns the timeStamp value for the specified application object。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>def</code>: The application object to check。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getTimeStamp(type)
+</code></pre>
+<h3 id="objgettimestampdef"><code>obj.getTimeStamp(def)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getTimeStamp(def)</code></p>
+<p>This function returns the timeStamp value for the specified technology datatype。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>type</code>: The technology datatype to check。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getTimeStamp(def)
+</code></pre>
+<h3 id="objenabletimestampsvaluetrue"><code>obj.enableTimeStamps(value=true)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.enableTimeStamps(value=true)</code></p>
+<p>This function enables or disables the update of timeStamps on this oaTech database。 TimeStamps are enabled by default。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>value</code>: If true, enable timeStamps; If false, disable timeStamps。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.enableTimeStamps(value=true)
+</code></pre>
+<h3 id="objgetmode"><code>obj.getMode()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getMode()</code></p>
+<p>This function returns the mode of the currently open tech database。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getMode()
+</code></pre>
+<h3 id="objgetrefcount"><code>obj.getRefCount()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getRefCount()</code></p>
+<p>This function returns the number of times this tech database was opened without closing。 This number includes both internal and external openings。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getRefCount()
+</code></pre>
+<h3 id="objismodified"><code>obj.isModified()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isModified()</code></p>
+<p>This function returns a boolean value that indicates if this tech database has been modified but not saved。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.isModified()
+</code></pre>
+<h3 id="objisrecovered"><code>obj.isRecovered()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isRecovered()</code></p>
+<p>This function returns a boolean that indicates whether this tech was recovered from a critical save or an auto save database file。 For information about how to use a recover type database to restore a design, see the Programmers Guide article OpenAccess Libraries and Design Management 。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.isRecovered()
+</code></pre>
+<h3 id="objgetdbuperuuviewtype"><code>obj.getDBUPerUU(viewType)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getDBUPerUU(viewType)</code></p>
+<p>This function returns the database-units per user-unit for the specified view type。 The local argument specifies whether, if true, to look only in this technology database or, if false, to search this technology database and all its referenced technology databases for the effective database-units per user-unit。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+<li><code>local</code>: If true, look only in this technology database; If false, search this technology database and all its referenced technology databases。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getDBUPerUU(viewType)
+</code></pre>
+<h3 id="objgetdbuperuuviewtype-local"><code>obj.getDBUPerUU(viewType, local)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getDBUPerUU(viewType, local)</code></p>
+<p>This function returns the database-units per user-unit for the specified viewType used for this technology database and all of its referenced technology databases。 Both this value and the user-units type must be used to calculate the real distance meant by lengths and coordinates stored in an OpenAccess database。 The viewTypes allowed in this call are the subset of oaReservedViewType values that are used as viewTypes for an oaDesign 。 These are: oacMaskLayout , oacSchematic , oacSchematicSymbol , oacNetlist , or oacHierDesign 。 The caller can construct the viewType inline with this function call as in: tech-&gt;getDBUPerUU(oaViewType::get(oacMaskLayout))。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getDBUPerUU(viewType, local)
+</code></pre>
+<h3 id="objgetuserunitsviewtype"><code>obj.getUserUnits(viewType)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getUserUnits(viewType)</code></p>
+<p>This function returns the user-unit information for the specified viewType。 The local argument specifies whether, if true, to look only in this technology database or, if false, to search this technology database and all of its referenced technology databases for the effective user-unit。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+<li><code>local</code>: If true, look only in this technology database; If false, search this technology database and all its referenced technology databases。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getUserUnits(viewType)
+</code></pre>
+<h3 id="objgetuserunitsviewtype-local"><code>obj.getUserUnits(viewType, local)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getUserUnits(viewType, local)</code></p>
+<p>This function returns the user-unit information for the specified viewType used for this technology database and all of its referenced technology databases。 Note: Although users can construct their own oaViewTypes, valid viewTypes for this function are restricted to the set of reserved viewTypes, namely, an oaReservedViewType object constructed with one of the following reserved view type enumerated constants: oacMaskLayout , oacSchematic , oacSchematicSymbol , oacNetlist , or oacHierDesign 。 The developer can call oaViewType::get(oaReservedViewType) to construct and return a pointer to an a oaViewType object using one of the valid reserved viewType enumerated constants (for example, oaViewType::get(oacMaskLayout) or oaViewType::get (oaReservedViewType(oacMaskLayout)) 。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getUserUnits(viewType, local)
+</code></pre>
+<h3 id="objgetclearancemeasure"><code>obj.getClearanceMeasure()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getClearanceMeasure()</code></p>
+<p>This function returns the clearance measure enum value in use。 The local argument specifies whether, if true, to look only in this technology database or, if false, to search this technology database and all of its referenced technology databases for the effective clearance measure。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>local</code>: If true, look only in this technology database; If false, search this technology database and all its referenced technology databases。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getClearanceMeasure()
+</code></pre>
+<h3 id="objgetclearancemeasurelocal"><code>obj.getClearanceMeasure(local)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getClearanceMeasure(local)</code></p>
+<p>This function returns the clearance measurement enum value used for this technology database and all of its referenced technology databases。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getClearanceMeasure(local)
+</code></pre>
+<h3 id="objgetdefaultmanufacturinggrid"><code>obj.getDefaultManufacturingGrid()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getDefaultManufacturingGrid()</code></p>
+<p>This function returns the manufacturing grid that applies to all physical layers unless it has been overridden at the physical layer level。 The local argument specifies whether, if true, to look only in this technology database or, if false, to search this technology database and all of its referenced technology databases for the effective manufacturing grid。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>local</code>: If true, look only in this technology database; If false, search this technology database and all its referenced technology databases。</li>
+</ul>
+<p><strong>返回</strong></p>
+<ul>
+<li>An oaDist, which is an oaUInt4 that represents the non-negative distance, along one axis, between two oaCoord values。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getDefaultManufacturingGrid()
+</code></pre>
+<h3 id="objgetdefaultmanufacturinggridlocal"><code>obj.getDefaultManufacturingGrid(local)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getDefaultManufacturingGrid(local)</code></p>
+<p>This function returns the manufacturing grid that applies to all physical layers unless it has been overridden at the physical layer level。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getDefaultManufacturingGrid(local)
+</code></pre>
+<h3 id="objisgategrounded"><code>obj.isGateGrounded()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isGateGrounded()</code></p>
+<p>This function returns a boolean indicating whether or not the gates are considered grounded。 The local argument specifies whether, if true, to look only in this technology database or, if false, to search this technology database and all of its referenced technology databases for the effective boolean value。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>local</code>: If true, look only in this technology database; If false, search this technology database and all its referenced technology databases。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.isGateGrounded()
+</code></pre>
+<h3 id="objisgategroundedlocal"><code>obj.isGateGrounded(local)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isGateGrounded(local)</code></p>
+<p>This function returns a boolean value indicating whether or not the gates are considered grounded in this tech database。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.isGateGrounded(local)
+</code></pre>
+<h3 id="objgettechheadersrefheaders-localfalse"><code>obj.getTechHeaders(refHeaders, local=false)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getTechHeaders(refHeaders, local=false)</code></p>
+<p>This function returns an ordered list of tech database headers that are referenced by this tech database。 If there are no references, an empty array is returned。 Refer to Incremental Technology Databases in the Using Technology Databases section of the Programmers Guide for more information about referenced tech databases。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>refHeaders</code>: Array containing the set of oaTech database headers。</li>
+<li><code>local</code>: Specifies the extent of the search for referenced oaTech databases。 If local is true, the tech headers referenced directly from this tech in the order in which the references were set are returned。 If local is false, the complete graph of tech databases rooted at this tech is returned in the refHeaders array。 The order of the tech headers reflects a depth-first traversal of the tech graph。 Note that this graph may not be complete if there are missing tech databases in the list。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getTechHeaders(refHeaders, local=false)
+</code></pre>
+<h3 id="objhasunboundrefs"><code>obj.hasUnboundRefs()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.hasUnboundRefs()</code></p>
+<p>This function returns true if this database has unbound tech database references (or if it has no tech database references)。 Otherwise, false is returned。 The existence of an unbound tech database reference affects the search order when looking up technology objects in incremental tech databases。 For more information about the search order, refer to Referencing Technology Databases in the Programmers Guide。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.hasUnboundRefs()
+</code></pre>
+<h3 id="objsetdbuperuuviewtype-value"><code>obj.setDBUPerUU(viewType, value)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setDBUPerUU(viewType, value)</code></p>
+<p>This function sets the database-units per user-unit information in the technology database for the specified viewType。 The viewTypes allowed in this call are the subset of oaReservedViewType values that are used as viewTypes for an oaDesign 。 These are: oacMaskLayout , oacSchematic , oacSchematicSymbol , oacNetlist , or oacHierDesign 。 The caller can construct the viewType inline with this function call as in: tech-&gt;setDBUPerUU(oaViewType::get(oacMaskLayout), 2000) Note: Significant flow issues result when you combine layouts that use different DBUPerUU settings in a project resulting in a single mask。 To avoid any issues, use a single DBUPerUU setting that is a function of the manufacturing grid for the given technology, as outlined in the following table。 Manufacturing Grid Typically Used at DBperUUs that Work (mathematically) Recommended 0.1 micron (100 nm)。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: Pointer to an oaViewType for the type of design to set the value for。</li>
+<li><code>value</code>: The number of database-units that represent a distance of 1 user-unit。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidDBUPerUU</code>。</li>
+<li><code>oacConflictingDBUPerUUInTech</code>。</li>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.setDBUPerUU(viewType, value)
+</code></pre>
+<h3 id="objsetuserunitsviewtype-value"><code>obj.setUserUnits(viewType, value)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setUserUnits(viewType, value)</code></p>
+<p>This function sets the user-unit information in the technology database for the specified viewType。 Note: Although users can construct their own oaViewTypes, valid viewTypes for this function are restricted to the set of reserved viewTypes, namely, an oaReservedViewType object constructed with one of the following reserved view type enumerated constants: oacMaskLayout , oacSchematic , oacSchematicSymbol , oacNetlist , or oacHierDesign 。 The developer can call oaViewType::get(oaReservedViewType) to construct and return a pointer to an a oaViewType object using one of the valid reserved viewType enumerated constants (for example, oaViewType::get(oacMaskLayout) or oaViewType::get (oaReservedViewType(oacMaskLayout)) 。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+<li><code>value</code>: The user-unit value to set。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacConflictingUserUnitsInTech</code>。</li>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.setUserUnits(viewType, value)
+</code></pre>
+<h3 id="objsetclearancemeasuremeasure"><code>obj.setClearanceMeasure(measure)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setClearanceMeasure(measure)</code></p>
+<p>This function sets the clearance measurement value for this technology database。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>measure</code>: The clearance measurement value。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacConflictingClearanceMeasureInTech</code>: The ClearanceMeasure tech attribute cannot be set as indicated because it would introduce conflicts in the specified tech graph。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.setClearanceMeasure(measure)
+</code></pre>
+<h3 id="objsetdefaultmanufacturinggridgrid"><code>obj.setDefaultManufacturingGrid(grid)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setDefaultManufacturingGrid(grid)</code></p>
+<p>This function sets the manufacturing grid that applies to all physical layers unless it has been overridden at the physical layer level。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>grid</code>: The new value for the default manufacturing grid。 An oaDist is an oaUInt4 that represents the non-negative distance, along one axis, between two oaCoord values。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacConflictingDefaultManufacturingGridInTech</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.setDefaultManufacturingGrid(grid)
+</code></pre>
+<h3 id="objsetgategroundedgategrounded"><code>obj.setGateGrounded(gateGrounded)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setGateGrounded(gateGrounded)</code></p>
+<p>This function sets the gateGrounded attribute in this technology database。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>gateGrounded</code>: Boolean that specifies whether or not the gates are considered grounded。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacConflictingGateGroundedInTech</code>: The GateGrounded tech attribute cannot be set as indicated because it would introduce conflicts in the specified tech graph。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.setGateGrounded(gateGrounded)
+</code></pre>
+<h3 id="objunsetdbuperuuviewtype"><code>obj.unsetDBUPerUU(viewType)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.unsetDBUPerUU(viewType)</code></p>
+<p>This function reverts the database-units per user-unit attribute for the specified viewType back to its unset state in the technology database。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacUnsetDBUPerUUNotSet</code>。</li>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.unsetDBUPerUU(viewType)
+</code></pre>
+<h3 id="objunsetuserunitsviewtype"><code>obj.unsetUserUnits(viewType)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.unsetUserUnits(viewType)</code></p>
+<p>This function reverts the user-unit attribute for the specified viewType back to its unset state in the technology database。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacUnsetUserUnitsNotSet</code>。</li>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.unsetUserUnits(viewType)
+</code></pre>
+<h3 id="objunsetclearancemeasure"><code>obj.unsetClearanceMeasure()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.unsetClearanceMeasure()</code></p>
+<p>This function reverts the clearance measure attribute back to its unset state in the technology database。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacUnsetClearanceMeasureNotSet</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.unsetClearanceMeasure()
+</code></pre>
+<h3 id="objunsetdefaultmanufacturinggrid"><code>obj.unsetDefaultManufacturingGrid()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.unsetDefaultManufacturingGrid()</code></p>
+<p>This function reverts the default manufacturing grid attribute back to its unset state in the technology database。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacUnsetDefaultManufacturingGridNotSet</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.unsetDefaultManufacturingGrid()
+</code></pre>
+<h3 id="objunsetgategrounded"><code>obj.unsetGateGrounded()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.unsetGateGrounded()</code></p>
+<p>This function reverts the gates-are-considered-grounded attribute back to its unset state in the technology database。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacUnsetGateGroundedNotSet</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.unsetGateGrounded()
+</code></pre>
+<h3 id="objisdbuperuusetviewtype"><code>obj.isDBUPerUUSet(viewType)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isDBUPerUUSet(viewType)</code></p>
+<p>This function returns true if the DBUPerUU attribute for the specified viewType is explicitly set in the technology database; false is returned otherwise。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.isDBUPerUUSet(viewType)
+</code></pre>
+<h3 id="objisuserunitssetviewtype"><code>obj.isUserUnitsSet(viewType)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isUserUnitsSet(viewType)</code></p>
+<p>This function returns true if the user-unit attribute for the specified viewType is explicitly set in the technology database; false is returned otherwise。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.isUserUnitsSet(viewType)
+</code></pre>
+<h3 id="objisclearancemeasureset"><code>obj.isClearanceMeasureSet()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isClearanceMeasureSet()</code></p>
+<p>This function returns true if the clearance measure attribute is explicitly set in the technology database; false is returned otherwise。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.isClearanceMeasureSet()
+</code></pre>
+<h3 id="objisdefaultmanufacturinggridset"><code>obj.isDefaultManufacturingGridSet()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isDefaultManufacturingGridSet()</code></p>
+<p>This function returns true if the default manufacturing grid attribute is explicitly set in the technology database; false is returned otherwise。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.isDefaultManufacturingGridSet()
+</code></pre>
+<h3 id="objisgategroundedset"><code>obj.isGateGroundedSet()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isGateGroundedSet()</code></p>
+<p>This function returns true if the gates-are-considered-grounded attribute is explicitly set in the technology database; false is returned otherwise。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.isGateGroundedSet()
+</code></pre>
+<h3 id="objsetrefsrefs"><code>obj.setRefs(refs)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setRefs(refs)</code></p>
+<p>This function sets the tech database references for this tech。 A reference is a mechanism that allows this tech database to inherit information from other techs。 The set of referenced tech databases is known as the graph of techs。 This function removes any previously existing references (as a result, some oaTechLayerHeaders and oaTechViaDefHeaders may become and remain unbound)。 An oacTechSetRefsConflicts exception is thrown if this function: Introduces a technology object with the same name (or other key attribute) as another technology object in the graph。 Introduces a technology attribute with the same name as another technology attribute in the graph that has a different value for the attribute。 Introduces a constraint group with the same name as another constraint group in the graph。 An oacTechCannotSetDuplicateRefs exception is thrown if this function attempts to set duplicate tech database references on a tech database。 An oacTechSetRefsCircularReference exception is thrown if an attempt is made to set a reference on this database so that its graph chain refers back to this tech db (if techA-&gt;techB-&gt;techC and this function attempts to set techC-&gt;techA)。 OpenAccess issues onConflict observer notifications and issues exceptions for the above errors。 OpenAccess also issues onProcessFamilyConflict and onExcludedLayerConflict observer notifications for processFamily attribute conflicts or excluded layer conflicts。 When setRefs() is used, pre and post-modify observers are called from oaObserver<oaTech> using the oacSetRefsTechModType。 For more information about setting references, refer to Incremental Technology Databases in the Using Technology Databases section of the Programmers Guide。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>refs</code>: An array of oaTech pointers to reference。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacTechSetRefsConflicts</code>: This exception is thrown if any conflict is discovered in the graph of tech databases。</li>
+<li><code>oacTechCannotSetDuplicateRefs</code>: This exception is throw if there is a duplicate database reference in the refs array。 For example, if the ref array contains (techB, techB)。</li>
+<li><code>oacTechSetRefsCircularReference</code>: This exception is thrown if an attempt is made to set a reference on this database so that its graph chain refers back to this tech db (if techA-&gt;techB-&gt;techC and this function attempts to set techC-&gt;techA)。</li>
+<li><code>oacTechSetRefsCannotOpenAllRefGraphs</code>: This exception is thrown if all technology databases in the graph are not open and setRefs fails to open any of them。 All technology databases in the graph must be open for setRefs to proceed。</li>
+<li><code>oacSetRefsTechOpen</code>: This exception is thrown if this technology database is being opened。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.setRefs(refs)
+</code></pre>
+<h3 id="objunsetrefs"><code>obj.unsetRefs()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.unsetRefs()</code></p>
+<p>This function removes all references to other tech databases。 No operation is performed if this tech database has no references。 For more information about tech database references, refer to Incremental Technology Databases in the Using Technology Databases section of the Programmers Guide。 Removing existing oaTech database references might cause some oaTechLayerHeaders and oaTechViaDefHeaders to become unbound and remain that way。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacUnsetRefsTechOpen</code>: This exception is thrown if this technology database is being opened。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.unsetRefs()
+</code></pre>
+<h3 id="objsetprocessfamilyprocessfamily"><code>obj.setProcessFamily(processFamily)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setProcessFamily(processFamily)</code></p>
+<p>This function sets the processFamily attribute for this technology database。 When called, this function replaces the current processFamily attribute unless doing so causes an error。 It is an error if a tech, in any technology database graph that this tech is part of, has a different processFamily attribute already set。 Setting the processFamily to its current value does not produce an error。 If you call this function with an empty string, the processFamily attribute is unset。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>processFamily</code>: The string value for the process family attribute。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacConflictingProcessFamilyInTech</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.setProcessFamily(processFamily)
+</code></pre>
+<h3 id="objunsetprocessfamily"><code>obj.unsetProcessFamily()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.unsetProcessFamily()</code></p>
+<p>This function unsets the processFamily attribute to the empty string for this technology database。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.unsetProcessFamily()
+</code></pre>
+<h3 id="objgetprocessfamilyprocessfamily-localfalse"><code>obj.getProcessFamily(processFamily, local=false)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getProcessFamily(processFamily, local=false)</code></p>
+<p>This function retrieves the processFamily attribute and returns it in the processFamily string。 If the processFamily attribute is unset, the empty string is returned。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>processFamily</code>: Returned string containing the processFamily。</li>
+<li><code>local</code>: If true, look only in this technology database; If false, search this technology database and all its referenced technology databases。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getProcessFamily(processFamily, local=false)
+</code></pre>
+<h3 id="objhasprocessfamilylocalfalse"><code>obj.hasProcessFamily(local=false)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.hasProcessFamily(local=false)</code></p>
+<p>This function checks this database for a processFamily attribute if local is true, or if local is false, checks all databases in the graph of techs for a processFamily attribute。 The function returns true if the processFamily attribute is set and returns false if the attribute is not set。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>local</code>: If true, search for the processFamily attribute only in this technology database; If false, search this technology database and all its referenced technology databases。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.hasProcessFamily(local=false)
+</code></pre>
+<h3 id="objvalidate"><code>obj.validate()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.validate()</code></p>
+<p>This function returns false if there are multiple objects with the same attributes or conflicting parameter values in the technology database graph rooted at this tech database。 It returns true otherwise。 OpenAccess issues onConflict observer notifications for conflicting objects in different techs in the graph。 It also issues onProcessFamilyConflict and onExcludedLayerConflict for processFamily attribute conflicts or excluded layer conflicts。 For more information, refer to Incremental Technology Databases in the Using Technology Databases section of the Programmers Guide。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.validate()
+</code></pre>
+<h3 id="objuutodbuviewtype-value"><code>obj.uuToDBU(viewType, value)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.uuToDBU(viewType, value)</code></p>
+<p>This function converts the user units into database units for the specified viewType。 The viewTypes allowed in this call are the subset of oaReservedViewType values that are used as viewTypes for an oaDesign 。 These are: oacMaskLayout , oacSchematic , oacSchematicSymbol , oacNetlist , or oacHierDesign 。 The caller can construct the viewType inline with this function call as in: tech-&gt;uuToDBU(oaViewType::get(oacMaskLayout), 22.6)。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+<li><code>value</code>: The value in user units to convert to database units。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.uuToDBU(viewType, value)
+</code></pre>
+<h3 id="objuutodbudistanceviewtype-value"><code>obj.uuToDBUDistance(viewType, value)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.uuToDBUDistance(viewType, value)</code></p>
+<p>This function converts the user-unit distance to database-unit distance for the specified viewType。 The viewTypes allowed in this call are the subset of oaReservedViewType values that are used as viewTypes for an oaDesign 。 These are: oacMaskLayout , oacSchematic , oacSchematicSymbol , oacNetlist , or oacHierDesign 。 The caller can construct the viewType inline with this function call as in: tech-&gt;uuToDBU(oaViewType::get(oacMaskLayout), 22.6)。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+<li><code>value</code>: The distance in user units to convert to database units。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.uuToDBUDistance(viewType, value)
+</code></pre>
+<h3 id="objuutodbuareaviewtype-value"><code>obj.uuToDBUArea(viewType, value)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.uuToDBUArea(viewType, value)</code></p>
+<p>This function converts the area in square user units to an area in square database units for the specified viewType。 The viewTypes allowed in this call are the subset of oaReservedViewType values that are used as viewTypes for an oaDesign 。 These are: oacMaskLayout , oacSchematic , oacSchematicSymbol , oacNetlist , or oacHierDesign 。 The caller can construct the viewType inline with this function call as in: tech-&gt;uuToDBUArea(oaViewType::get(oacMaskLayout), 184.0)。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+<li><code>value</code>: The area in user units to convert to database units。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.uuToDBUArea(viewType, value)
+</code></pre>
+<h3 id="objdbutouuviewtype-value"><code>obj.dbuToUU(viewType, value)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.dbuToUU(viewType, value)</code></p>
+<p>This function converts the database units into user units for the specified viewType。 Note: Although users can construct their own oaViewTypes, valid viewTypes for this function are restricted to the set of reserved viewTypes, namely, an oaReservedViewType object constructed with one of the following reserved view type enumerated constants: oacMaskLayout , oacSchematic , oacSchematicSymbol , oacNetlist , or oacHierDesign 。 The developer can call oaViewType::get(oaReservedViewType) to construct and return a pointer to an a oaViewType object using one of the valid reserved viewType enumerated constants (for example, oaViewType::get(oacMaskLayout) or oaViewType::get (oaReservedViewType(oacMaskLayout)) 。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+<li><code>value</code>: The value in database units to convert to user units。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.dbuToUU(viewType, value)
+</code></pre>
+<h3 id="objdbutouudistanceviewtype-value"><code>obj.dbuToUUDistance(viewType, value)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.dbuToUUDistance(viewType, value)</code></p>
+<p>This function converts the database unit distance to user unit distance for the specified viewType。 Note: Although users can construct their own oaViewTypes, valid viewTypes for this function are restricted to the set of reserved viewTypes, namely, an oaReservedViewType object constructed with one of the following reserved view type enumerated constants: oacMaskLayout , oacSchematic , oacSchematicSymbol , oacNetlist , or oacHierDesign 。 The developer can call oaViewType::get(oaReservedViewType) to construct and return a pointer to an a oaViewType object using one of the valid reserved viewType enumerated constants (for example, oaViewType::get(oacMaskLayout) or oaViewType::get (oaReservedViewType(oacMaskLayout)) 。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+<li><code>value</code>: The distance in database units to convert to user units。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.dbuToUUDistance(viewType, value)
+</code></pre>
+<h3 id="objdbutouuareaviewtype-value"><code>obj.dbuToUUArea(viewType, value)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.dbuToUUArea(viewType, value)</code></p>
+<p>This function converts the database unit area to user unit area for the specified viewType。 Note: Although users can construct their own oaViewTypes, valid viewTypes for this function are restricted to the set of reserved viewTypes, namely, an oaReservedViewType object constructed with one of the following reserved view type enumerated constants: oacMaskLayout , oacSchematic , oacSchematicSymbol , oacNetlist , or oacHierDesign 。 The developer can call oaViewType::get(oaReservedViewType) to construct and return a pointer to an a oaViewType object using one of the valid reserved viewType enumerated constants (for example, oaViewType::get(oacMaskLayout) or oaViewType::get (oaReservedViewType(oacMaskLayout)) 。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+<li><code>value</code>: The area in database units to convert to user units。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.dbuToUUArea(viewType, value)
+</code></pre>
+<h3 id="objenableundovalue-undomodel"><code>obj.enableUndo(value, undoModel)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.enableUndo(value, undoModel)</code></p>
+<p>This function enables or disables undo for this in-memory image of the technology database。 If enabled, all changes made to this tech are logged so that undo() can restore the tech to earlier states。 If disabled, undo records are not created, and changes are not logged。 This function requires the caller to specify a particular model for undo (oaUndoModelEnum value)。 When enabling undo, the undoModel argument is required。 If disabling undo, the undoModel argument is omitted。 When undo is disabled, the current undo log and undo records are discarded。 OpenAccess supports two undo models: postCheckpoint model, in which checkpoints are set after an action preCheckpoint model, in which checkpoints are set before an action If postCheckpoint is specified, a call to undo must immediately follow a checkpoint or an exception is thrown。 See Undo and Redo Use Models in OpenAccess for more information。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>value</code>: A value of true enables undo, a value of false disables undo。</li>
+<li><code>undoModel</code>: Specifies the postCheckpoint or preCheckpoint model for enabling undo or is not specified for disabling undo。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacTechCannotChangeUndoModel</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.enableUndo(value, undoModel)
+</code></pre>
+<h3 id="objredo"><code>obj.redo()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.redo()</code></p>
+<p>This function restores the state of the in-memory image of the technology database to its state before the last undo。 The records are stored using either a pre-checkpoint or post-checkpoint model。 This call reverses the changes only if undo is enabled, undo() was called for this tech, and no changes occurred since the last undo() 。 The redo operation starts from the most recent record and restores the one transaction defined by both the checkpoint and the undo model。 Refer to the Undo and Redo Use Models article for additional information。 If there is an enabled observer on the action that is completed as a result of the redo operation, that observer is called。 In addition, there are observers for the redo operation itself。 Refer to oaTechUndoObserver for more information。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacTechUndoNotEnabled</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.redo()
+</code></pre>
+<h3 id="objundo"><code>obj.undo()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.undo()</code></p>
+<p>This function reverts the changes made to the in-memory image of this technology database。 Undo records are stored using either a pre-checkpoint or post-checkpoint model。 This function steps back one checkpoint to the most recent checkpoint and reverses the changes saved in the undo records。 The undo operation starts from the most recent record and reverses the one transaction defined by both the checkpoint and the undo model。 Refer to the Undo and Redo Use Models article for additional information。 If there is an enabled observer on the action that is completed as a result of the undo operation, that observer is called。 In addition, there are observers for the undo operation itself。 Refer to oaTechUndoObserver for more information。 Note that only changes to managed objects in the oaTech are reversed。 Utility objects that contain pointers to a managed object are not affected。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacTechUndoNotEnabled</code>。</li>
+<li><code>oacTechCannotUndoWithoutCpInPostModel</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.undo()
+</code></pre>
+<h3 id="objisundoenabled"><code>obj.isUndoEnabled()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isUndoEnabled()</code></p>
+<p>This function determines whether undo is enabled for this technology database in memory。</p>
+<p><strong>返回</strong></p>
+<ul>
+<li>true if undo is enabled; false if undo is not enabled。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.isUndoEnabled()
+</code></pre>
+<h3 id="objisinundo"><code>obj.isInUndo()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.isInUndo()</code></p>
+<p>This function determines whether this technology database in memory is currently in an undo or redo operation。</p>
+<p><strong>返回</strong></p>
+<ul>
+<li>true if this tech is in an undo or redo operation; false if the tech is not in an undo or redo operation。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.isInUndo()
+</code></pre>
+<h3 id="objsetcpcheckpointiduint_max"><code>obj.setCp(checkPointID=UINT_MAX)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setCp(checkPointID=UINT_MAX)</code></p>
+<p>This function sets an undo checkpoint for the in-memory image of this technology database。 A checkpoint marks a state of the tech。 If undo is enabled, each call to undo() restores the tech to the state marked by the previous checkpoint。 The checkpoint has a user-specified ID, which can be used to assist in keeping track of checkpoints。 If not specified, a unique value of checkPointID is automatically assigned to the checkpoint by OpenAccess。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>checkPointID</code>: The specified checkpoint ID。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacTechUndoNotEnabled</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.setCp(checkPointID=UINT_MAX)
+</code></pre>
+<h3 id="objunsetcp"><code>obj.unsetCp()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.unsetCp()</code></p>
+<p>This function removes the last checkpoint in this tech assuming that there are no undo records after the last checkpoint。 Otherwise, an exception is thrown。 See oaTech::getNumUndoCpRecs() for getting the number of undo records after the checkpoint。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacTechUndoNotEnabled</code>。</li>
+<li><code>oacTechCannotUnsetNonEmptyCp</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.unsetCp()
+</code></pre>
+<h3 id="objgetnumundocprecs"><code>obj.getNumUndoCpRecs()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getNumUndoCpRecs()</code></p>
+<p>This function returns the number of undo records on the most recent checkpoint saved for this tech。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getNumUndoCpRecs()
+</code></pre>
+<h3 id="objgetcpid"><code>obj.getCpID()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getCpID()</code></p>
+<p>This function returns the ID of the last checkpoint set in this tech。 If the ID is not set on that checkpoint, this function returns UINT_MAX。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getCpID()
+</code></pre>
+<h3 id="objgetnumundorecsoncp"><code>obj.getNumUndoRecsOnCp()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getNumUndoRecsOnCp()</code></p>
+<p>This function returns the number of undo records that will be removed if an undo command is issued。 The value returned depends on the undo model in use。 If the undo model is oacUndoModelPostCheckpoint, the function returns the number of undo records before the last checkpoint。 If the undo model is oacUndoModelPreCheckpoint, the function returns the number of undo records after the last checkpoint。 For more information about undo models, refer to Undo and Redo Use Models in OpenAccess in the Programmers Guide。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getNumUndoRecsOnCp()
+</code></pre>
+<h3 id="objgetundomodel"><code>obj.getUndoModel()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getUndoModel()</code></p>
+<p>This function returns the undo model specified when calling enableUndo() 。 If this function is called and undo is not enabled, the default value of oacUndoModelNotSpecified is returned。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getUndoModel()
+</code></pre>
+<h3 id="objcalcvmsize"><code>obj.calcVMSize()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.calcVMSize()</code></p>
+<p>This function calculates and returns the amount of virtual memory this tech database is currently using。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.calcVMSize()
+</code></pre>
+<h3 id="objminimizevm"><code>obj.minimizeVM()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.minimizeVM()</code></p>
+<p>This function minimizes the amount of virtual memory this tech is currently using。 It releases dynamically allocated data structures that can be rebuilt as needed。 Applications can call this function after creating a tech or making significant edits to an existing tech, before starting a phase of processing that interacts with the tech in different ways。 This function should be called sparingly, as it can have a substantial impact on the performance of subsequent operations。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.minimizeVM()
+</code></pre>
+<h3 id="objhasdefaultconstraintgroup"><code>obj.hasDefaultConstraintGroup()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.hasDefaultConstraintGroup()</code></p>
+<p>This function returns a boolean indicating whether or not there is a default constraint group for this tech database。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.hasDefaultConstraintGroup()
+</code></pre>
+<h3 id="objgetdefaultconstraintgroup"><code>obj.getDefaultConstraintGroup()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getDefaultConstraintGroup()</code></p>
+<p>This function returns the default constraint group for this technology。 If no constraints have been set on the default constraint group, a new constraint group is created and returned。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getDefaultConstraintGroup()
+</code></pre>
+<h3 id="objgetfoundryrules"><code>obj.getFoundryRules()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getFoundryRules()</code></p>
+<p>This function returns the constraint group that represents the foundry rules for this technology。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getFoundryRules()
+</code></pre>
+<h3 id="objgetfeaturesdatamodelrev-features"><code>obj.getFeatures(dataModelRev, features)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getFeatures(dataModelRev, features)</code></p>
+<p>This function returns the data model revision number for the database, as well as an array of the features currently in the database。 The application can iterate through the array to get the ID for each feature present。 Each feature ID corresponds to an oaFeatureIDEnum value。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>dataModelRev</code>: returned data model revision。</li>
+<li><code>features</code>: returned feature array。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getFeatures(dataModelRev, features)
+</code></pre>
+<h3 id="objgetanalysislibs"><code>obj.getAnalysisLibs()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getAnalysisLibs()</code></p>
+<p>This function returns a collection of analysis libraries。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filterFlags</code>: Determines the extent of the returned collection of analysis libraries: oacAnalysisLibIterAll: The collection contains all analysis libraries defined in this and all referenced tech databases oacAnalysisLibIterLocal: The collection contains the analysis libraries defined locally in this tech database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getAnalysisLibs()
+</code></pre>
+<h3 id="objgetanalysislibsfilterflags"><code>obj.getAnalysisLibs(filterFlags)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getAnalysisLibs(filterFlags)</code></p>
+<p>This function returns a collection of analysis libraries contained in the graph of tech databases rooted at this oaTech。 To return a collection of analysis libraries in the current tech only, refer to the getAnalysisLibs function that takes the filterFlags argument。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getAnalysisLibs(filterFlags)
+</code></pre>
+<h3 id="objgetlayers"><code>obj.getLayers()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getLayers()</code></p>
+<p>This function returns a collection of layers。 The filterFlags value defines the extent of the collection。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filterFlags</code>: Defines the extent of the returned collection of layers: oacLayerIterAll: The collection contains all layers defined in this and all referenced tech databases。 oacLayerIterLocal: The collection contains the layers defined locally in this tech database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getLayers()
+</code></pre>
+<h3 id="objgetlayersfilterflags"><code>obj.getLayers(filterFlags)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getLayers(filterFlags)</code></p>
+<p>This function returns a collection of layers this and all referenced tech databases。 To return a collection of layers in the current tech only, refer to the getLayers function that takes the filterFlags argument。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getLayers(filterFlags)
+</code></pre>
+<h3 id="objgetoppoints"><code>obj.getOpPoints()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getOpPoints()</code></p>
+<p>This function returns a collection of operating points。 The filterFlags value defines the extent of the collection。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filterFlags</code>: Determines the extent of the returned collection of operating points: oacOpPointIterAll: The collection contains all operating points defined in this and all referenced tech databases 。 oacOpPointIterLocal: The collection contains the operating points defined locally in this tech database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getOpPoints()
+</code></pre>
+<h3 id="objgetoppointsfilterflags"><code>obj.getOpPoints(filterFlags)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getOpPoints(filterFlags)</code></p>
+<p>This function returns a collection of operating points in this and all referenced tech databases。 To return a collection of operating points in the current tech only, refer to the getOpPoints function that takes the filterFlags argument。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getOpPoints(filterFlags)
+</code></pre>
+<h3 id="objgetpurposes"><code>obj.getPurposes()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getPurposes()</code></p>
+<p>This function returns a collection of purposes。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filterFlags</code>: Determines the extent of the returned collection of purposes: oacPurposeIterAll: The collection contains all purposes defined in this and all referenced tech databases。 oacPurposeIterLocal: The collection contains the purposes defined locally in this tech database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getPurposes()
+</code></pre>
+<h3 id="objgetpurposesfilterflags"><code>obj.getPurposes(filterFlags)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getPurposes(filterFlags)</code></p>
+<p>This function returns a collection of purposes in this and all referenced tech databases。 To return a collection of purposes in the current tech only, refer to the getPurposes function that takes the filterFlags argument。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getPurposes(filterFlags)
+</code></pre>
+<h3 id="objgetsitedefs"><code>obj.getSiteDefs()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getSiteDefs()</code></p>
+<p>This function returns a collection of siteDefs。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filterFlags</code>: Determines the extent of the returned collection of siteDefs: oacSiteDefIterAll: The collection contains all siteDefs defined in this and all referenced tech databases。 oacSiteDefIterLocal: The collection contains the siteDefs defined locally in this tech database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getSiteDefs()
+</code></pre>
+<h3 id="objgetsitedefsfilterflags"><code>obj.getSiteDefs(filterFlags)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getSiteDefs(filterFlags)</code></p>
+<p>This function returns a collection of siteDefs in this and all referenced tech databases。 To return a collection of siteDefs in the current tech only, refer to the getSiteDefs function that takes the filterFlags argument。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getSiteDefs(filterFlags)
+</code></pre>
+<h3 id="objgetvalues"><code>obj.getValues()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getValues()</code></p>
+<p>This function returns a collection of values。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filterFlags</code>: Determines the extent of the returned collection of values: oacTechValueIterAll: The collection contains all values defined in this and all referenced tech databases。 oacTechValueIterLocal: The collection contains the values defined locally in this tech database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getValues()
+</code></pre>
+<h3 id="objgetvaluesfilterflags"><code>obj.getValues(filterFlags)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getValues(filterFlags)</code></p>
+<p>This function returns a collection of values in this and all referenced tech databases。 To return a collection of values in the current tech only, refer to the getValues function that takes the filterFlags argument。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getValues(filterFlags)
+</code></pre>
+<h3 id="objgetviadefs"><code>obj.getViaDefs()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getViaDefs()</code></p>
+<p>This function returns a collection of viaDefs。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filterFlags</code>: Determines the extent of the returned collection of viaDefs: oacViaDefIterAll: The collection contains all viaDefs defined in this and all referenced tech databases。 oacViaDefIterLocal: The collection contains the viaDefs defined locally in this tech database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getViaDefs()
+</code></pre>
+<h3 id="objgetviadefsfilterflags"><code>obj.getViaDefs(filterFlags)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getViaDefs(filterFlags)</code></p>
+<p>This function returns a collection of viaDefs in this and all referenced tech databases。 To return a collection of viaDefs in the current tech only, refer to the getViaDefs function that takes the filterFlags argument。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getViaDefs(filterFlags)
+</code></pre>
+<h3 id="objgetviaspecs"><code>obj.getViaSpecs()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getViaSpecs()</code></p>
+<p>This function returns a collection of viaSpecs。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filterFlags</code>: Determines the extent of the returned collection of viaSpecs: oacViaSpecIterAll: The collection contains all viaSpecs defined in this and all referenced tech databases。 oacViaSpecIterLocal: The collection contains the viaSpecs defined locally in this tech database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getViaSpecs()
+</code></pre>
+<h3 id="objgetviaspecsfilterflags"><code>obj.getViaSpecs(filterFlags)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getViaSpecs(filterFlags)</code></p>
+<p>This function returns a collection of via specs in this and all referenced tech databases。 To return a collection of via specs in the current tech only, refer to the getViaSpecs function that takes the filterFlags argument。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getViaSpecs(filterFlags)
+</code></pre>
+<h3 id="objgetviavariantsfilterflagsoacviavariantiterall"><code>obj.getViaVariants(filterFlags=oacViaVariantIterAll)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getViaVariants(filterFlags=oacViaVariantIterAll)</code></p>
+<p>This function returns a collection of oaViaVariants。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filterFlags</code>: Specifies what the collection contains。 The bit flags are defined as follows: oacViaVariantIterAll: The returned collection contains all oaViaVariants defined in this and all referenced technology databases。 oacViaVariantIterLocal: The returned collection contains the oaViaVariants defined locally in this technology database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getViaVariants(filterFlags=oacViaVariantIterAll)
+</code></pre>
+<h3 id="objgetviavariantheadersfilterflagsoacviavariantheaderiterall"><code>obj.getViaVariantHeaders(filterFlags=oacViaVariantHeaderIterAll)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getViaVariantHeaders(filterFlags=oacViaVariantHeaderIterAll)</code></p>
+<p>This function returns a collection of viaVariantHeaders。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filterFlags</code>: Specifies what the collection contains。 The bit flags are defined as follows: oacViaVariantHeaderIterAll: The collection contains all oaViaVariantHeaders defined in this and all referenced technology databases。 oacViaVariantHeaderIterLocal: The collection contains the oaViaVariantHeaders defined locally in this technology database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getViaVariantHeaders(filterFlags=oacViaVariantHeaderIterAll)
+</code></pre>
+<h3 id="objgetlayerheaders"><code>obj.getLayerHeaders()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getLayerHeaders()</code></p>
+<p>This function returns a collection of layerHeaders in this tech database。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getLayerHeaders()
+</code></pre>
+<h3 id="objgetviadefheaders"><code>obj.getViaDefHeaders()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getViaDefHeaders()</code></p>
+<p>This function returns a collection of viaDefHeaders in this tech database。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getViaDefHeaders()
+</code></pre>
+<h3 id="objgetconstraintsdefnull"><code>obj.getConstraints(def=NULL)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getConstraints(def=NULL)</code></p>
+<p>This function returns a collection of constraints that match the given constraint definition。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>def</code>: Constraint definition to match。 When NULL is specified, the collection contains all constraints。</li>
+<li><code>filterFlags</code>: Determines the extent of the returned collection of constraints: oacConstraintIterAll: The collection contains all constraints defined in this and all referenced tech databases。 oacConstraintIterLocal: The collection contains the constraints defined locally in this tech database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getConstraints(def=NULL)
+</code></pre>
+<h3 id="objgetconstraintsdef-filterflags"><code>obj.getConstraints(def, filterFlags)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getConstraints(def, filterFlags)</code></p>
+<p>This function returns a collection of constraints with the specified definition in this and any referenced tech databases。 If no definition is specified, all the constraints are returned。 To return a collection of constraints in the current tech only, refer to the getConstraints function that takes the filterFlags argument。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>def</code>: Optional constraint definition to search for。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getConstraints(def, filterFlags)
+</code></pre>
+<h3 id="objgetconstraintgroups"><code>obj.getConstraintGroups()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getConstraintGroups()</code></p>
+<p>This function returns a collection of constraint groups that are associated with the specified constraintGroupDef。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>def</code>: pointer to an oaConstraintGroupDef 。</li>
+<li><code>filterFlags</code>: Determines the extent of the returned collection of constraint groups: oacTechConstraintGroupIterAll (the default): The collection contains all constraint groups defined in this and all referenced tech databases。 oacTechConstraintGroupIterLocal: The collection contains the constraint groups defined locally in this tech database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getConstraintGroups()
+</code></pre>
+<h3 id="objgetconstraintgroupsfilterflags"><code>obj.getConstraintGroups(filterFlags)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getConstraintGroups(filterFlags)</code></p>
+<p>This function returns a collection of constraint groups。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filterFlags</code>: Determines the extent of the returned collection of constraint groups: oacTechConstraintGroupIterAll: The collection contains all constraint groups defined in this and all referenced tech databases。 oacTechConstraintGroupIterLocal: The collection contains the constraint groups defined locally in this tech database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getConstraintGroups(filterFlags)
+</code></pre>
+<h3 id="objgetconstraintgroupsdef-filterflagsoactechconstraintgroupiterall"><code>obj.getConstraintGroups(def, filterFlags=oacTechConstraintGroupIterAll)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getConstraintGroups(def, filterFlags=oacTechConstraintGroupIterAll)</code></p>
+<p>This function returns a collection of constraint groups in this and all referenced tech databases。 To return a collection of constraint groups in the current tech only, refer to the getConstraintGroups function that takes the filterFlags argument。 Refer to Incremental Technology Databases in the Using Technology Databases section of the Programmers Guide for more information about referenced tech databases。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getConstraintGroups(def, filterFlags=oacTechConstraintGroupIterAll)
+</code></pre>
+<h3 id="objgetconstraintparams"><code>obj.getConstraintParams()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getConstraintParams()</code></p>
+<p>This function returns a collection of constraint parameters。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filterFlags</code>: Determines the extent of the returned collection of constraint parameters: oacTechConstraintParamIterAll: The collection contains all constraint parameters defined in this and all referenced tech databases。 oacTechConstraintParamIterLocal: The collection contains the constraint parameters defined locally in this tech database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getConstraintParams()
+</code></pre>
+<h3 id="objgetconstraintparamsfilterflags"><code>obj.getConstraintParams(filterFlags)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getConstraintParams(filterFlags)</code></p>
+<p>This function returns a collection of constraint parameters in this and all referenced tech databases。 To return a collection of constraint parameters in the current tech only, refer to the getConstraintParams function that takes the filterFlags argument。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getConstraintParams(filterFlags)
+</code></pre>
+<h3 id="objgetconstraintgroupheaders"><code>obj.getConstraintGroupHeaders()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getConstraintGroupHeaders()</code></p>
+<p>This function returns a collection of constraint group headers used by this tech database。 Note that the collection can include oaConstraintGroupHeaders with the same name (for default or foundry constraint groups)。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getConstraintGroupHeaders()
+</code></pre>
+<h3 id="objgetderivedlayerparamsfilterflagsoactechderivedlayerparamiterall"><code>obj.getDerivedLayerParams(filterFlags=oacTechDerivedLayerParamIterAll)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getDerivedLayerParams(filterFlags=oacTechDerivedLayerParamIterAll)</code></p>
+<p>This function returns a collection of derivedLayer parameters。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>filterFlags</code>: Determines the extent of the returned collection of derivedLayer parameters: oacTechDerivedLayerParmIterAll: The collection contains all derivedLayer parameters defined in this and all referenced oaTech databases。 oacTechDerivedLayerParamIterLocal: The collection contains the derivedLayer parameters defined locally in this oaTech database。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getDerivedLayerParams(filterFlags=oacTechDerivedLayerParamIterAll)
+</code></pre>
+<h3 id="objgetappobjectdefs"><code>obj.getAppObjectDefs()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getAppObjectDefs()</code></p>
+<p>This function returns a collection of appObjectDefs used in this tech database。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getAppObjectDefs()
+</code></pre>
+<h3 id="objgetappobjectsdef"><code>obj.getAppObjects(def)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getAppObjects(def)</code></p>
+<p>This function returns a collection of any oaAppObject with the specified extension that exists in this tech database。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>def</code>: The extension to include in the oaAppObject collection。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getAppObjects(def)
+</code></pre>
+<h3 id="objgetappdefsbydatatypedatatype"><code>obj.getAppDefsByDataType(dataType)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getAppDefsByDataType(dataType)</code></p>
+<p>This function returns a collection of appDefs of the specified data type used in this tech database。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>dataType</code>: The type code for the specified data table。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getAppDefsByDataType(dataType)
+</code></pre>
+<h3 id="objgetgroups"><code>obj.getGroups()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getGroups()</code></p>
+<p>This function returns a collection of groups in this tech database with the specified group definition。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>def</code>: Input group definition。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getGroups()
+</code></pre>
+<h3 id="objgetgroupsdef"><code>obj.getGroups(def)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getGroups(def)</code></p>
+<p>This function returns the complete set of groups in this tech database。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getGroups(def)
+</code></pre>
+<h3 id="objgetgroupsbynamename"><code>obj.getGroupsByName(name)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getGroupsByName(name)</code></p>
+<p>This function returns a collection of group names for the specified extension in this tech database。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>name</code>: The extension to include in the collection。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getGroupsByName(name)
+</code></pre>
+<h3 id="objgetusedin"><code>obj.getUsedIn()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getUsedIn()</code></p>
+<p>This function returns a collection of techHeaders in other open tech databases that contain references to this tech database。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+# assume obj is a oaTech
+obj.getUsedIn()
+</code></pre>
+<h3 id="_techoatechcreatelibname"><code>_tech.oaTech.create(libName)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.create(libName)</code></p>
+<p>This function creates the tech database for the specified library。 An exception is thrown if the tech database already exists or if the specified library uses an attached tech database in another library。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>lib</code>: The library for which to create the tech database。</li>
+</ul>
+<p><strong>返回</strong></p>
+<ul>
+<li>A pointer to the new oaTech database。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacTechAlreadyExists</code>。</li>
+<li><code>oacTechLibNotFound</code>。</li>
+<li><code>oacCannotFindInheritedTechLib</code>。</li>
+<li><code>oacTechAttachedTechLibDetected</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.create(libName)
+</code></pre>
+<h3 id="_techoatechcreatelib"><code>_tech.oaTech.create(lib)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.create(lib)</code></p>
+<p>This function creates the tech database for the specified library。 An exception is thrown if the tech database already exists or if the specified library uses an attached tech database in another library。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>libName</code>: The name of the library for which to create the tech database。</li>
+</ul>
+<p><strong>返回</strong></p>
+<ul>
+<li>A pointer to the new tech database。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibNotFound</code>。</li>
+<li><code>oacTechAlreadyExists</code>。</li>
+<li><code>oacTechLibNotFound</code>。</li>
+<li><code>oacCannotFindInheritedTechLib</code>。</li>
+<li><code>oacTechAttachedTechLibDetected</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.create(lib)
+</code></pre>
+<h3 id="_techoatechopenlibname-moder"><code>_tech.oaTech.open(libName, mode='r')</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.open(libName, mode='r')</code></p>
+<p>This function opens the tech database for the specified library with the specified access mode。 Note that the open functions do not create tech databases, they simply open them。 The tech to be opened might reference other techs in a graph。 If so, OpenAccess attempts to open the referenced techs as well。 If one of the referenced techs was edited out of context, conflicting technology objects might be encountered。 It is an error if opening a tech: Introduces a technology object with the same name as another technology object in the graph。 Introduces a technology attribute with the same name as another technology attribute in the graph that has a different value for the attribute。 Introduces a constraint group with the same name as another constraint group in the graph。 OpenAccess issues onConflict observer notifications and issues exceptions for conflicting objects in different techs in the graph。 It also issues onProcessFamilyConflict and onExcludedLayerConflict for processFamily attribute conflicts or excluded layer conflicts。 For more information about referenced tech databases, refer to Incremental Technology Databases in the Using Technology Databases section of the Programmers Guide。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>lib</code>: A pointer to the library whose oaTech database is to be opened。</li>
+<li><code>mode</code>: The mode in which to open the database。 'r' for read 'w' for write (truncate by deleting existing data) 'a' for append 'A' for append in override mode, which is not typically used。 Refer to Compatibility for OpenAccess Applications and Data in the Programmers Guide for more information。</li>
+</ul>
+<p><strong>返回</strong></p>
+<ul>
+<li>A pointer to the opened tech database。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacOpenOnTechBeingPurged</code>: Attempt to open a technology database that is being purged。</li>
+<li><code>oacCannotFindLibraryTech</code>: Tech database for the specified library is not found。</li>
+<li><code>oacTechFileDoesNotExist</code>。</li>
+<li><code>oacCannotFindInheritedTechLib</code>。</li>
+<li><code>oacDataNotCompatibleOnOpen</code>: The design contains new features that are not understood by this version of OpenAccess and cannot be opened。</li>
+<li><code>oacDataNotCompatibleOnOpenInAppendMode</code>: The design contains new features that are not understood by this version of OpenAccess and cannot be opened in append mode。</li>
+<li><code>oacCannotRepairCorruptedAppData</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.open(libName, mode='r')
+</code></pre>
+<h3 id="_techoatechopenlib-moder"><code>_tech.oaTech.open(lib, mode='r')</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.open(lib, mode='r')</code></p>
+<p>This function opens the tech database for the specified library with the specified access mode。 Note that the open functions do not create tech databases, they simply open them。 The tech to be opened might reference other techs in a graph。 If so, OpenAccess attempts to open the referenced techs as well。 Refer to Incremental Technology Databases in the Using Technology Databases section of the Programmers Guide for more information。 If one of the referenced techs was edited out of context, conflicting technology objects might be encountered when opening the tech。 It is an error if opening a tech: Introduces a technology object with the same name as another technology object in the graph。 Introduces a technology attribute with the same name as another technology attribute in the graph that has a different value for the attribute。 Introduces a constraint group with the same name as another constraint group in the graph。 OpenAccess issues observer notifications and exceptions for conflicting objects in different techs in the graph。 It also issues onProcessFamilyConflict and onExcludedLayerConflict for processFamily attribute conflicts or excluded layer conflicts。 Refer to Conflicts in Incremental Technology Databases in the Using Technology Databases section of the Programmers Guide for more information。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>libName</code>: The name of the library whose oaTech database is to be opened。</li>
+<li><code>mode</code>: The mode in which to open the design。 'r' for read 'w' for write (truncate by deleting existing data) 'a' for append 'A' for append in override mode, which is not typically used。 Refer to Compatibility for OpenAccess Applications and Data in the Programmers Guide for more information。</li>
+</ul>
+<p><strong>返回</strong></p>
+<ul>
+<li>A pointer to the opened tech database。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacTechLibNotFound</code>。</li>
+<li><code>oacOpenOnTechBeingPurged</code>。</li>
+<li><code>oacCannotFindLibraryTech</code>。</li>
+<li><code>oacTechFileDoesNotExist</code>。</li>
+<li><code>oacCannotFindInheritedTechLib</code>。</li>
+<li><code>oacDataNotCompatibleOnOpen</code>: The design contains new features that are not understood by this version of OpenAccess and cannot be opened。</li>
+<li><code>oacDataNotCompatibleOnOpenInAppendMode</code>: The design contains new features that are not understood by this version of OpenAccess and cannot be opened in append mode。</li>
+<li><code>oacCannotRepairCorruptedAppData</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.open(lib, mode='r')
+</code></pre>
+<h3 id="_techoatechrecoverlibname-type"><code>_tech.oaTech.recover(libName, type)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.recover(libName, type)</code></p>
+<p>This function attempts to recover the tech with the specified saveRecover type in the specified library。 If successful, the tech is returned。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>libName</code>: The name of the library。</li>
+<li><code>type</code>: Either oacAutoSaveType or oacCriticalSaveType。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacTechLibNotFound</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.recover(libName, type)
+</code></pre>
+<h3 id="_techoatechfindlibname"><code>_tech.oaTech.find(libName)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.find(libName)</code></p>
+<p>This function attempts to find an open tech database for the specified library。 If the library contains a tech database, and that database is not open, the function returns NULL。 If there is no local tech database, and the library uses an attached tech database specified with the "techLibName" property instead, this function recursively attempts to resolve the target library and find the open tech database for the resolved target library。 (see the oaTech class description for further information)。 If successful, the function returns a pointer to the tech database。 Otherwise, NULL is returned。 An oacCannotFindInheritedTechLib exception is thrown if a "techLibName" string property in the target library resolution chain specifies the name of a non-existent library。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>lib</code>: A pointer to the library whose oaTech database is to be found。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacCannotFindInheritedTechLib</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.find(libName)
+</code></pre>
+<h3 id="_techoatechfindlib"><code>_tech.oaTech.find(lib)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.find(lib)</code></p>
+<p>This function attempts to find an open tech database for the specified library name。 If the library contains a tech database, and that database is not open, the function will return NULL。 If there is no local tech database, if the library uses an attached tech database specified with the "techLibName" property, this function will recursively attempt to resolve the target library and find the open tech database for the resolved target library (see the oaTech class description for further information)。 If successful, the function returns a pointer to the tech database。 Otherwise, NULL is returned。 An oacCannotFindInheritedTechLib exception is thrown if a "techLibName" string property in the target library resolution chain specifies the name of a non-existent library。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>libName</code>: Name of the library whose oaTech database is to be found。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacCannotFindInheritedTechLib</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.find(lib)
+</code></pre>
+<h3 id="_techoatechdestroylibname"><code>_tech.oaTech.destroy(libName)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.destroy(libName)</code></p>
+<p>This function attempts to remove the specified oaSaveRecoverType file from disk。 It throws an exception if this file cannot be found on disk。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>libName</code>: The name of the library。</li>
+<li><code>type</code>: Either oacAutoSaveType or oacCriticalSaveType。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacTechLibNotFound</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.destroy(libName)
+</code></pre>
+<h3 id="_techoatechdestroylib"><code>_tech.oaTech.destroy(lib)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.destroy(lib)</code></p>
+<p>This function attempts to remove the tech database associated with the library specified by lib。 The tech database for the library will be removed from disk。 If no tech database exists, but the library uses an attached tech database specified with the "techLibName" property, then the attachment property will be removed。 It is not an error to remove the tech database even if other libraries use this tech as an attached tech。 An exception is thrown if the tech database is open。 See the oaTech class description for more information about attached tech databases。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>lib</code>: A pointer to the library containing the oaTech database to destroy。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacDestroyTechOpen</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.destroy(lib)
+</code></pre>
+<h3 id="_techoatechdestroylibname-type"><code>_tech.oaTech.destroy(libName, type)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.destroy(libName, type)</code></p>
+<p>This function attempts to remove the tech database associated with the library specified by libName。 The tech database for the library will be removed from disk。 If no tech database exists, but the library uses an attached tech database specified with the "techLibName" property, then the attachment property will be removed。 It is not an error to remove the oaTech database even if other libraries use this tech database as an attached tech。 An exception is thrown if the tech database is open。 See the oaTech class description for more information about attached tech databases。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>libName</code>: The library containing the oaTech database to destroy。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacTechLibNotFound</code>。</li>
+<li><code>oacDestroyTechOpen</code>。</li>
+<li><code>oacDestroyWithAttachProperty</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.destroy(libName, type)
+</code></pre>
+<h3 id="_techoatechexistslibname-inheritedtrue"><code>_tech.oaTech.exists(libName, inherited=true)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.exists(libName, inherited=true)</code></p>
+<p>This function returns a boolean that indicates whether the specified oaSaveRecover file exists for the tech in the specified library。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>lib</code>: The library to check。</li>
+<li><code>type</code>: The oaSaveRecover type to match, which is either oacAutoSaveType or oacCriticalSaveType。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.exists(libName, inherited=true)
+</code></pre>
+<h3 id="_techoatechexistslib-inheritedtrue"><code>_tech.oaTech.exists(lib, inherited=true)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.exists(lib, inherited=true)</code></p>
+<p>This function returns a boolean that indicates whether the specified oaSaveRecover file exists for the tech in the specified library。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>libName</code>: The name of the library to check。</li>
+<li><code>type</code>: The oaSaveRecover type to match, which is either oacAutoSaveType or oacCriticalSaveType。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.exists(lib, inherited=true)
+</code></pre>
+<h3 id="_techoatechexistslibname-type"><code>_tech.oaTech.exists(libName, type)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.exists(libName, type)</code></p>
+<p>This function returns true if the tech database is open for the specified library or if a non-zero size tech database for the specified library exists on disk。 It returns false otherwise。 If the tech is not currently open and if inherited is true (default), this function uses the library's "techLibName" string property to resolve the target library (see the oaTech class description for further information)。 If inherited is false, the property is ignored and the lookup is done using the specified library only。 An oacCannotFindInheritedTechLib exception is thrown if inherited is true and a "techLibName" string property in the target library resolution chain specifies the name of a non-existent library。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>lib</code>: A pointer to the library to check。</li>
+<li><code>inherited</code>: If true, look at the "techLibName" property string value (interpreted in the oaNativeNS ) to resolve the target library。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacCannotFindInheritedTechLib</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.exists(libName, type)
+</code></pre>
+<h3 id="_techoatechexistslib-type"><code>_tech.oaTech.exists(lib, type)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.exists(lib, type)</code></p>
+<p>This function returns true if the tech database is open for the specified library or if a non-zero size tech database for the specified library exists on disk。 It returns false otherwise。 If the tech is not currently open and if inherited is true (default), this function uses the library's "techLibName" string property to resolve the target library (see the oaTech class description for further information)。 If inherited is false, the property is ignored and the lookup is done using the specified library only。 An oacCannotFindInheritedTechLib exception is thrown if inherited is true and a "techLibName" string property in the target library resolution chain specifies the name of a non-existent library。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>libName</code>: The name of the library to check。</li>
+<li><code>inherited</code>: If true, look at the library's "techLibName" property string value (interpreted in the oaNativeNS ) to resolve the target library。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacCannotFindInheritedTechLib</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.exists(lib, type)
+</code></pre>
+<h3 id="_techoatechgetdefaultdbuperuuviewtype"><code>_tech.oaTech.getDefaultDBUPerUU(viewType)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.getDefaultDBUPerUU(viewType)</code></p>
+<p>This function returns the default database-units per user-unit for the specified viewType。 These are the static values that will be returned by getDBUPerUU() when no call to setDBUPerUU has been made for a given viewType。 The viewTypes allowed in this call are the subset of oaReservedViewType values that are used as viewTypes for an oaDesign 。 These are: oacMaskLayout , oacSchematic , oacSchematicSymbol , oacNetlist , or oacHierDesign 。 The caller can construct the viewType inline with this function call as in: tech-&gt;getDefaultDBUPerUU(oaViewType::get(oacMaskLayout))。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.getDefaultDBUPerUU(viewType)
+</code></pre>
+<h3 id="_techoatechgetdefaultuserunitsviewtype"><code>_tech.oaTech.getDefaultUserUnits(viewType)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.getDefaultUserUnits(viewType)</code></p>
+<p>This function returns the requested user-unit information from the tech database for the specified viewType。 Note: Although users can construct their own oaViewTypes, valid viewTypes for this function are restricted to the set of reserved viewTypes, namely, an oaReservedViewType object constructed with one of the following reserved view type enumerated constants: oacMaskLayout , oacSchematic , oacSchematicSymbol , oacNetlist , or oacHierDesign 。 The developer can call oaViewType::get(oaReservedViewType) to construct and return a pointer to an a oaViewType object using one of the valid reserved viewType enumerated constants (for example, oaViewType::get(oacMaskLayout) or oaViewType::get (oaReservedViewType(oacMaskLayout)) 。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>viewType</code>: A pointer to an oaViewType that corresponds to the specified type oaReservedViewType 。 It needs to be one of the reserved design viewTypes: maskLayout, schematic, schematicSymbol, netlist, or oaHierDesign。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacInvalidTechViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.getDefaultUserUnits(viewType)
+</code></pre>
+<h3 id="_techoatechgetdefaultdefaultmanufacturinggrid"><code>_tech.oaTech.getDefaultDefaultManufacturingGrid()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.getDefaultDefaultManufacturingGrid()</code></p>
+<p>This function returns the default value for the default manufacturing grid。</p>
+<p><strong>返回</strong></p>
+<ul>
+<li>An oaDist, which is an oaUInt4 that represents the non-negative distance, along one axis, between two oaCoord values。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.getDefaultDefaultManufacturingGrid()
+</code></pre>
+<h3 id="_techoatechgetdefaultclearancemeasure"><code>_tech.oaTech.getDefaultClearanceMeasure()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.getDefaultClearanceMeasure()</code></p>
+<p>This function returns the default clearance measure enum value。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.getDefaultClearanceMeasure()
+</code></pre>
+<h3 id="_techoatechgetdefaultisgategrounded"><code>_tech.oaTech.getDefaultIsGateGrounded()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.getDefaultIsGateGrounded()</code></p>
+<p>This function returns the default boolean value indicating whether or not the gates are considered grounded。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.getDefaultIsGateGrounded()
+</code></pre>
+<h3 id="_techoatechattachlib-attachlibname"><code>_tech.oaTech.attach(lib, attachLibName)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.attach(lib, attachLibName)</code></p>
+<p>This function creates a technology attachment between the specified library lib and the library with the name attachLibName。 If there is an existing attachment, it is first removed。 The oacAttachLibraryHasLocalTech error is thrown if a technology database exists locally in the library lib。 The oacDMDataCannotGetWriteAccess error is thrown if the library dmData database in the library lib cannot be opened for editing。 Note that the library dmData database is needed because this function creates a string property called techLibName in the dmData that specifies the name of the associated technology library。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>lib</code>: Pointer to the technology library to attach。</li>
+<li><code>attachLibName</code>: Name of the library to attach to。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacAttachLibraryHasLocalTech</code>。</li>
+<li><code>oacDMDataCannotGetWriteAccess</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.attach(lib, attachLibName)
+</code></pre>
+<h3 id="_techoatechdetachlib"><code>_tech.oaTech.detach(lib)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.detach(lib)</code></p>
+<p>This function removes the technology attachment from the specified library lib。 The oacDetachNoAttachment error is thrown if the library does not have a technology attachment to another library。 The oacDMDataCannotGetWriteAccess error is thrown if the library dmData database cannot be opened for edit。 Note that the library dmData database is needed because the technology attachment information is stored there。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>lib</code>: Pointer to the technology library to detach。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacDetachNoAttachment</code>。</li>
+<li><code>oacDMDataCannotGetWriteAccess</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.detach(lib)
+</code></pre>
+<h3 id="_techoatechhasattachmentlib"><code>_tech.oaTech.hasAttachment(lib)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.hasAttachment(lib)</code></p>
+<p>This function returns true if the technology library lib has a technology attachment to another library。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>lib</code>: Pointer to the technology library。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.hasAttachment(lib)
+</code></pre>
+<h3 id="_techoatechgetattachmentlib-attachlibname"><code>_tech.oaTech.getAttachment(lib, attachLibName)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.getAttachment(lib, attachLibName)</code></p>
+<p>This function gets the name of the library that the specified library lib has a technology attachment to and returns it in attachLibName。 It is an error if lib does not have a technology attachment to another library。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>lib</code>: Pointer to the technology library。</li>
+<li><code>attachLibName</code>: Retrieved library name。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacGetAttachmentNoAttachment</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.getAttachment(lib, attachLibName)
+</code></pre>
+<h3 id="_techoatechgetrevnumber"><code>_tech.oaTech.getRevNumber()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.getRevNumber()</code></p>
+<p>This function returns the revision number for the tech database。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.getRevNumber()
+</code></pre>
+<h3 id="_techoatechgetopentechs"><code>_tech.oaTech.getOpenTechs()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_tech.oaTech.getOpenTechs()</code></p>
+<p>This function returns a collection of currently open tech databases。</p>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _tech
+
+_tech.oaTech.getOpenTechs()
+</code></pre>
+        </div>
+        <aside class="toc-panel"><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false"><span>方法</span><span class="toc-toggle-indicator">展开</span></button><div class="toc-body"><h2>方法</h2><ul><li><a href="#obj-close"><code>obj.close()</code></a></li><li><a href="#obj-purge"><code>obj.purge()</code></a></li><li><a href="#obj-save"><code>obj.save()</code></a></li><li><a href="#obj-save-type"><code>obj.save(type)</code></a></li><li><a href="#obj-saveas-libname"><code>obj.saveAs(libName)</code></a></li><li><a href="#obj-reopen-mode"><code>obj.reopen(mode)</code></a></li><li><a href="#obj-revert"><code>obj.revert()</code></a></li><li><a href="#obj-getlibname-libname"><code>obj.getLibName(libName)</code></a></li><li><a href="#obj-getlibname-ns-out"><code>obj.getLibName(ns, out)</code></a></li><li><a href="#obj-getlib"><code>obj.getLib()</code></a></li><li><a href="#obj-getcreatetime"><code>obj.getCreateTime()</code></a></li><li><a href="#obj-getreadintime"><code>obj.getReadInTime()</code></a></li><li><a href="#obj-getlastsavedtime"><code>obj.getLastSavedTime()</code></a></li><li><a href="#obj-gettimestamp-type"><code>obj.getTimeStamp(type)</code></a></li><li><a href="#obj-gettimestamp-def"><code>obj.getTimeStamp(def)</code></a></li><li><a href="#obj-enabletimestamps-value-true"><code>obj.enableTimeStamps(value=true)</code></a></li><li><a href="#obj-getmode"><code>obj.getMode()</code></a></li><li><a href="#obj-getrefcount"><code>obj.getRefCount()</code></a></li><li><a href="#obj-ismodified"><code>obj.isModified()</code></a></li><li><a href="#obj-isrecovered"><code>obj.isRecovered()</code></a></li><li><a href="#obj-getdbuperuu-viewtype"><code>obj.getDBUPerUU(viewType)</code></a></li><li><a href="#obj-getdbuperuu-viewtype-local"><code>obj.getDBUPerUU(viewType, local)</code></a></li><li><a href="#obj-getuserunits-viewtype"><code>obj.getUserUnits(viewType)</code></a></li><li><a href="#obj-getuserunits-viewtype-local"><code>obj.getUserUnits(viewType, local)</code></a></li><li><a href="#obj-getclearancemeasure"><code>obj.getClearanceMeasure()</code></a></li><li><a href="#obj-getclearancemeasure-local"><code>obj.getClearanceMeasure(local)</code></a></li><li><a href="#obj-getdefaultmanufacturinggrid"><code>obj.getDefaultManufacturingGrid()</code></a></li><li><a href="#obj-getdefaultmanufacturinggrid-local"><code>obj.getDefaultManufacturingGrid(local)</code></a></li><li><a href="#obj-isgategrounded"><code>obj.isGateGrounded()</code></a></li><li><a href="#obj-isgategrounded-local"><code>obj.isGateGrounded(local)</code></a></li><li><a href="#obj-gettechheaders-refheaders-local-false"><code>obj.getTechHeaders(refHeaders, local=false)</code></a></li><li><a href="#obj-hasunboundrefs"><code>obj.hasUnboundRefs()</code></a></li><li><a href="#obj-setdbuperuu-viewtype-value"><code>obj.setDBUPerUU(viewType, value)</code></a></li><li><a href="#obj-setuserunits-viewtype-value"><code>obj.setUserUnits(viewType, value)</code></a></li><li><a href="#obj-setclearancemeasure-measure"><code>obj.setClearanceMeasure(measure)</code></a></li><li><a href="#obj-setdefaultmanufacturinggrid-grid"><code>obj.setDefaultManufacturingGrid(grid)</code></a></li><li><a href="#obj-setgategrounded-gategrounded"><code>obj.setGateGrounded(gateGrounded)</code></a></li><li><a href="#obj-unsetdbuperuu-viewtype"><code>obj.unsetDBUPerUU(viewType)</code></a></li><li><a href="#obj-unsetuserunits-viewtype"><code>obj.unsetUserUnits(viewType)</code></a></li><li><a href="#obj-unsetclearancemeasure"><code>obj.unsetClearanceMeasure()</code></a></li><li><a href="#obj-unsetdefaultmanufacturinggrid"><code>obj.unsetDefaultManufacturingGrid()</code></a></li><li><a href="#obj-unsetgategrounded"><code>obj.unsetGateGrounded()</code></a></li><li><a href="#obj-isdbuperuuset-viewtype"><code>obj.isDBUPerUUSet(viewType)</code></a></li><li><a href="#obj-isuserunitsset-viewtype"><code>obj.isUserUnitsSet(viewType)</code></a></li><li><a href="#obj-isclearancemeasureset"><code>obj.isClearanceMeasureSet()</code></a></li><li><a href="#obj-isdefaultmanufacturinggridset"><code>obj.isDefaultManufacturingGridSet()</code></a></li><li><a href="#obj-isgategroundedset"><code>obj.isGateGroundedSet()</code></a></li><li><a href="#obj-setrefs-refs"><code>obj.setRefs(refs)</code></a></li><li><a href="#obj-unsetrefs"><code>obj.unsetRefs()</code></a></li><li><a href="#obj-setprocessfamily-processfamily"><code>obj.setProcessFamily(processFamily)</code></a></li><li><a href="#obj-unsetprocessfamily"><code>obj.unsetProcessFamily()</code></a></li><li><a href="#obj-getprocessfamily-processfamily-local-false"><code>obj.getProcessFamily(processFamily, local=false)</code></a></li><li><a href="#obj-hasprocessfamily-local-false"><code>obj.hasProcessFamily(local=false)</code></a></li><li><a href="#obj-validate"><code>obj.validate()</code></a></li><li><a href="#obj-uutodbu-viewtype-value"><code>obj.uuToDBU(viewType, value)</code></a></li><li><a href="#obj-uutodbudistance-viewtype-value"><code>obj.uuToDBUDistance(viewType, value)</code></a></li><li><a href="#obj-uutodbuarea-viewtype-value"><code>obj.uuToDBUArea(viewType, value)</code></a></li><li><a href="#obj-dbutouu-viewtype-value"><code>obj.dbuToUU(viewType, value)</code></a></li><li><a href="#obj-dbutouudistance-viewtype-value"><code>obj.dbuToUUDistance(viewType, value)</code></a></li><li><a href="#obj-dbutouuarea-viewtype-value"><code>obj.dbuToUUArea(viewType, value)</code></a></li><li><a href="#obj-enableundo-value-undomodel"><code>obj.enableUndo(value, undoModel)</code></a></li><li><a href="#obj-redo"><code>obj.redo()</code></a></li><li><a href="#obj-undo"><code>obj.undo()</code></a></li><li><a href="#obj-isundoenabled"><code>obj.isUndoEnabled()</code></a></li><li><a href="#obj-isinundo"><code>obj.isInUndo()</code></a></li><li><a href="#obj-setcp-checkpointid-uint-max"><code>obj.setCp(checkPointID=UINT_MAX)</code></a></li><li><a href="#obj-unsetcp"><code>obj.unsetCp()</code></a></li><li><a href="#obj-getnumundocprecs"><code>obj.getNumUndoCpRecs()</code></a></li><li><a href="#obj-getcpid"><code>obj.getCpID()</code></a></li><li><a href="#obj-getnumundorecsoncp"><code>obj.getNumUndoRecsOnCp()</code></a></li><li><a href="#obj-getundomodel"><code>obj.getUndoModel()</code></a></li><li><a href="#obj-calcvmsize"><code>obj.calcVMSize()</code></a></li><li><a href="#obj-minimizevm"><code>obj.minimizeVM()</code></a></li><li><a href="#obj-hasdefaultconstraintgroup"><code>obj.hasDefaultConstraintGroup()</code></a></li><li><a href="#obj-getdefaultconstraintgroup"><code>obj.getDefaultConstraintGroup()</code></a></li><li><a href="#obj-getfoundryrules"><code>obj.getFoundryRules()</code></a></li><li><a href="#obj-getfeatures-datamodelrev-features"><code>obj.getFeatures(dataModelRev, features)</code></a></li><li><a href="#obj-getanalysislibs"><code>obj.getAnalysisLibs()</code></a></li><li><a href="#obj-getanalysislibs-filterflags"><code>obj.getAnalysisLibs(filterFlags)</code></a></li><li><a href="#obj-getlayers"><code>obj.getLayers()</code></a></li><li><a href="#obj-getlayers-filterflags"><code>obj.getLayers(filterFlags)</code></a></li><li><a href="#obj-getoppoints"><code>obj.getOpPoints()</code></a></li><li><a href="#obj-getoppoints-filterflags"><code>obj.getOpPoints(filterFlags)</code></a></li><li><a href="#obj-getpurposes"><code>obj.getPurposes()</code></a></li><li><a href="#obj-getpurposes-filterflags"><code>obj.getPurposes(filterFlags)</code></a></li><li><a href="#obj-getsitedefs"><code>obj.getSiteDefs()</code></a></li><li><a href="#obj-getsitedefs-filterflags"><code>obj.getSiteDefs(filterFlags)</code></a></li><li><a href="#obj-getvalues"><code>obj.getValues()</code></a></li><li><a href="#obj-getvalues-filterflags"><code>obj.getValues(filterFlags)</code></a></li><li><a href="#obj-getviadefs"><code>obj.getViaDefs()</code></a></li><li><a href="#obj-getviadefs-filterflags"><code>obj.getViaDefs(filterFlags)</code></a></li><li><a href="#obj-getviaspecs"><code>obj.getViaSpecs()</code></a></li><li><a href="#obj-getviaspecs-filterflags"><code>obj.getViaSpecs(filterFlags)</code></a></li><li><a href="#obj-getviavariants-filterflags-oacviavariantiterall"><code>obj.getViaVariants(filterFlags=oacViaVariantIterAll)</code></a></li><li><a href="#obj-getviavariantheaders-filterflags-oacviavariantheaderiterall"><code>obj.getViaVariantHeaders(filterFlags=oacViaVariantHeaderIterAll)</code></a></li><li><a href="#obj-getlayerheaders"><code>obj.getLayerHeaders()</code></a></li><li><a href="#obj-getviadefheaders"><code>obj.getViaDefHeaders()</code></a></li><li><a href="#obj-getconstraints-def-null"><code>obj.getConstraints(def=NULL)</code></a></li><li><a href="#obj-getconstraints-def-filterflags"><code>obj.getConstraints(def, filterFlags)</code></a></li><li><a href="#obj-getconstraintgroups"><code>obj.getConstraintGroups()</code></a></li><li><a href="#obj-getconstraintgroups-filterflags"><code>obj.getConstraintGroups(filterFlags)</code></a></li><li><a href="#obj-getconstraintgroups-def-filterflags-oactechconstraintgroupiterall"><code>obj.getConstraintGroups(def, filterFlags=oacTechConstraintGroupIterAll)</code></a></li><li><a href="#obj-getconstraintparams"><code>obj.getConstraintParams()</code></a></li><li><a href="#obj-getconstraintparams-filterflags"><code>obj.getConstraintParams(filterFlags)</code></a></li><li><a href="#obj-getconstraintgroupheaders"><code>obj.getConstraintGroupHeaders()</code></a></li><li><a href="#obj-getderivedlayerparams-filterflags-oactechderivedlayerparamiterall"><code>obj.getDerivedLayerParams(filterFlags=oacTechDerivedLayerParamIterAll)</code></a></li><li><a href="#obj-getappobjectdefs"><code>obj.getAppObjectDefs()</code></a></li><li><a href="#obj-getappobjects-def"><code>obj.getAppObjects(def)</code></a></li><li><a href="#obj-getappdefsbydatatype-datatype"><code>obj.getAppDefsByDataType(dataType)</code></a></li><li><a href="#obj-getgroups"><code>obj.getGroups()</code></a></li><li><a href="#obj-getgroups-def"><code>obj.getGroups(def)</code></a></li><li><a href="#obj-getgroupsbyname-name"><code>obj.getGroupsByName(name)</code></a></li><li><a href="#obj-getusedin"><code>obj.getUsedIn()</code></a></li><li><a href="#tech-oatech-create-libname"><code>_tech.oaTech.create(libName)</code></a></li><li><a href="#tech-oatech-create-lib"><code>_tech.oaTech.create(lib)</code></a></li><li><a href="#tech-oatech-open-libname-mode-r"><code>_tech.oaTech.open(libName, mode=&#x27;r&#x27;)</code></a></li><li><a href="#tech-oatech-open-lib-mode-r"><code>_tech.oaTech.open(lib, mode=&#x27;r&#x27;)</code></a></li><li><a href="#tech-oatech-recover-libname-type"><code>_tech.oaTech.recover(libName, type)</code></a></li><li><a href="#tech-oatech-find-libname"><code>_tech.oaTech.find(libName)</code></a></li><li><a href="#tech-oatech-find-lib"><code>_tech.oaTech.find(lib)</code></a></li><li><a href="#tech-oatech-destroy-libname"><code>_tech.oaTech.destroy(libName)</code></a></li><li><a href="#tech-oatech-destroy-lib"><code>_tech.oaTech.destroy(lib)</code></a></li><li><a href="#tech-oatech-destroy-libname-type"><code>_tech.oaTech.destroy(libName, type)</code></a></li><li><a href="#tech-oatech-exists-libname-inherited-true"><code>_tech.oaTech.exists(libName, inherited=true)</code></a></li><li><a href="#tech-oatech-exists-lib-inherited-true"><code>_tech.oaTech.exists(lib, inherited=true)</code></a></li><li><a href="#tech-oatech-exists-libname-type"><code>_tech.oaTech.exists(libName, type)</code></a></li><li><a href="#tech-oatech-exists-lib-type"><code>_tech.oaTech.exists(lib, type)</code></a></li><li><a href="#tech-oatech-getdefaultdbuperuu-viewtype"><code>_tech.oaTech.getDefaultDBUPerUU(viewType)</code></a></li><li><a href="#tech-oatech-getdefaultuserunits-viewtype"><code>_tech.oaTech.getDefaultUserUnits(viewType)</code></a></li><li><a href="#tech-oatech-getdefaultdefaultmanufacturinggrid"><code>_tech.oaTech.getDefaultDefaultManufacturingGrid()</code></a></li><li><a href="#tech-oatech-getdefaultclearancemeasure"><code>_tech.oaTech.getDefaultClearanceMeasure()</code></a></li><li><a href="#tech-oatech-getdefaultisgategrounded"><code>_tech.oaTech.getDefaultIsGateGrounded()</code></a></li><li><a href="#tech-oatech-attach-lib-attachlibname"><code>_tech.oaTech.attach(lib, attachLibName)</code></a></li><li><a href="#tech-oatech-detach-lib"><code>_tech.oaTech.detach(lib)</code></a></li><li><a href="#tech-oatech-hasattachment-lib"><code>_tech.oaTech.hasAttachment(lib)</code></a></li><li><a href="#tech-oatech-getattachment-lib-attachlibname"><code>_tech.oaTech.getAttachment(lib, attachLibName)</code></a></li><li><a href="#tech-oatech-getrevnumber"><code>_tech.oaTech.getRevNumber()</code></a></li><li><a href="#tech-oatech-getopentechs"><code>_tech.oaTech.getOpenTechs()</code></a></li></ul></div></aside>
+      </div>
+    </main>
+  </div>
+  <div class="footer">oapy 是 AIVI 项目的一部分。此站点提供当前 oapy Python API 的中文文档。</div>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.querySelector("[data-class-filter]");
+  if (input) {
+    input.addEventListener("input", () => {
+      const term = input.value.trim().toLowerCase();
+      document.querySelectorAll("[data-class-item]").forEach((item) => {
+        const name = item.getAttribute("data-class-name") || "";
+        item.classList.toggle("hidden", term && !name.includes(term));
+      });
+    });
+  }
+
+  const globalInput = document.querySelector("[data-global-search]");
+  if (globalInput) {
+    globalInput.addEventListener("input", () => {
+      const term = globalInput.value.trim().toLowerCase();
+      document.querySelectorAll("[data-search-item]").forEach((item) => {
+        const name = item.getAttribute("data-search-name") || "";
+        const module = item.getAttribute("data-search-module") || "";
+        const visible = !term || name.includes(term) || module.includes(term);
+        item.classList.toggle("hidden", !visible);
+      });
+    });
+  }
+
+  document.querySelectorAll("[data-toc-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const panel = button.closest(".toc-panel");
+      if (!panel) return;
+      const isOpen = panel.classList.toggle("open");
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      const indicator = button.querySelector(".toc-toggle-indicator");
+      if (indicator) {
+        indicator.textContent = isOpen ? "Hide" : "Show";
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

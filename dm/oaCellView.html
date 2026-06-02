@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>oaCellView</title>
+  <style>
+body {
+  margin: 0;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  color: #f2d6c2;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #fff4ea;
+}
+
+.topbar {
+  border-bottom: 1px solid #6f3d2d;
+  background: #120f0f;
+}
+
+.topbar-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 14px 20px 10px;
+}
+
+.brand {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff8f2;
+  margin: 0 0 10px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tab {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  color: #f2d6c2;
+  font-size: 13px;
+}
+
+.tab.active {
+  background: #4b2317;
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.layout {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 28px;
+  padding: 24px 24px 40px;
+}
+
+.sidebar {
+  font-size: 13px;
+}
+
+.sidebar-panel {
+  border: 1px solid #6f3d2d;
+  margin-bottom: 16px;
+  background: #151111;
+}
+
+.sidebar-title {
+  background: #2a1713;
+  border-bottom: 1px solid #6f3d2d;
+  padding: 8px 10px;
+  font-weight: 700;
+  color: #fff1e8;
+}
+
+.sidebar-body {
+  padding: 8px 10px;
+}
+
+.sidebar-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.sidebar-search::placeholder {
+  color: #c8a995;
+}
+
+.sidebar-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-body li.hidden {
+  display: none;
+}
+
+.active-link {
+  font-weight: 700;
+  color: #fff8f2;
+}
+
+.sidebar-body li + li {
+  margin-top: 6px;
+}
+
+.content {
+  min-width: 0;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  align-items: start;
+}
+
+.doc {
+  border: 1px solid #6f3d2d;
+  background: #120f0f;
+  padding: 24px 28px 32px;
+  min-width: 0;
+}
+
+.toc-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 0;
+  position: sticky;
+  top: 16px;
+  margin-bottom: 16px;
+}
+
+.toc-toggle {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 0;
+  background: #2a1713;
+  color: #fff1e8;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.toc-toggle:hover {
+  background: #3a1d16;
+}
+
+.toc-toggle-indicator {
+  font-size: 12px;
+  color: #d6ac96;
+}
+
+.toc-body {
+  display: none;
+  padding: 14px 16px;
+}
+
+.toc-panel.open .toc-body {
+  display: block;
+}
+
+.toc-panel h2 {
+  margin: 0 0 10px;
+  padding: 0;
+  border: 0;
+  font-size: 18px;
+  color: #fff1e8;
+}
+
+.toc-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-panel li + li {
+  margin-top: 8px;
+}
+
+.toc-panel a {
+  font-size: 13px;
+  line-height: 1.35;
+  color: #f2d6c2;
+}
+
+.crumbs {
+  color: #c8a995;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.meta {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 10px 12px;
+  margin: 16px 0 20px;
+  font-size: 13px;
+}
+
+.meta div + div {
+  margin-top: 4px;
+}
+
+.doc h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  color: #fff8f2;
+}
+
+.doc h2 {
+  margin: 28px 0 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #6f3d2d;
+  font-size: 22px;
+  color: #fff1e8;
+}
+
+.doc h3 {
+  margin: 22px 0 10px;
+  font-size: 18px;
+  color: #f7e1d5;
+}
+
+.doc p, .doc li {
+  font-size: 14px;
+}
+
+.doc pre {
+  overflow-x: auto;
+  background: #0d0b0b;
+  border: 1px solid #6f3d2d;
+  padding: 12px 14px;
+}
+
+.doc code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  color: #f7e1d5;
+}
+
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 18px;
+  font-size: 13px;
+  table-layout: fixed;
+}
+
+.doc th, .doc td {
+  border: 1px solid #6f3d2d;
+  padding: 7px 9px;
+  vertical-align: top;
+  text-align: left;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.doc th {
+  background: #2a1713;
+  color: #fff1e8;
+}
+
+.doc blockquote {
+  margin: 14px 0;
+  padding: 8px 12px;
+  border-left: 4px solid #8a4a36;
+  background: #151111;
+  color: #f2d6c2;
+}
+
+.search-panel {
+  border: 1px solid #6f3d2d;
+  background: #151111;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+
+.search-panel input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #6f3d2d;
+  background: #0d0b0b;
+  color: #f5f1ec;
+  font-size: 14px;
+}
+
+.search-panel input::placeholder {
+  color: #c8a995;
+}
+
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+}
+
+.search-results li {
+  border-top: 1px solid #4b2317;
+  padding: 10px 0;
+}
+
+.search-results li.hidden {
+  display: none;
+}
+
+.search-results a {
+  font-weight: 700;
+}
+
+.search-results .module-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border: 1px solid #8a4a36;
+  background: #2a1713;
+  color: #f2d6c2;
+  font-size: 12px;
+}
+
+.search-results .result-path {
+  margin-top: 4px;
+  color: #c8a995;
+  font-size: 12px;
+}
+
+.footer {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px 28px;
+  color: #b89481;
+  font-size: 12px;
+}
+
+.doc > * {
+  min-width: 0;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toc-panel {
+    position: static;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><a href="../index.html">AIVI / oapy API 中文文档</a></div>
+      <div class="tabs"><a class="tab" href="../base/index.html">base</a><a class="tab" href="../common/index.html">common</a><a class="tab" href="../cms/index.html">cms</a><a class="tab active" href="../dm/index.html">dm</a><a class="tab" href="../design/index.html">design</a><a class="tab" href="../tech/index.html">tech</a><a class="tab" href="../wafer/index.html">wafer</a></div>
+    </div>
+  </div>
+  <div class="layout">
+    <aside class="sidebar"><div class="sidebar-panel"><div class="sidebar-title">模块</div><div class="sidebar-body"><ul><li><a href="../classes.html">全部类</a></li><li><a href="../base/index.html">base</a></li><li><a href="../common/index.html">common</a></li><li><a href="../cms/index.html">cms</a></li><li><a class="active-link" href="../dm/index.html">dm</a></li><li><a href="../design/index.html">design</a></li><li><a href="../tech/index.html">tech</a></li><li><a href="../wafer/index.html">wafer</a></li></ul></div></div><div class="sidebar-panel"><div class="sidebar-title">dm 类</div><div class="sidebar-body"><input class="sidebar-search" type="search" placeholder="筛选类" data-class-filter><ul><li data-class-item data-class-name="oacell"><a href="oaCell.html">oaCell</a></li><li data-class-item data-class-name="oacelldmdata"><a href="oaCellDMData.html">oaCellDMData</a></li><li data-class-item data-class-name="oacellview"><a class="active-link" href="oaCellView.html">oaCellView</a></li><li data-class-item data-class-name="oacellviewdmdata"><a href="oaCellViewDMData.html">oaCellViewDMData</a></li><li data-class-item data-class-name="oadmattr"><a href="oaDMAttr.html">oaDMAttr</a></li><li data-class-item data-class-name="oadmattrarray"><a href="oaDMAttrArray.html">oaDMAttrArray</a></li><li data-class-item data-class-name="oadmcontainer"><a href="oaDMContainer.html">oaDMContainer</a></li><li data-class-item data-class-name="oadmdata"><a href="oaDMData.html">oaDMData</a></li><li data-class-item data-class-name="oadmdatatype"><a href="oaDMDataType.html">oaDMDataType</a></li><li data-class-item data-class-name="oadmerror"><a href="oaDMError.html">oaDMError</a></li><li data-class-item data-class-name="oadmexception"><a href="oaDMException.html">oaDMException</a></li><li data-class-item data-class-name="oadmfile"><a href="oaDMFile.html">oaDMFile</a></li><li data-class-item data-class-name="oadmlockstatus"><a href="oaDMLockStatus.html">oaDMLockStatus</a></li><li data-class-item data-class-name="oadmobject"><a href="oaDMObject.html">oaDMObject</a></li><li data-class-item data-class-name="oadmobjectiter"><a href="oaDMObjectIter.html">oaDMObjectIter</a></li><li data-class-item data-class-name="oadmobjectstatusref"><a href="oaDMObjectStatusRef.html">oaDMObjectStatusRef</a></li><li data-class-item data-class-name="oadmobjectstatusrefiter"><a href="oaDMObjectStatusRefIter.html">oaDMObjectStatusRefIter</a></li><li data-class-item data-class-name="oadmobjectversionref"><a href="oaDMObjectVersionRef.html">oaDMObjectVersionRef</a></li><li data-class-item data-class-name="oadmobjectversionrefiter"><a href="oaDMObjectVersionRefIter.html">oaDMObjectVersionRefIter</a></li><li data-class-item data-class-name="oadmpluginerror"><a href="oaDMPlugInError.html">oaDMPlugInError</a></li><li data-class-item data-class-name="oalib"><a href="oaLib.html">oaLib</a></li><li data-class-item data-class-name="oalibaccess"><a href="oaLibAccess.html">oaLibAccess</a></li><li data-class-item data-class-name="oalibaccesslevel"><a href="oaLibAccessLevel.html">oaLibAccessLevel</a></li><li data-class-item data-class-name="oalibdmdata"><a href="oaLibDMData.html">oaLibDMData</a></li><li data-class-item data-class-name="oalibdatatype"><a href="oaLibDataType.html">oaLibDataType</a></li><li data-class-item data-class-name="oalibdef"><a href="oaLibDef.html">oaLibDef</a></li><li data-class-item data-class-name="oalibdeflist"><a href="oaLibDefList.html">oaLibDefList</a></li><li data-class-item data-class-name="oalibdeflistmem"><a href="oaLibDefListMem.html">oaLibDefListMem</a></li><li data-class-item data-class-name="oalibdeflistref"><a href="oaLibDefListRef.html">oaLibDefListRef</a></li><li data-class-item data-class-name="oalibmode"><a href="oaLibMode.html">oaLibMode</a></li><li data-class-item data-class-name="oareservedviewtype"><a href="oaReservedViewType.html">oaReservedViewType</a></li><li data-class-item data-class-name="oasaverecovertype"><a href="oaSaveRecoverType.html">oaSaveRecoverType</a></li><li data-class-item data-class-name="oavccap"><a href="oaVCCap.html">oaVCCap</a></li><li data-class-item data-class-name="oavcmessagetype"><a href="oaVCMessageType.html">oaVCMessageType</a></li><li data-class-item data-class-name="oavcobserver"><a href="oaVCObserver.html">oaVCObserver</a></li><li data-class-item data-class-name="oavcobservercollection"><a href="oaVCObserverCollection.html">oaVCObserverCollection</a></li><li data-class-item data-class-name="oavcobserveriter"><a href="oaVCObserverIter.html">oaVCObserverIter</a></li><li data-class-item data-class-name="oavcobserverresult"><a href="oaVCObserverResult.html">oaVCObserverResult</a></li><li data-class-item data-class-name="oavcoperation"><a href="oaVCOperation.html">oaVCOperation</a></li><li data-class-item data-class-name="oavcquerydepth"><a href="oaVCQueryDepth.html">oaVCQueryDepth</a></li><li data-class-item data-class-name="oavcsystem"><a href="oaVCSystem.html">oaVCSystem</a></li><li data-class-item data-class-name="oavcversion"><a href="oaVCVersion.html">oaVCVersion</a></li><li data-class-item data-class-name="oavcversioniter"><a href="oaVCVersionIter.html">oaVCVersionIter</a></li><li data-class-item data-class-name="oaversioncomp"><a href="oaVersionComp.html">oaVersionComp</a></li><li data-class-item data-class-name="oaview"><a href="oaView.html">oaView</a></li><li data-class-item data-class-name="oaviewdmdata"><a href="oaViewDMData.html">oaViewDMData</a></li><li data-class-item data-class-name="oaviewtype"><a href="oaViewType.html">oaViewType</a></li></ul></div></div></aside>
+    <main class="content">
+      <div class="content-grid">
+        <div class="doc">
+          <div class="crumbs"><a href="../index.html">首页</a> / <a href="index.html">dm</a> / oaCellView</div>
+          <h1 id="oacellview">oaCellView</h1>
+<p><strong>模块</strong>: <code>oapy._oa._dm</code>
+<strong>导入</strong>: <code>from oapy._oa import _dm</code></p>
+<h2 id="_1">概览</h2>
+<p><code>oaCellView</code> 在 <code>oapy</code> 中可用，可通过 <code>_dm</code> 模块访问。</p>
+<p>本页汇总 <code>oaCellView</code> 当前在 <code>oapy</code> 中可用的 Python 接口。</p>
+<h2 id="_2">详细说明</h2>
+<p>The oaCellView class implements an OpenAccess library cellView file object。 The oaCellView class can be observed by deriving from oaObserver<oaCellView> 。 Note: The oaCellView function descriptions indicate if library access is required for the called function。 If the access type must be write access, this requirement also is noted。 For more information on library access, see Library Access in the detailed description for oaLib and OpenAccess 2.2 Libraries and Design Management in the Programmers Guide。</p>
+<h2 id="_3">方法总览</h2>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>Python 调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaCellView.destroy()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getCell()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getView()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.getPrimary()</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setView(view)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>obj.setView(view, mustExist)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaCellView.find(cell, view)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaCellView.find(lib, cellName, viewName)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaCellView.get(cell, view)</code></td>
+</tr>
+<tr>
+<td>✅</td>
+<td><code>_dm.oaCellView.get(lib, cellName, viewName, viewType)</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">方法说明</h2>
+<h3 id="_dmoacellviewdestroy"><code>_dm.oaCellView.destroy()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaCellView.destroy()</code></p>
+<p>This function destroys the this oaCellView。 Note: If you want to destroy a cellView and its related design, first purge the design to remove it from memory。 This function requires write access to the library associated with this object (through a call to oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if write access to the library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib and OpenAccess 2.2 Libraries and Design Management in the Programmers Guide。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaCellView.destroy()
+</code></pre>
+<h3 id="objgetcell"><code>obj.getCell()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getCell()</code></p>
+<p>此函数返回指向 this cellView 的 cell 的指针。 This function requires access to the library associated with this object (through a call to oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if access to the library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib and OpenAccess 2.2 Libraries and Design Management in the Programmers Guide。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaCellView
+obj.getCell()
+</code></pre>
+<h3 id="objgetview"><code>obj.getView()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getView()</code></p>
+<p>此函数返回指向 this cellView 的 view 的指针。 This function requires access to the library associated with this object (through a call to oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if access to the library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib and OpenAccess 2.2 Libraries and Design Management in the Programmers Guide。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaCellView
+obj.getView()
+</code></pre>
+<h3 id="objgetprimary"><code>obj.getPrimary()</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.getPrimary()</code></p>
+<p>This function returns the primary file for this cellView。 This function requires access to the library associated with this object (through a call to oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if access to the library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib and OpenAccess 2.2 Libraries and Design Management in the Programmers Guide。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaCellView
+obj.getPrimary()
+</code></pre>
+<h3 id="objsetviewview"><code>obj.setView(view)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setView(view)</code></p>
+<p>This function modifies this cellView by associating it with the specified view。 If mustExist is false, this version of the function operates the same as the version of this function that does not include the mustExist argument - the view is changed, and the primary data is renamed (see oaCellView::setView )。 If the mustExist is true, this version of the function assumes that the cellView already contains the appropriate type of data but that it is not currently marked as the primary data for the cellView。 This function makes this data the primary data。 The original data is left in the cellView as non-primary data。 Note: Two setView functions (with and without the mustExist argument) have been implemented in the current release to maintain drop-in compatibility。 These two functions will be merged together at a later date。 An oacCVSetViewPrimaryFileLocked exception is thrown if the primary file cannot be write-locked by the current process -- for example, because it is locked by another process。 New: An oacCVSetViewPrimaryFileDoesNotExist exception is thrown if the file that corresponds to the new viewType does not exist in the cellView。 This function requires write access to the library associated with this object (through a call to oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if write access to the library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib and OpenAccess 2.2 Libraries and Design Management in the Programmers Guide。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>view</code>: input parameter - pointer to the view to set for this cellView。</li>
+<li><code>mustExist-</code>: boolean which should set to true in this version of the function。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacCVSetViewPrimaryFileLocked</code>。</li>
+<li><code>oacCVSetViewPrimaryFileDoesNotExist</code>。</li>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaCellView
+obj.setView(view)
+</code></pre>
+<h3 id="objsetviewview-mustexist"><code>obj.setView(view, mustExist)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>obj.setView(view, mustExist)</code></p>
+<p>This function modifies this cellView by associating it with the specified view。 When using this version of the function, the existing primary data will be renamed to be of the appropriate type。 An oacCVSetViewPrimaryFileExists exception will be thrown if the non-primary data of the specified type already exists in the cellView。 Note: Two setView functions (with and without the mustExist argument) have been implemented in the current release to maintain drop-in compatibility。 These two functions will be merged together at a later date。 An oacCVExists exception is thrown if another cellView (a cellView other than this cellView) already exists with the cellName and viewName that this function is to set on this cellView。 An oacCVSetViewPrimaryFileExists exception is thrown if a file already exists in the cellView with the same name to which the primary file is to be renamed。 An oacCVSetViewPrimaryFileLocked exception is thrown if the primary file cannot be write-locked by the current process -- for example, because it is locked by another process。 This function requires write access to the library associated with this object (through a call to oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if write access to the library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib and OpenAccess 2.2 Libraries and Design Management in the Programmers Guide。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>view</code>: input parameter - pointer to the view to set for this cellView。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacCVExists</code>。</li>
+<li><code>oacCVSetViewPrimaryFileExists</code>。</li>
+<li><code>oacCVSetViewPrimaryFileLocked</code>。</li>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+# assume obj is a oaCellView
+obj.setView(view, mustExist)
+</code></pre>
+<h3 id="_dmoacellviewfindcell-view"><code>_dm.oaCellView.find(cell, view)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaCellView.find(cell, view)</code></p>
+<p>This functions finds and returns a pointer to the cellView specified by the cell and view names。 If not found, NULL is returned。 This function requires access to the library associated with this object (through a call to oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if access to the library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib and OpenAccess 2.2 Libraries and Design Management in the Programmers Guide。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>lib</code>: pointer to owning lib for the cellView to be found。</li>
+<li><code>cellName</code>: name of owning cell for the cellView to be found。</li>
+<li><code>viewName</code>: name of owning view for the cellView to be found。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaCellView.find(cell, view)
+</code></pre>
+<h3 id="_dmoacellviewfindlib-cellname-viewname"><code>_dm.oaCellView.find(lib, cellName, viewName)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaCellView.find(lib, cellName, viewName)</code></p>
+<p>This function finds and returns a pointer to the specified cellView。 An exception is thrown if the specified cell and view are not in the same library。 If not found, NULL is returned。 This function requires access to the library associated with this object (through a call to oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if access to the library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib and OpenAccess 2.2 Libraries and Design Management in the Programmers Guide。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>cell</code>: pointer to the owning cell for the cellView to be found。</li>
+<li><code>view</code>: pointer to the owning view for the cellview to be found。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacCellViewNotInSameLib</code>。</li>
+<li><code>oacLibAccessDenied</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaCellView.find(lib, cellName, viewName)
+</code></pre>
+<h3 id="_dmoacellviewgetcell-view"><code>_dm.oaCellView.get(cell, view)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaCellView.get(cell, view)</code></p>
+<p>This function attempts to find and return the cellView specified by lib, cellName, viewName and viewType。 If it cannot be found, an attempt is made to create the cellView while creating any missing cell and view owners。 Proper library write access is required for the creation to be successful and an exception is thrown if this is not the case。 If successful, a pointer to an oaCellView object is returned。</p>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>lib</code>: A pointer to the oaLib object representing the library。</li>
+<li><code>cellName</code>: A constant reference to an oaScalarName object holding the name of the cell。</li>
+<li><code>viewName</code>: A constant reference to an oaScalarName object holding the name of the view。</li>
+<li><code>viewType</code>: A pointer to a constant viewType object specifying the type of view to obtain。</li>
+</ul>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacLibAccessDenied</code>。</li>
+<li><code>oacMismatchViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaCellView.get(cell, view)
+</code></pre>
+<h3 id="_dmoacellviewgetlib-cellname-viewname-viewtype"><code>_dm.oaCellView.get(lib, cellName, viewName, viewType)</code></h3>
+<p><strong>绑定状态</strong>: 已绑定</p>
+<p><strong>Python 调用</strong>: <code>_dm.oaCellView.get(lib, cellName, viewName, viewType)</code></p>
+<p>This function finds and returns the cellView with the specified cell and view if it exists。 If not found, it is created, and a pointer to the new cellView is returned。 An exception is thrown if the specified cell and view are not in the same library。 When a new cellview is created, a new dmFile as the primary of that cellview will be automatically created after that cellview itself is created。 The users will get the postCreate callback on the cellview, followed by the postCreate callback on the primary file。 This function requires write access to the library associated with this object (through a call to oaLib::getAccess )。 An oacLibAccessDenied exception is thrown if the write access to the library does not exist。 For more information on library access, see Library Access in the detailed description for oaLib and OpenAccess 2.2 Libraries and Design Management in the Programmers Guide。</p>
+<p><strong>异常</strong></p>
+<ul>
+<li><code>oacCellViewNotInSameLib</code>。</li>
+<li><code>oacLibAccessDenied</code>。</li>
+<li><code>oacMismatchViewType</code>。</li>
+</ul>
+<p><strong>Python 示例</strong></p>
+<pre><code class="language-python">from oapy._oa import _dm
+
+_dm.oaCellView.get(lib, cellName, viewName, viewType)
+</code></pre>
+        </div>
+        <aside class="toc-panel"><button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false"><span>方法</span><span class="toc-toggle-indicator">展开</span></button><div class="toc-body"><h2>方法</h2><ul><li><a href="#dm-oacellview-destroy"><code>_dm.oaCellView.destroy()</code></a></li><li><a href="#obj-getcell"><code>obj.getCell()</code></a></li><li><a href="#obj-getview"><code>obj.getView()</code></a></li><li><a href="#obj-getprimary"><code>obj.getPrimary()</code></a></li><li><a href="#obj-setview-view"><code>obj.setView(view)</code></a></li><li><a href="#obj-setview-view-mustexist"><code>obj.setView(view, mustExist)</code></a></li><li><a href="#dm-oacellview-find-cell-view"><code>_dm.oaCellView.find(cell, view)</code></a></li><li><a href="#dm-oacellview-find-lib-cellname-viewname"><code>_dm.oaCellView.find(lib, cellName, viewName)</code></a></li><li><a href="#dm-oacellview-get-cell-view"><code>_dm.oaCellView.get(cell, view)</code></a></li><li><a href="#dm-oacellview-get-lib-cellname-viewname-viewtype"><code>_dm.oaCellView.get(lib, cellName, viewName, viewType)</code></a></li></ul></div></aside>
+      </div>
+    </main>
+  </div>
+  <div class="footer">oapy 是 AIVI 项目的一部分。此站点提供当前 oapy Python API 的中文文档。</div>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.querySelector("[data-class-filter]");
+  if (input) {
+    input.addEventListener("input", () => {
+      const term = input.value.trim().toLowerCase();
+      document.querySelectorAll("[data-class-item]").forEach((item) => {
+        const name = item.getAttribute("data-class-name") || "";
+        item.classList.toggle("hidden", term && !name.includes(term));
+      });
+    });
+  }
+
+  const globalInput = document.querySelector("[data-global-search]");
+  if (globalInput) {
+    globalInput.addEventListener("input", () => {
+      const term = globalInput.value.trim().toLowerCase();
+      document.querySelectorAll("[data-search-item]").forEach((item) => {
+        const name = item.getAttribute("data-search-name") || "";
+        const module = item.getAttribute("data-search-module") || "";
+        const visible = !term || name.includes(term) || module.includes(term);
+        item.classList.toggle("hidden", !visible);
+      });
+    });
+  }
+
+  document.querySelectorAll("[data-toc-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const panel = button.closest(".toc-panel");
+      if (!panel) return;
+      const isOpen = panel.classList.toggle("open");
+      button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      const indicator = button.querySelector(".toc-toggle-indicator");
+      if (indicator) {
+        indicator.textContent = isOpen ? "Hide" : "Show";
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
